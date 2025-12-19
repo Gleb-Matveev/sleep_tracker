@@ -2,7 +2,14 @@
 <html lang="ru">
     {{> head }}
 <body>
-    {{{ body }}}
-    {{> footer }}
+    <div class="app-root">
+        {{> navbar }}
+        <main class="main">
+            <div class="main-inner">
+                {{{ body }}}
+            </div>
+        </main>
+        {{> footer }}
+    </div>
 </body>
 </html>

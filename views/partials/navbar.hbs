@@ -1,10 +1,19 @@
-<nav class="topnav">
-  <a class="{{#if home}}active{{/if}}" onclick="myFunction('/')">Home</a>
-  <a class="{{#if projects}}active{{/if}}" onclick="myFunction('/projects')">Projects</a>
-  <a class="{{#if hobbies}}active{{/if}}" onclick="myFunction('/hobbies')">Hobbies</a>
-  <a class="{{#if organisations}}active{{/if}}" onclick="myFunction('/organisations')">Organisations</a>
-  <a class="{{#if contacts}}active{{/if}}" onclick="myFunction('/contacts')">Contacts</a>
-  <a class="{{#if stuff}}active{{/if}}" onclick="myFunction('/stuff')">Всякое</a>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="navbar-logo">
+      <div class="navbar-logo-circle">Zz</div>
+      <div>
+        <div class="navbar-title">Sleep Tracker</div>
+        <div class="navbar-subtitle">Better nights, better days</div>
+      </div>
+    </div>
+
+    <div class="nav-links">
+      <a class="nav-link {{#if home}}active{{/if}}" onclick="myFunction('/')">Home</a>
+      <a class="nav-link {{#if stats}}active{{/if}}" onclick="myFunction('/projects')">Statistics</a>
+      <a class="nav-link {{#if goals}}active{{/if}}" onclick="myFunction('/hobbies')">Goals</a>
+      <a class="nav-link {{#if rules}}active{{/if}}" onclick="myFunction('/organisations')">Rules</a>
+      <a class="nav-link {{#if routins}}active{{/if}}" onclick="myFunction('/contacts')">Routins</a>
+    </div>
+  </div>
 </nav>
-
-
