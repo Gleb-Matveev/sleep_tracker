@@ -1,0 +1,30 @@
+<section class="card">
+  <div class="card-header">
+    <h1 class="card-title">Sleep routines</h1>
+    <span class="badge-pill">Night &amp; morning</span>
+  </div>
+
+  <p class="card-subtitle">
+    Repeatable steps before sleep and after waking up that make your day more stable.
+  </p>
+
+  <div style="margin-top: 1rem; display: grid; gap: 1rem;">
+    {{#each items}}
+      <article class="card" style="padding: 1rem 1.1rem;">
+        <div class="card-header" style="margin-bottom: 0.4rem;">
+          <h2 class="card-title" style="font-size: 0.95rem;">{{this.name}}</h2>
+          <span class="chip">
+            {{this.type}}
+          </span>
+        </div>
+        <ul style="margin: 0.4rem 0 0; padding-left: 1.1rem; font-size: 0.85rem; color: var(--text-main);">
+          {{#each this.points}}
+            <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </article>
+    {{/each}}
+  </div>
+</section>
+
+

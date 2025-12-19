@@ -1,0 +1,25 @@
+<section class="card">
+  <div class="card-header">
+    <h1 class="card-title">Sleep rules</h1>
+    <span class="badge-pill">Healthy habits</span>
+  </div>
+
+  <p class="card-subtitle">
+    Simple rules that support stable, deep and restorative sleep.
+  </p>
+
+  <div style="margin-top: 1rem; display: grid; gap: 1rem;">
+    {{#each items}}
+      <article class="card" style="padding: 1rem 1.1rem;">
+        <div class="card-header" style="margin-bottom: 0.4rem;">
+          <h2 class="card-title" style="font-size: 0.95rem;">{{this.title}}</h2>
+        </div>
+        <p class="card-subtitle">
+          {{this.description}}
+        </p>
+      </article>
+    {{/each}}
+  </div>
+</section>
+
+
