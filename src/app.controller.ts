@@ -1,4 +1,4 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Render, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -12,21 +12,40 @@ export class AppController {
     };
   }
 
-  @Get()
-  @Render('index')
-  root() {
-    return this.getCommonViewData({
-      home: true,
-      message: 'Track your sleep and wake up better every day 💤',
-    });
+  reviews(@Query('auth') auth: string) {
+    if (auth == 'auth') {
+    }
+    return;
   }
 
-  @Get('projects')
+  @Get()
+  @Render('index')
+  root(@Query('auth') auth: string) {
+    if (auth == 'auth') {
+      return this.getCommonViewData({
+        home: true,
+        message: 'Track your sleep and wake up better every day 💤',
+      });
+    }
+    return;
+  }
+
+  @Get('statistics')
   @Render('statistics')
   statistics() {
     const stats = [
-      { date: '2025-12-17', score1: 8.2, score2: 7.5, description: 'Fell asleep quickly, woke up refreshed.' },
-      { date: '2025-12-18', score1: 6.1, score2: 5.4, description: 'Late bedtime, some night awakenings.' },
+      {
+        date: '2025-12-17',
+        score1: 8.2,
+        score2: 7.5,
+        description: 'Fell asleep quickly, woke up refreshed.',
+      },
+      {
+        date: '2025-12-18',
+        score1: 6.1,
+        score2: 5.4,
+        description: 'Late bedtime, some night awakenings.',
+      },
     ];
 
     return this.getCommonViewData({
@@ -35,17 +54,19 @@ export class AppController {
     });
   }
 
-  @Get('hobbies')
+  @Get('goals')
   @Render('goals')
   goals() {
     const goals = [
       {
         title: 'Sleep 8 hours on weekdays',
-        description: 'Lights out by 23:30 and wake up at 07:30, at least 5 days a week.',
+        description:
+          'Lights out by 23:30 and wake up at 07:30, at least 5 days a week.',
       },
       {
         title: 'No screens 30 minutes before bed',
-        description: 'Replace the phone with a book or calm music before sleep.',
+        description:
+          'Replace the phone with a book or calm music before sleep.',
       },
     ];
 
@@ -55,13 +76,14 @@ export class AppController {
     });
   }
 
-  @Get('organisations')
+  @Get('rules')
   @Render('rules')
   rules() {
     const rules = [
       {
         title: 'Keep a stable sleep schedule',
-        description: 'Go to bed and wake up at the same time, even on weekends.',
+        description:
+          'Go to bed and wake up at the same time, even on weekends.',
       },
       {
         title: 'Create a calm sleeping environment',
@@ -75,7 +97,7 @@ export class AppController {
     });
   }
 
-  @Get('contacts')
+  @Get('routins')
   @Render('routins')
   routins() {
     const routins = [
