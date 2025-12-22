@@ -12,12 +12,6 @@ export class AppController {
     };
   }
 
-  reviews(@Query('auth') auth: string) {
-    if (auth == 'auth') {
-    }
-    return;
-  }
-
   @Get()
   @Render('index')
   root(@Query('auth') auth: string) {
