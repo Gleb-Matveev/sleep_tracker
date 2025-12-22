@@ -7,9 +7,11 @@ import { DayModule } from './day/day.module';
 import { GoalModule } from './goal/goal.module';
 import { RoutineModule } from './routine/routine.module';
 import { RuleModule } from './rule/rule.module';
+import { DatabaseModule } from './database/database.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    DatabaseModule,
     UserModule,
     RuleModule,
     GoalModule,

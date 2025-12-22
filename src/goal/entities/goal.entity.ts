@@ -18,7 +18,7 @@ export class Goal {
   description: string;
 
   @Column({ type: 'enum', enum: Status })
-  period: Status;
+  status: Status;
 
   @ManyToOne(() => User, user => user.goals)
   user: User;

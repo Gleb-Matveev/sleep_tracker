@@ -7,6 +7,13 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  private getCommonViewData(extra: Record<string, unknown> = {}) {
+    return {
+      year: new Date().getFullYear(),
+      ...extra,
+    };
+  }
+
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);

@@ -1,15 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRuleDto } from './dto/create-rule.dto';
 import { UpdateRuleDto } from './dto/update-rule.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Rule } from './entities/rule.entity';
 
 @Injectable()
 export class RuleService {
+  constructor(
+    @InjectRepository(Rule)
+    private ruleRepository: Repository<Rule>,
+  ) {}
+
   create(createRuleDto: CreateRuleDto) {
     return 'This action adds a new rule';
   }
 
   findAll() {
-    return `This action returns all rule`;
+    return this.ruleRepository.find();
   }
 
   findOne(id: number) {

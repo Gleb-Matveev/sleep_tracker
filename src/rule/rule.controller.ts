@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Render,
+} from '@nestjs/common';
 import { RuleService } from './rule.service';
 import { CreateRuleDto } from './dto/create-rule.dto';
 import { UpdateRuleDto } from './dto/update-rule.dto';
@@ -7,14 +16,38 @@ import { UpdateRuleDto } from './dto/update-rule.dto';
 export class RuleController {
   constructor(private readonly ruleService: RuleService) {}
 
+  private getCommonViewData(extra: Record<string, unknown> = {}) {
+    return {
+      year: new Date().getFullYear(),
+      ...extra,
+    };
+  }
+
   @Post()
   create(@Body() createRuleDto: CreateRuleDto) {
     return this.ruleService.create(createRuleDto);
   }
 
   @Get()
-  findAll() {
-    return this.ruleService.findAll();
+  @Render('rules')
+  async findAll() {
+    /*const rules = [
+      {
+        title: 'Keep a stable sleep schedule',
+        description:
+          'Go to bed and wake up at the same time, even on weekends.',
+      },
+      {
+        title: 'Create a calm sleeping environment',
+        description: 'Dark, cool room without loud noises or bright lights.',
+      },
+    ];*/
+    const rules = await this.ruleService.findAll();
+
+    return this.getCommonViewData({
+      rules: true,
+      items: rules,
+    });
   }
 
   @Get(':id')

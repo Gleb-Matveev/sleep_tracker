@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Render,
+} from '@nestjs/common';
 import { GoalService } from './goal.service';
 import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
@@ -7,14 +16,39 @@ import { UpdateGoalDto } from './dto/update-goal.dto';
 export class GoalController {
   constructor(private readonly goalService: GoalService) {}
 
+  private getCommonViewData(extra: Record<string, unknown> = {}) {
+    return {
+      year: new Date().getFullYear(),
+      ...extra,
+    };
+  }
+
   @Post()
   create(@Body() createGoalDto: CreateGoalDto) {
     return this.goalService.create(createGoalDto);
   }
 
   @Get()
-  findAll() {
-    return this.goalService.findAll();
+  @Render('goals')
+  async findAll() {
+    /*const goals = [
+      {
+        title: 'Sleep 8 hours on weekdays',
+        description:
+          'Lights out by 23:30 and wake up at 07:30, at least 5 days a week.',
+      },
+      {
+        title: 'No screens 30 minutes before bed',
+        description:
+          'Replace the phone with a book or calm music before sleep.',
+      },
+    ];*/
+    const goals = await this.goalService.findAll();
+
+    return this.getCommonViewData({
+      goals: true,
+      items: goals,
+    });
   }
 
   @Get(':id')
