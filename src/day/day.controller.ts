@@ -16,13 +16,6 @@ import { UpdateDayDto } from './dto/update-day.dto';
 export class DayController {
   constructor(private readonly dayService: DayService) {}
 
-  private getCommonViewData(extra: Record<string, unknown> = {}) {
-    return {
-      year: new Date().getFullYear(),
-      ...extra,
-    };
-  }
-
   @Post()
   create(@Body() createDayDto: CreateDayDto) {
     return this.dayService.create(createDayDto);
@@ -30,8 +23,8 @@ export class DayController {
 
   @Get()
   @Render('statistics')
-  findAll() {
-    const stats = [
+  async findAll() {
+    /*const stats = [
       {
         date: '2025-12-17',
         score1: 8.2,
@@ -44,12 +37,14 @@ export class DayController {
         score2: 5.4,
         description: 'Late bedtime, some night awakenings.',
       },
-    ];
+    ];*/
 
-    return this.getCommonViewData({
+    const stats = await this.dayService.findAll();
+
+    return {
       stats: true,
       statistics: stats,
-    });
+    };
   }
 
   @Get(':id')

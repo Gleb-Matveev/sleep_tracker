@@ -7,13 +7,6 @@ import { UpdateRoutineDto } from './dto/update-routine.dto';
 export class RoutineController {
   constructor(private readonly routineService: RoutineService) {}
 
-  private getCommonViewData(extra: Record<string, unknown> = {}) {
-    return {
-      year: new Date().getFullYear(),
-      ...extra,
-    };
-  }
-
   @Post()
   create(@Body() createRoutineDto: CreateRoutineDto) {
     return this.routineService.create(createRoutineDto);
@@ -21,8 +14,8 @@ export class RoutineController {
 
   @Get()
   @Render('routins')
-  findAll() {
-    const routins = [
+  async findAll() {
+    /*const routins = [
       {
         name: 'Evening wind-down',
         type: 'night',
@@ -41,12 +34,13 @@ export class RoutineController {
           '5 minutes of breathing or short walk',
         ],
       },
-    ];
+    ];*/
+    const routines = await this.routineService.findAll();
 
-    return this.getCommonViewData({
+    return {
       routins: true,
-      items: routins,
-    });
+      items: routines,
+    };
   }
 
   @Get(':id')

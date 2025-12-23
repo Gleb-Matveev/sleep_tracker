@@ -16,8 +16,8 @@ export class RuleService {
     return 'This action adds a new rule';
   }
 
-  findAll() {
-    return this.ruleRepository.find();
+  async findAll(): Promise<Rule[]> {
+    return await this.ruleRepository.find();
   }
 
   findOne(id: number) {

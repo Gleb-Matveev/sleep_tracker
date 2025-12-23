@@ -1,15 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Routine } from './entities/routine.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class RoutineService {
+
+  constructor(
+    @InjectRepository(Routine)
+    private routineRepository: Repository<Routine>
+  ) {}
+
   create(createRoutineDto: CreateRoutineDto) {
     return 'This action adds a new routine';
   }
 
-  findAll() {
-    return `This action returns all routine`;
+  async findAll(): Promise<Routine[]> {
+    return await this.routineRepository.find();
   }
 
   findOne(id: number) {

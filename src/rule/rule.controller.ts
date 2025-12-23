@@ -16,13 +16,6 @@ import { UpdateRuleDto } from './dto/update-rule.dto';
 export class RuleController {
   constructor(private readonly ruleService: RuleService) {}
 
-  private getCommonViewData(extra: Record<string, unknown> = {}) {
-    return {
-      year: new Date().getFullYear(),
-      ...extra,
-    };
-  }
-
   @Post()
   create(@Body() createRuleDto: CreateRuleDto) {
     return this.ruleService.create(createRuleDto);
@@ -44,10 +37,10 @@ export class RuleController {
     ];*/
     const rules = await this.ruleService.findAll();
 
-    return this.getCommonViewData({
+    return {
       rules: true,
       items: rules,
-    });
+    };
   }
 
   @Get(':id')

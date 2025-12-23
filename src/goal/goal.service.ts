@@ -16,8 +16,8 @@ export class GoalService {
     return 'This action adds a new goal';
   }
 
-  findAll(): Promise<Goal[]> {
-    return this.goalRepository.find();
+  async findAll(): Promise<Goal[]> {
+    return await this.goalRepository.find();
   }
 
   findOne(id: number) {

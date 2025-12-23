@@ -16,13 +16,6 @@ import { UpdateGoalDto } from './dto/update-goal.dto';
 export class GoalController {
   constructor(private readonly goalService: GoalService) {}
 
-  private getCommonViewData(extra: Record<string, unknown> = {}) {
-    return {
-      year: new Date().getFullYear(),
-      ...extra,
-    };
-  }
-
   @Post()
   create(@Body() createGoalDto: CreateGoalDto) {
     return this.goalService.create(createGoalDto);
@@ -45,10 +38,10 @@ export class GoalController {
     ];*/
     const goals = await this.goalService.findAll();
 
-    return this.getCommonViewData({
+    return {
       goals: true,
       items: goals,
-    });
+    };
   }
 
   @Get(':id')
