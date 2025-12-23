@@ -255,6 +255,7 @@
     color: #f9fafb;
     box-shadow: 0 14px 32px rgba(124, 58, 237, 0.75);
     transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s ease-out;
+    text-decoration: none;
   }
   
   .btn:hover {

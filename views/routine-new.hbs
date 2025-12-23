@@ -1,0 +1,88 @@
+<section class="card">
+  <div class="card-header">
+    <h1 class="card-title">Add routine</h1>
+    <span class="badge-pill">Night &amp; morning</span>
+  </div>
+
+  <p class="card-subtitle">
+    Define repeatable steps to keep your evenings and mornings stable.
+  </p>
+
+  <form action="/routine" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="routine-form">
+    <div>
+      <label for="name" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Title</label>
+      <input id="name" name="name" type="text" placeholder="e.g. Evening wind-down" required>
+    </div>
+
+    <div>
+      <label for="period" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Period</label>
+      <select id="period" name="period">
+        <option value="Night">Night</option>
+        <option value="Day">Day</option>
+      </select>
+    </div>
+
+    <div>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+        <label class="card-subtitle">Steps</label>
+        <button type="button" class="btn btn-secondary" id="add-step-btn">+ Add step</button>
+      </div>
+      <div id="steps-list" style="display: grid; gap: 0.5rem;">
+        <div class="step-row" style="display: grid; grid-template-columns: 1fr auto; gap: 0.5rem;">
+          <input name="steps[]" type="text" placeholder="Open curtains and get daylight" required>
+          <button type="button" class="btn btn-secondary remove-step-btn" aria-label="Remove step">&minus;</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 0.6rem; justify-content: flex-end;">
+      <a class="btn btn-secondary" href="/routine">Cancel</a>
+      <button class="btn" type="submit">Save routine</button>
+    </div>
+  </form>
+</section>
+
+<script>
+  (() => {
+    const stepsList = document.getElementById('steps-list');
+    const addBtn = document.getElementById('add-step-btn');
+
+    const createRow = (value = '') => {
+      const row = document.createElement('div');
+      row.className = 'step-row';
+      row.style.display = 'grid';
+      row.style.gridTemplateColumns = '1fr auto';
+      row.style.gap = '0.5rem';
+
+      const input = document.createElement('input');
+      input.name = 'steps[]';
+      input.type = 'text';
+      input.placeholder = 'Describe the step';
+      input.required = true;
+      input.value = value;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'btn btn-secondary remove-step-btn';
+      removeBtn.setAttribute('aria-label', 'Remove step');
+      removeBtn.textContent = '−';
+      removeBtn.addEventListener('click', () => {
+        if (stepsList.children.length > 1) {
+          row.remove();
+        } else {
+          input.value = '';
+          input.focus();
+        }
+      });
+
+      row.appendChild(input);
+      row.appendChild(removeBtn);
+      return row;
+    };
+
+    addBtn?.addEventListener('click', () => {
+      stepsList.appendChild(createRow());
+    });
+  })();
+</script>
+

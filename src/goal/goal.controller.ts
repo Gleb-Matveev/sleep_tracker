@@ -7,18 +7,21 @@ import {
   Param,
   Delete,
   Render,
+  Res,
 } from '@nestjs/common';
 import { GoalService } from './goal.service';
 import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
+import type { Response } from 'express';
 
 @Controller('goal')
 export class GoalController {
   constructor(private readonly goalService: GoalService) {}
 
   @Post()
-  create(@Body() createGoalDto: CreateGoalDto) {
-    return this.goalService.create(createGoalDto);
+  async create(@Body() createGoalDto: CreateGoalDto, @Res() res: Response) {
+    await this.goalService.create(createGoalDto);
+    return res.redirect('/goal');
   }
 
   @Get()
@@ -42,6 +45,12 @@ export class GoalController {
       goals: true,
       items: goals,
     };
+  }
+
+  @Get('new')
+  @Render('goal-new')
+  newForm() {
+    return { goals: true };
   }
 
   @Get(':id')

@@ -12,8 +12,9 @@ export class RuleService {
     private ruleRepository: Repository<Rule>,
   ) {}
 
-  create(createRuleDto: CreateRuleDto) {
-    return 'This action adds a new rule';
+  async create(createRuleDto: CreateRuleDto): Promise<Rule> {
+    const rule = this.ruleRepository.create(createRuleDto);
+    return this.ruleRepository.save(rule);
   }
 
   async findAll(): Promise<Rule[]> {

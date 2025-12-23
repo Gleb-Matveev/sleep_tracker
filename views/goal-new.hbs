@@ -1,0 +1,36 @@
+<section class="card">
+  <div class="card-header">
+    <h1 class="card-title">Add new goal</h1>
+    <span class="badge-pill">Your priorities</span>
+  </div>
+
+  <p class="card-subtitle">
+    Define a clear objective to improve your sleep habits.
+  </p>
+
+  <form action="/goal" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;">
+    <div>
+      <label for="name" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Title</label>
+      <input id="name" name="name" type="text" placeholder="e.g. Sleep 8 hours on weekdays" required>
+    </div>
+
+    <div>
+      <label for="description" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Description</label>
+      <textarea id="description" name="description" rows="3" placeholder="What exactly should be achieved?" required></textarea>
+    </div>
+
+    <div>
+      <label for="status" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Status</label>
+      <select id="status" name="status">
+        <option value="Not done">Not done</option>
+        <option value="Done">Done</option>
+      </select>
+    </div>
+
+    <div style="display: flex; gap: 0.6rem; justify-content: flex-end;">
+      <a class="btn btn-secondary" href="/goal">Cancel</a>
+      <button class="btn" type="submit">Save goal</button>
+    </div>
+  </form>
+</section>
+

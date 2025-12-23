@@ -1,0 +1,28 @@
+<section class="card">
+  <div class="card-header">
+    <h1 class="card-title">Add sleep rule</h1>
+    <span class="badge-pill">Healthy habits</span>
+  </div>
+
+  <p class="card-subtitle">
+    Create a simple guideline that keeps your sleep routine consistent.
+  </p>
+
+  <form action="/rule" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;">
+    <div>
+      <label for="name" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Title</label>
+      <input id="name" name="name" type="text" placeholder="e.g. No caffeine after 16:00" required>
+    </div>
+
+    <div>
+      <label for="description" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Description</label>
+      <textarea id="description" name="description" rows="3" placeholder="Why and how to follow this rule?" required></textarea>
+    </div>
+
+    <div style="display: flex; gap: 0.6rem; justify-content: flex-end;">
+      <a class="btn btn-secondary" href="/rule">Cancel</a>
+      <button class="btn" type="submit">Save rule</button>
+    </div>
+  </form>
+</section>
+

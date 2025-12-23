@@ -13,8 +13,9 @@ export class RoutineService {
     private routineRepository: Repository<Routine>
   ) {}
 
-  create(createRoutineDto: CreateRoutineDto) {
-    return 'This action adds a new routine';
+  async create(createRoutineDto: CreateRoutineDto): Promise<Routine> {
+    const routine = this.routineRepository.create(createRoutineDto);
+    return this.routineRepository.save(routine);
   }
 
   async findAll(): Promise<Routine[]> {

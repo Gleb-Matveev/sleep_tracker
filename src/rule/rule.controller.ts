@@ -7,18 +7,21 @@ import {
   Param,
   Delete,
   Render,
+  Res,
 } from '@nestjs/common';
 import { RuleService } from './rule.service';
 import { CreateRuleDto } from './dto/create-rule.dto';
 import { UpdateRuleDto } from './dto/update-rule.dto';
+import type { Response } from 'express';
 
 @Controller('rule')
 export class RuleController {
   constructor(private readonly ruleService: RuleService) {}
 
   @Post()
-  create(@Body() createRuleDto: CreateRuleDto) {
-    return this.ruleService.create(createRuleDto);
+  async create(@Body() createRuleDto: CreateRuleDto, @Res() res: Response) {
+    await this.ruleService.create(createRuleDto);
+    return res.redirect('/rule');
   }
 
   @Get()
@@ -41,6 +44,12 @@ export class RuleController {
       rules: true,
       items: rules,
     };
+  }
+
+  @Get('new')
+  @Render('rule-new')
+  newForm() {
+    return { rules: true };
   }
 
   @Get(':id')

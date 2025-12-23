@@ -12,8 +12,15 @@ export class DayService {
     private dayRepository: Repository<Day>,
   ) {}
 
-  create(createDayDto: CreateDayDto) {
-    return 'This action adds a new day';
+  async create(createDayDto: CreateDayDto): Promise<Day> {
+    const day = this.dayRepository.create({
+      ...createDayDto,
+      getup_score: Number(createDayDto.getup_score),
+      feeling_score: Number(createDayDto.feeling_score),
+      date: new Date(createDayDto.date),
+    });
+
+    return this.dayRepository.save(day);
   }
 
   async findAll(): Promise<Day[]> {

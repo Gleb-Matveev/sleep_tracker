@@ -1,11 +1,14 @@
 <section class="card">
   <div class="card-header">
     <h1 class="card-title">Sleep statistics</h1>
-    <span class="badge-pill">Last nights</span>
+    <div style="display: flex; align-items: center; gap: 0.6rem;">
+      <span class="badge-pill">Last nights</span>
+      <a class="btn btn-secondary" href="/day/new" aria-label="Add day">+</a>
+    </div>
   </div>
 
   <p class="card-subtitle">
-    Overview of your recent sleep quality. Later this will be filled from the database.
+    Overview of your recent sleep quality and duration.
   </p>
 
   <div style="margin-top: 1rem; overflow-x: auto;">
@@ -35,5 +38,6 @@
     </table>
   </div>
 </section>
+
 
 

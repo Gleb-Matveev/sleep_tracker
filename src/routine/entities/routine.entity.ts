@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { DayRoutine } from '../../day/entities/day-routine.entity';
 import { User } from '../../user/entities/user.entity';
 
-enum RoutinePeriod {
+export enum RoutinePeriod {
   DAY = 'Day',
   NIGHT = 'Night',
 }

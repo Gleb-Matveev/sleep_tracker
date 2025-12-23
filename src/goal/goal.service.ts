@@ -12,8 +12,9 @@ export class GoalService {
     private goalRepository: Repository<Goal>, 
   ) {}
 
-  create(createGoalDto: CreateGoalDto) {
-    return 'This action adds a new goal';
+  async create(createGoalDto: CreateGoalDto): Promise<Goal> {
+    const goal = this.goalRepository.create(createGoalDto);
+    return this.goalRepository.save(goal);
   }
 
   async findAll(): Promise<Goal[]> {

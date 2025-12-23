@@ -1,7 +1,7 @@
 import { User } from '../../user/entities/user.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
 
-enum Status {
+export enum Status {
   DONE = "Done",
   NOTDONE = "Not done"
 }

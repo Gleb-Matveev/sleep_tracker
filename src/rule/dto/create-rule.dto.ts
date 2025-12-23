@@ -1,1 +1,4 @@
-export class CreateRuleDto {}
+export class CreateRuleDto {
+  name: string;
+  description: string;
+}
