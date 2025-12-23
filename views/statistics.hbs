@@ -21,23 +21,35 @@
           <th>Up time</th>
           <th>Down time</th>
           <th>Description</th>
+          <th style="width: 1%;"></th>
         </tr>
       </thead>
       <tbody>
         {{#each statistics}}
-          <tr>
+          <tr class="day-row" data-day-id="{{this.id}}">
             <td>{{this.date}}</td>
             <td>{{this.getup_score}}</td>
             <td>{{this.feeling_score}}</td>
             <td>{{this.wakeUpTime}}</td>
             <td>{{this.wakeDownTime}}</td>
-            <td>{{this.description}}</td>
+            <td>
+              <span>{{this.description}}</span>
+            </td>
+            <td style="text-align: right;">
+              <button
+                type="button"
+                class="btn btn-secondary day-delete-btn js-delete-trigger"
+                style="padding-inline: 0.6rem; font-size: 0.75rem;"
+                data-delete-url="/day/{{this.id}}"
+                data-remove-closest=".day-row"
+                data-delete-message="Delete this day?"
+              >
+                Delete
+              </button>
+            </td>
           </tr>
         {{/each}}
       </tbody>
     </table>
-  </div>
+      </div>
 </section>
-
-
-

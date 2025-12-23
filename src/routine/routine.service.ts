@@ -30,7 +30,7 @@ export class RoutineService {
     return `This action updates a #${id} routine`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} routine`;
+  async remove(id: number): Promise<void> {
+    await this.routineRepository.delete(id);
   }
 }

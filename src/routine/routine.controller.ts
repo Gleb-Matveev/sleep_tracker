@@ -25,26 +25,6 @@ export class RoutineController {
   @Get()
   @Render('routins')
   async findAll() {
-    /*const routins = [
-      {
-        name: 'Evening wind-down',
-        type: 'night',
-        points: [
-          'Turn off bright lights 1 hour before bed',
-          'Write down tasks for tomorrow',
-          '10 minutes of stretching or light yoga',
-        ],
-      },
-      {
-        name: 'Morning energy boost',
-        type: 'morning',
-        points: [
-          'Open curtains and get daylight immediately',
-          'Drink a glass of water',
-          '5 minutes of breathing or short walk',
-        ],
-      },
-    ];*/
     const routines = await this.routineService.findAll();
 
     return {

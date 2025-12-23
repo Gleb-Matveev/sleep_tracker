@@ -383,7 +383,54 @@
     color: var(--accent-soft);
     text-shadow: 0 0 16px rgba(168, 85, 247, 0.7);
   }
-  
+
+  /* Modal подтверждения */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 80;
+  }
+
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(10px);
+  }
+
+  .modal {
+    position: relative;
+    max-width: 360px;
+    width: 100%;
+    background: radial-gradient(circle at top left, #1f2937, #020617);
+    border-radius: 18px;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(148, 163, 184, 0.45);
+    box-shadow: 0 22px 50px rgba(15, 23, 42, 0.9);
+    z-index: 81;
+  }
+
+  .modal-title {
+    margin: 0 0 0.4rem;
+    font-size: 0.98rem;
+    font-weight: 600;
+  }
+
+  .modal-message {
+    margin: 0 0 0.9rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+  }
+
   /* Адаптивность */
   @media (max-width: 640px) {
     .navbar-inner {

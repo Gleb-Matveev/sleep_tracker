@@ -27,17 +27,6 @@ export class RuleController {
   @Get()
   @Render('rules')
   async findAll() {
-    /*const rules = [
-      {
-        title: 'Keep a stable sleep schedule',
-        description:
-          'Go to bed and wake up at the same time, even on weekends.',
-      },
-      {
-        title: 'Create a calm sleeping environment',
-        description: 'Dark, cool room without loud noises or bright lights.',
-      },
-    ];*/
     const rules = await this.ruleService.findAll();
 
     return {

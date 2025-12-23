@@ -35,7 +35,7 @@ export class DayService {
     return `This action updates a #${id} day`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} day`;
+  async remove(id: number): Promise<void> {
+    await this.dayRepository.delete(id);
   }
 }

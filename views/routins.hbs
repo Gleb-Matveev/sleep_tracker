@@ -15,10 +15,22 @@
     {{#each items}}
       <article class="card card-hover" style="padding: 1rem 1.1rem;">
         <div class="card-header" style="margin-bottom: 0.4rem;">
-          <h2 class="card-title" style="font-size: 0.95rem;">{{this.name}}</h2>
-          <span class="chip">
-            {{this.type}}
-          </span>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <h2 class="card-title" style="font-size: 0.95rem;">{{this.name}}</h2>
+            <span class="chip">
+              {{this.type}}
+            </span>
+          </div>
+          <button
+            type="button"
+            class="btn btn-secondary js-delete-trigger"
+            style="padding-inline: 0.75rem; font-size: 0.8rem;"
+            data-delete-url="/routine/{{this.id}}"
+            data-remove-closest=".card"
+            data-delete-message="Delete this routine?"
+          >
+            Delete
+          </button>
         </div>
         <ul style="margin: 0.4rem 0 0; padding-left: 1.1rem; font-size: 0.85rem; color: var(--text-main);">
           {{#each this.steps}}

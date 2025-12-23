@@ -29,7 +29,7 @@ export class GoalService {
     return `This action updates a #${id} goal`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} goal`;
+  async remove(id: number): Promise<void> {
+    await this.goalRepository.delete(id);
   }
 }

@@ -28,21 +28,6 @@ export class DayController {
   @Get()
   @Render('statistics')
   async findAll() {
-    /*const stats = [
-      {
-        date: '2025-12-17',
-        score1: 8.2,
-        score2: 7.5,
-        description: 'Fell asleep quickly, woke up refreshed.',
-      },
-      {
-        date: '2025-12-18',
-        score1: 6.1,
-        score2: 5.4,
-        description: 'Late bedtime, some night awakenings.',
-      },
-    ];*/
-
     const stats = await this.dayService.findAll();
 
     const statistics = stats.map((day) => ({

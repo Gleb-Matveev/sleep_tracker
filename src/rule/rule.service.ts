@@ -29,7 +29,7 @@ export class RuleService {
     return `This action updates a #${id} rule`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} rule`;
+  async remove(id: number): Promise<void> {
+    await this.ruleRepository.delete(id);
   }
 }
