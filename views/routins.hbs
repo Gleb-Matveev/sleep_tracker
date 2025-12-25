@@ -13,12 +13,12 @@
 
   <div style="margin-top: 1rem; display: grid; gap: 1rem;">
     {{#each items}}
-      <article class="card card-hover" style="padding: 1rem 1.1rem;">
+      <article class="card card-hover" style="padding: 1rem 1.1rem; cursor: pointer;" onclick="window.location.href='/routine/{{this.id}}/edit'">
         <div class="card-header" style="margin-bottom: 0.4rem;">
           <div style="display: flex; align-items: center; gap: 0.5rem;">
             <h2 class="card-title" style="font-size: 0.95rem;">{{this.name}}</h2>
             <span class="chip">
-              {{this.type}}
+              {{this.period}}
             </span>
           </div>
           <button
@@ -28,6 +28,7 @@
             data-delete-url="/routine/{{this.id}}"
             data-remove-closest=".card"
             data-delete-message="Delete this routine?"
+            onclick="event.stopPropagation();"
           >
             Delete
           </button>

@@ -22,12 +22,24 @@ export class RoutineService {
     return await this.routineRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} routine`;
+  async findOne(id: number): Promise<Routine | null> {
+    return await this.routineRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateRoutineDto: UpdateRoutineDto) {
-    return `This action updates a #${id} routine`;
+  async update(id: number, updateRoutineDto: UpdateRoutineDto): Promise<Routine> {
+    const steps = Array.isArray(updateRoutineDto.steps)
+      ? updateRoutineDto.steps.map((s) => s.trim()).filter(Boolean)
+      : undefined;
+    
+    await this.routineRepository.update(id, {
+      ...updateRoutineDto,
+      steps,
+    });
+    const updated = await this.routineRepository.findOne({ where: { id } });
+    if (!updated) {
+      throw new Error(`Routine with id ${id} not found`);
+    }
+    return updated;
   }
 
   async remove(id: number): Promise<void> {

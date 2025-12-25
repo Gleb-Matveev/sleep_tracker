@@ -41,14 +41,27 @@ export class RuleController {
     return { rules: true };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ruleService.findOne(+id);
+  @Get(':id/edit')
+  @Render('rule-edit')
+  async editForm(@Param('id') id: string) {
+    const rule = await this.ruleService.findOne(+id);
+    if (!rule) {
+      throw new Error(`Rule with id ${id} not found`);
+    }
+    return {
+      rules: true,
+      rule: {
+        id: rule.id,
+        name: rule.name,
+        description: rule.description,
+      },
+    };
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRuleDto: UpdateRuleDto) {
-    return this.ruleService.update(+id, updateRuleDto);
+  async update(@Param('id') id: string, @Body() updateRuleDto: UpdateRuleDto, @Res() res: Response) {
+    await this.ruleService.update(+id, updateRuleDto);
+    return res.redirect('/rule');
   }
 
   @Delete(':id')

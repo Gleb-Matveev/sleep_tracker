@@ -21,12 +21,17 @@ export class RuleService {
     return await this.ruleRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} rule`;
+  async findOne(id: number): Promise<Rule | null> {
+    return await this.ruleRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateRuleDto: UpdateRuleDto) {
-    return `This action updates a #${id} rule`;
+  async update(id: number, updateRuleDto: UpdateRuleDto): Promise<Rule> {
+    await this.ruleRepository.update(id, updateRuleDto);
+    const updated = await this.ruleRepository.findOne({ where: { id } });
+    if (!updated) {
+      throw new Error(`Rule with id ${id} not found`);
+    }
+    return updated;
   }
 
   async remove(id: number): Promise<void> {

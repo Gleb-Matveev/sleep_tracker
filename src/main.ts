@@ -15,6 +15,12 @@ async function bootstrap() {
 
   const hbs = require('hbs');
   hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
+  hbs.registerHelper('eq', function(a, b, options) {
+    if (a === b) {
+      return options.fn(this);
+    }
+    return options.inverse(this);
+  });
 
   await app.listen(process.env.PORT ?? 3000);
   console.log("Server is listnening on port: ", process.env.PORT)

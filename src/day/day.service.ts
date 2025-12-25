@@ -27,12 +27,22 @@ export class DayService {
     return await this.dayRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} day`;
+  async findOne(id: number): Promise<Day | null> {
+    return await this.dayRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateDayDto: UpdateDayDto) {
-    return `This action updates a #${id} day`;
+  async update(id: number, updateDayDto: UpdateDayDto): Promise<Day> {
+    await this.dayRepository.update(id, {
+      ...updateDayDto,
+      getup_score: updateDayDto.getup_score !== undefined ? Number(updateDayDto.getup_score) : undefined,
+      feeling_score: updateDayDto.feeling_score !== undefined ? Number(updateDayDto.feeling_score) : undefined,
+      date: updateDayDto.date ? new Date(updateDayDto.date) : undefined,
+    });
+    const updated = await this.dayRepository.findOne({ where: { id } });
+    if (!updated) {
+      throw new Error(`Day with id ${id} not found`);
+    }
+    return updated;
   }
 
   async remove(id: number): Promise<void> {

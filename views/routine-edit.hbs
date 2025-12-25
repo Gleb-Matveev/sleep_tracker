@@ -1,0 +1,131 @@
+<section class="card">
+  <div class="card-header">
+    <h1 class="card-title">Edit routine</h1>
+    <span class="badge-pill">Night &amp; morning</span>
+  </div>
+
+  <p class="card-subtitle">
+    Update your routine steps.
+  </p>
+
+  <form action="/routine/{{routine.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="routine-form">
+    <div>
+      <label for="name" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Title</label>
+      <input id="name" name="name" type="text" placeholder="e.g. Evening wind-down" value="{{routine.name}}" required>
+    </div>
+
+    <div>
+      <label for="period" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Period</label>
+      <select id="period" name="period">
+        <option value="Night" {{#eq routine.period "Night"}}selected{{/eq}}>Night</option>
+        <option value="Day" {{#eq routine.period "Day"}}selected{{/eq}}>Day</option>
+      </select>
+    </div>
+
+    <div>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+        <label class="card-subtitle">Steps</label>
+        <button type="button" class="btn btn-secondary" id="add-step-btn">+ Add step</button>
+      </div>
+      <div id="steps-list" style="display: grid; gap: 0.5rem;">
+        {{#each routine.steps}}
+          <div class="step-row" style="display: grid; grid-template-columns: 1fr auto; gap: 0.5rem;">
+            <input name="steps[]" type="text" placeholder="Describe the step" value="{{this}}" required>
+            <button type="button" class="btn btn-secondary remove-step-btn" aria-label="Remove step">&minus;</button>
+          </div>
+        {{/each}}
+        {{#unless routine.steps}}
+          <div class="step-row" style="display: grid; grid-template-columns: 1fr auto; gap: 0.5rem;">
+            <input name="steps[]" type="text" placeholder="Describe the step" required>
+            <button type="button" class="btn btn-secondary remove-step-btn" aria-label="Remove step">&minus;</button>
+          </div>
+        {{/unless}}
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 0.6rem; justify-content: flex-end;">
+      <a class="btn btn-secondary" href="/routine">Cancel</a>
+      <button class="btn" type="submit">Update routine</button>
+    </div>
+  </form>
+</section>
+
+<script>
+  (() => {
+    const stepsList = document.getElementById('steps-list');
+    const addBtn = document.getElementById('add-step-btn');
+
+    const createRow = (value = '') => {
+      const row = document.createElement('div');
+      row.className = 'step-row';
+      row.style.display = 'grid';
+      row.style.gridTemplateColumns = '1fr auto';
+      row.style.gap = '0.5rem';
+
+      const input = document.createElement('input');
+      input.name = 'steps[]';
+      input.type = 'text';
+      input.placeholder = 'Describe the step';
+      input.required = true;
+      input.value = value;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'btn btn-secondary remove-step-btn';
+      removeBtn.setAttribute('aria-label', 'Remove step');
+      removeBtn.textContent = '−';
+      removeBtn.addEventListener('click', () => {
+        if (stepsList.children.length > 1) {
+          row.remove();
+        } else {
+          input.value = '';
+          input.focus();
+        }
+      });
+
+      row.appendChild(input);
+      row.appendChild(removeBtn);
+      return row;
+    };
+
+    addBtn?.addEventListener('click', () => {
+      stepsList.appendChild(createRow());
+    });
+
+    document.querySelectorAll('.remove-step-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const row = btn.closest('.step-row');
+        if (stepsList.children.length > 1) {
+          row.remove();
+        } else {
+          const input = row.querySelector('input');
+          if (input) {
+            input.value = '';
+            input.focus();
+          }
+        }
+      });
+    });
+
+    document.getElementById('routine-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const steps = formData.getAll('steps[]').filter(s => s.trim());
+      const data = {
+        name: formData.get('name'),
+        period: formData.get('period'),
+        steps,
+      };
+      
+      await fetch(form.action, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      
+      window.location.href = '/routine';
+    });
+  })();
+</script>
+

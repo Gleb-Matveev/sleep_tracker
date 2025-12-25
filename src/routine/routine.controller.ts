@@ -39,14 +39,36 @@ export class RoutineController {
     return { routins: true };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.routineService.findOne(+id);
+  @Get(':id/edit')
+  @Render('routine-edit')
+  async editForm(@Param('id') id: string) {
+    const routine = await this.routineService.findOne(+id);
+    if (!routine) {
+      throw new Error(`Routine with id ${id} not found`);
+    }
+    return {
+      routins: true,
+      routine: {
+        id: routine.id,
+        name: routine.name,
+        period: routine.period,
+        steps: routine.steps,
+      },
+    };
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoutineDto: UpdateRoutineDto) {
-    return this.routineService.update(+id, updateRoutineDto);
+  async update(@Param('id') id: string, @Body() updateRoutineDto: UpdateRoutineDto, @Res() res: Response) {
+    const steps =
+      Array.isArray(updateRoutineDto.steps)
+        ? updateRoutineDto.steps.map((s) => s.trim()).filter(Boolean)
+        : undefined;
+
+    await this.routineService.update(+id, {
+      ...updateRoutineDto,
+      steps,
+    });
+    return res.redirect('/routine');
   }
 
   @Delete(':id')

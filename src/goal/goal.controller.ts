@@ -41,14 +41,28 @@ export class GoalController {
     return { goals: true };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.goalService.findOne(+id);
+  @Get(':id/edit')
+  @Render('goal-edit')
+  async editForm(@Param('id') id: string) {
+    const goal = await this.goalService.findOne(+id);
+    if (!goal) {
+      throw new Error(`Goal with id ${id} not found`);
+    }
+    return {
+      goals: true,
+      goal: {
+        id: goal.id,
+        name: goal.name,
+        description: goal.description,
+        status: goal.status,
+      },
+    };
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto) {
-    return this.goalService.update(+id, updateGoalDto);
+  async update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto, @Res() res: Response) {
+    await this.goalService.update(+id, updateGoalDto);
+    return res.redirect('/goal');
   }
 
   @Delete(':id')

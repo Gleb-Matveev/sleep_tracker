@@ -1,0 +1,66 @@
+<section class="card">
+  <div class="card-header">
+    <h1 class="card-title">Edit sleep day</h1>
+    <span class="badge-pill">Last nights</span>
+  </div>
+
+  <p class="card-subtitle">
+    Update your sleep stats for the selected date.
+  </p>
+
+  <form action="/day/{{day.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="edit-form">
+    <div style="display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+      <div>
+        <label for="date" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Date</label>
+        <input id="date" name="date" type="date" value="{{day.date}}" required>
+      </div>
+      <div>
+        <label for="wakeUpTime" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Wake up time</label>
+        <input id="wakeUpTime" name="wakeUpTime" type="time" value="{{day.wakeUpTime}}" required>
+      </div>
+      <div>
+        <label for="wakeDownTime" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Bed time</label>
+        <input id="wakeDownTime" name="wakeDownTime" type="time" value="{{day.wakeDownTime}}" required>
+      </div>
+    </div>
+
+    <div style="display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+      <div>
+        <label for="getup_score" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">GetUp score (0-10)</label>
+        <input id="getup_score" name="getup_score" type="number" min="0" max="10" step="0.1" value="{{day.getup_score}}" required>
+      </div>
+      <div>
+        <label for="feeling_score" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Feeling score (0-10)</label>
+        <input id="feeling_score" name="feeling_score" type="number" min="0" max="10" step="0.1" value="{{day.feeling_score}}" required>
+      </div>
+    </div>
+
+    <div>
+      <label for="description" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Notes</label>
+      <textarea id="description" name="description" rows="3" placeholder="How you slept, what helped or disturbed?">{{day.description}}</textarea>
+    </div>
+
+    <div style="display: flex; gap: 0.6rem; justify-content: flex-end;">
+      <a class="btn btn-secondary" href="/day">Cancel</a>
+      <button class="btn" type="submit">Update day</button>
+    </div>
+  </form>
+</section>
+
+<script>
+  document.getElementById('edit-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+    
+    await fetch(form.action, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    
+    window.location.href = '/day';
+  });
+</script>
+

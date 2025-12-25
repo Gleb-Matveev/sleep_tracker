@@ -1,0 +1,45 @@
+<section class="card">
+  <div class="card-header">
+    <h1 class="card-title">Edit sleep rule</h1>
+    <span class="badge-pill">Healthy habits</span>
+  </div>
+
+  <p class="card-subtitle">
+    Update your sleep rule.
+  </p>
+
+  <form action="/rule/{{rule.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="edit-form">
+    <div>
+      <label for="name" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Title</label>
+      <input id="name" name="name" type="text" placeholder="e.g. No caffeine after 16:00" value="{{rule.name}}" required>
+    </div>
+
+    <div>
+      <label for="description" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Description</label>
+      <textarea id="description" name="description" rows="3" placeholder="Why and how to follow this rule?" required>{{rule.description}}</textarea>
+    </div>
+
+    <div style="display: flex; gap: 0.6rem; justify-content: flex-end;">
+      <a class="btn btn-secondary" href="/rule">Cancel</a>
+      <button class="btn" type="submit">Update rule</button>
+    </div>
+  </form>
+</section>
+
+<script>
+  document.getElementById('edit-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+    
+    await fetch(form.action, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    
+    window.location.href = '/rule';
+  });
+</script>
+

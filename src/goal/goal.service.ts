@@ -21,12 +21,17 @@ export class GoalService {
     return await this.goalRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} goal`;
+  async findOne(id: number): Promise<Goal | null> {
+    return await this.goalRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateGoalDto: UpdateGoalDto) {
-    return `This action updates a #${id} goal`;
+  async update(id: number, updateGoalDto: UpdateGoalDto): Promise<Goal> {
+    await this.goalRepository.update(id, updateGoalDto);
+    const updated = await this.goalRepository.findOne({ where: { id } });
+    if (!updated) {
+      throw new Error(`Goal with id ${id} not found`);
+    }
+    return updated;
   }
 
   async remove(id: number): Promise<void> {
