@@ -3,10 +3,11 @@ import { GoalService } from './goal.service';
 import { GoalController } from './goal.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Goal } from './entities/goal.entity';
+import { GoalsEventsService } from './goal.events';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Goal])],
   controllers: [GoalController],
-  providers: [GoalService],
+  providers: [GoalService, GoalsEventsService],
 })
 export class GoalModule {}

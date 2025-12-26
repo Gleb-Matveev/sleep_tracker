@@ -8,15 +8,29 @@ import {
   Delete,
   Render,
   Res,
+  MessageEvent,
+  Sse
 } from '@nestjs/common';
 import { GoalService } from './goal.service';
 import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
 import type { Response } from 'express';
+import { GoalsEventsService } from './goal.events';
+import { map, Observable } from 'rxjs';
 
 @Controller('goal')
 export class GoalController {
-  constructor(private readonly goalService: GoalService) {}
+  constructor(private readonly goalService: GoalService,
+    private goalEventsService: GoalsEventsService
+  ) {}
+
+  @Sse('events')
+  stream(): Observable<MessageEvent> {
+    const events$ = this.goalEventsService.asObservable().pipe(
+      map((event) => ({ data: JSON.stringify(event) }))
+    );
+    return events$;
+  }
 
   @Post()
   async create(@Body() createGoalDto: CreateGoalDto, @Res() res: Response) {
