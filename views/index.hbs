@@ -6,4 +6,33 @@
     <p class="card-subtitle">
         {{ message }}
     </p>
+<canvas id="myChart"></canvas>
+<script>
+    new Chart(document.getElementById('myChart'), {
+        type: 'line',
+        data: {
+            labels: [1, 2, 3, 4, 5, 6, 7],
+            datasets: [{
+                label: 'Feeling score',
+                data: [5, 12, 8, 20, 15, 25, 18]
+            },
+            {
+                label: 'Get up score',
+                data: [2, 7, 21, 10, 15, 15, 13]
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            animations: {
+                y: {
+                    from: 0
+                }
+            }
+        }
+    });
+</script>
 </section>
