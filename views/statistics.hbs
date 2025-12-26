@@ -26,7 +26,7 @@
       </thead>
       <tbody>
         {{#each statistics}}
-          <tr class="day-row" data-day-id="{{this.id}}" style="cursor: pointer;" onclick="window.location.href='/day/{{this.id}}/edit'">
+          <tr class="day-row card-delete-trigger" data-day-id="{{this.id}}" style="cursor: pointer;" card-collection-url="day", entity-id={{this.id}}>
             <td>{{this.date}}</td>
             <td>{{this.getup_score}}</td>
             <td>{{this.feeling_score}}</td>
@@ -35,7 +35,7 @@
             <td>
               <span>{{this.description}}</span>
             </td>
-            <td style="text-align: right;" onclick="event.stopPropagation();">
+            <td style="text-align: right;">
               <button
                 type="button"
                 class="btn btn-secondary day-delete-btn js-delete-trigger"

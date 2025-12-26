@@ -58,7 +58,6 @@
           const target = event.target;
           if (!(target instanceof HTMLElement)) return;
 
-          // delegate delete trigger
           const btn = target.closest('.js-delete-trigger');
           if (btn) {
             event.preventDefault();
@@ -70,7 +69,13 @@
             return;
           }
 
-          // close when clicking on backdrop
+          const card = target.closest('.card-delete-trigger');
+          if (card) {
+              const url = card.getAttribute('card-collection-url');
+              const id = card.getAttribute('entity-id');
+              window.location.href = `/${url}/${id}/edit`;
+          }
+
           if (target.classList.contains('modal-backdrop')) {
             close();
           }
