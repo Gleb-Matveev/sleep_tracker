@@ -47,7 +47,7 @@ export class RoutineController {
       throw new Error(`Routine with id ${id} not found`);
     }
     return {
-      routins: true,
+      routines: true,
       routine: {
         id: routine.id,
         name: routine.name,

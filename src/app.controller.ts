@@ -1,4 +1,5 @@
-import { Controller, Get, Render, Query } from '@nestjs/common';
+import { Controller, Get, Render, Query, Res } from '@nestjs/common';
+import express from 'express';
 import { AppService } from './app.service';
 
 @Controller()
@@ -13,6 +14,11 @@ export class AppController {
   }
 
   @Get()
+  redirect(@Res() res: express.Response) {
+    res.redirect('/day');
+  }
+
+  /*@Get()
   @Render('index')
   root(@Query('auth') auth: string) {
     if (auth == 'auth') {
@@ -22,5 +28,5 @@ export class AppController {
       });
     }
     return;
-  }
+  }*/
 }

@@ -14,6 +14,7 @@ import { CreateDayDto } from './dto/create-day.dto';
 import { UpdateDayDto } from './dto/update-day.dto';
 import { formatDate, formatTime } from '../presentation/formatters/date';
 import type { Response } from 'express';
+import { map } from 'rxjs';
 
 @Controller('day')
 export class DayController {
@@ -26,7 +27,7 @@ export class DayController {
   }
 
   @Get()
-  @Render('statistics')
+  @Render('day')
   async findAll() {
     const stats = await this.dayService.findAll();
 
@@ -41,8 +42,37 @@ export class DayController {
     }));
 
     return {
-      stats: true,
+      day: true,
       statistics,
+    };
+  }
+
+  @Get('graph')
+  @Render('graph')
+  async graph() {
+    const stats = await this.dayService.findAll();
+
+    type Mapped = {
+      labels: string[];
+      getup_data: number[];
+      feeling_data: number[];
+    };
+
+    const mapped = stats.reduce<Mapped>(
+      (acc, day) => {
+        acc.labels.push(formatDate(day.date));
+        acc.getup_data.push(day.getup_score);
+        acc.feeling_data.push(day.feeling_score);
+        return acc;
+      },
+      { labels: [], getup_data: [], feeling_data: [] },
+    );
+
+    return {
+      graph: true,
+      labels: mapped.labels,
+      getup_data: mapped.getup_data,
+      feeling_data: mapped.feeling_data
     };
   }
 

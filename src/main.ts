@@ -15,6 +15,7 @@ async function bootstrap() {
 
   const hbs = require('hbs');
   hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
+  hbs.registerHelper('json', (context) => JSON.stringify(context));
   hbs.registerHelper('eq', function(a, b, options) {
     if (a === b) {
       return options.fn(this);

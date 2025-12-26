@@ -1,0 +1,44 @@
+<section class="card">
+    <div class="card-header">
+        <h1 class="card-title">Today&apos;s sleep</h1>
+        <span class="badge-pill">Overview</span>
+    </div>
+    <p class="card-subtitle">
+        {{ message }}
+    </p>
+<canvas id="myChart"></canvas>
+<script>
+    const labels = {{{json labels}}};
+    const getup_data = {{{json getup_data}}};
+    const feeling_data = {{{json feeling_data}}};
+
+    new Chart(document.getElementById('myChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Feeling score',
+                data: getup_data,
+            },
+            {
+                label: 'Get up score',
+                data: feeling_data,
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    min: 0,
+                    max: 10,
+                    beginAtZero: true
+                }
+            },
+            animations: {
+                y: {
+                    from: 0
+                }
+            }
+        }
+    });
+</script>
+</section>
