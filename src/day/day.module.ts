@@ -3,9 +3,10 @@ import { DayService } from './day.service';
 import { DayController } from './day.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Day } from './entities/day.entity';
+import { DayRoutine } from './entities/day-routine.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Day])],
+  imports: [TypeOrmModule.forFeature([Day, DayRoutine])],
   controllers: [DayController],
   providers: [DayService],
 })

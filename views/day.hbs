@@ -20,6 +20,7 @@
           <th>Feeling Score</th>
           <th>Up time</th>
           <th>Down time</th>
+          <th>Associated routines</th>
           <th>Description</th>
           <th style="width: 1%;"></th>
         </tr>
@@ -32,6 +33,17 @@
             <td>{{this.feeling_score}}</td>
             <td>{{this.wakeUpTime}}</td>
             <td>{{this.wakeDownTime}}</td>
+            <td>
+              {{#if this.routines}}
+                <ul>
+                  {{#each this.routines}}
+                    <li>{{this.routine.id}}</li>
+                  {{/each}}
+                </ul>
+              {{else}}
+                <span>No routines</span>
+              {{/if}}
+            </td>
             <td>
               <span>{{this.description}}</span>
             </td>

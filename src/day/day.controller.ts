@@ -38,6 +38,7 @@ export class DayController {
       feeling_score: day.feeling_score,
       wakeUpTime: formatTime(day.wakeUpTime),
       wakeDownTime: formatTime(day.wakeDownTime),
+      routines: day.routines,
       description: day.description,
     }));
 

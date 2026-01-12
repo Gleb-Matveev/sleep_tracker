@@ -25,7 +25,11 @@ export class Day {
   @Column()
   description: string;
 
-  @OneToMany(() => DayRoutine, dr => dr.day)
+  @OneToMany(() => DayRoutine, dr => dr.day, { 
+    cascade: true,
+    orphanedRowAction: 'delete',
+    eager: true
+  })
   routines: DayRoutine[];
 
   @ManyToOne(() => User, user => user.days)

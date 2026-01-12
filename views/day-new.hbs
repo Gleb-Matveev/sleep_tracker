@@ -40,6 +40,19 @@
       <textarea id="description" name="description" rows="3" placeholder="How you slept, what helped or disturbed?"></textarea>
     </div>
 
+    <div>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+        <label class="card-subtitle">Steps</label>
+        <button type="button" class="btn btn-secondary" id="add-routine-btn">+ Add step</button>
+      </div>
+      <div id="routines-list" style="display: grid; gap: 0.5rem;">
+        <div class="step-row" style="display: grid; grid-template-columns: 1fr auto; gap: 0.5rem;">
+          <input name="routineIds[]" type="text" placeholder="Open curtains and get daylight" required>
+          <button type="button" class="btn btn-secondary remove-step-btn" aria-label="Remove step">&minus;</button>
+        </div>
+      </div>
+    </div>
+
     <div style="display: flex; gap: 0.6rem; justify-content: flex-end;">
       <a class="btn btn-secondary" href="/day">Cancel</a>
       <button class="btn" type="submit">Save day</button>
@@ -47,3 +60,46 @@
   </form>
 </section>
 
+<script>
+  (() => {
+    const routinesList = document.getElementById('routines-list');
+    const addBtn = document.getElementById('add-routine-btn');
+
+    const createRow = (value = '') => {
+      const row = document.createElement('div');
+      row.className = 'step-row';
+      row.style.display = 'grid';
+      row.style.gridTemplateColumns = '1fr auto';
+      row.style.gap = '0.5rem';
+
+      const input = document.createElement('input');
+      input.name = 'routineIds[]';
+      input.type = 'text';
+      input.placeholder = 'Routine';
+      input.required = true;
+      input.value = value;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'btn btn-secondary remove-step-btn';
+      removeBtn.setAttribute('aria-label', 'Remove routines');
+      removeBtn.textContent = '−';
+      removeBtn.addEventListener('click', () => {
+        if (routinesList.children.length > 1) {
+          row.remove();
+        } else {
+          input.value = '';
+          input.focus();
+        }
+      });
+
+      row.appendChild(input);
+      row.appendChild(removeBtn);
+      return row;
+    };
+
+    addBtn?.addEventListener('click', () => {
+      routinesList.appendChild(createRow());
+    });
+  })();
+</script>

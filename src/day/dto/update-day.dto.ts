@@ -1,4 +1,7 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { CreateDayDto } from './create-day.dto';
 
-export class UpdateDayDto extends PartialType(CreateDayDto) {}
+export class UpdateDayDto extends PartialType(
+  OmitType(CreateDayDto, ['routineIds'] as const), ) {
+  routineIds?: number[];
+}

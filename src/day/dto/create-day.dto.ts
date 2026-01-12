@@ -5,4 +5,5 @@ export class CreateDayDto {
   wakeUpTime: string;
   wakeDownTime: string;
   description?: string;
+  routineIds: number[];
 }

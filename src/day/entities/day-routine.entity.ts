@@ -7,9 +7,13 @@ export class DayRoutine {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Day)
+  @ManyToOne(() => Day, day => day.routines, { 
+    onDelete: 'CASCADE',
+  })
   day: Day;
 
-  @ManyToOne(() => Routine)
+  @ManyToOne(() => Routine, routine => routine.days, { 
+    onDelete: 'CASCADE',
+  })
   routine: Routine;
 }
