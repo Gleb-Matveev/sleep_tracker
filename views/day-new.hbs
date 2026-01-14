@@ -34,8 +34,9 @@
   border-radius: 8px;
   padding: 12px 40px 10px 16px;
   font-size: 14px;
-  color: var(--text-muted);
+  color: rgba(148, 163, 184, 0.75);;
   outline-color: var(--accent-soft);
+  background-color: rgba(15, 23, 42, 0.9);;
 }
 .form_label input::placeholder,
 .field_multiselect::placeholder {
@@ -191,12 +192,13 @@ input.multiselect_checkbox {
 </style>
 <!-- 
 Резкий угол внизу X
-Цвет при наведении
-Цвет крестика
-Наличие красной звездочки
-Цвет и форма карточек при выборе
-Выделение варианты с острыми углами
-Поле должно разворачиваться а не создавать еще одно ниже
+Цвет при наведении X
+Цвет крестика X
+Наличие красной звездочки X
+Цвет и форма карточек при выборе X
+Выделение варианты с острыми углами X
+Поле должно разворачиваться а не создавать еще одно ниже X
+Закрытие по клику вне области
 -->
 
 <section class="card">
@@ -241,17 +243,21 @@ input.multiselect_checkbox {
       <textarea id="description" name="description" rows="3" placeholder="How you slept, what helped or disturbed?"></textarea>
     </div>
 
+    <p>{{stats}}</p>
     <div class="form_label">
       <label for="description" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Routines completed</label>
       <div class="multiselect_block">
-        <label for="select-1" class="field_multiselect">Routines completed</label>
+        <label for="select-1" class="field_multiselect">Your routines</label>
         <input id="checkbox-1" class="multiselect_checkbox" type="checkbox">
         <label for="checkbox-1" class="multiselect_label"></label>
         <select id="select-1" class="field_select" name="technology" multiple style="@media (min-width: 768px) { height: calc(4 * 38px)}">
-          <option value="all">All</option>
+          <!-- <option value="all">All</option>
           <option value="HTML">HTML</option>
           <option value="CSS">CSS</option>
-          <option value="JavaScript">Java Script</option>
+          <option value="JavaScript">Java Script</option> -->
+          {{#each routines}}
+             <option>{{this.name}}</option>
+          {{/each}}
         </select>
       </div>
       <span class="error_text"></span>

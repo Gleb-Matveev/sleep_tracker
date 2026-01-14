@@ -79,8 +79,15 @@ export class DayController {
 
   @Get('new')
   @Render('day-new')
-  newForm() {
-    return { stats: true };
+  async newForm() {
+    const routines = await this.dayService.findAllRoutines();
+
+    // проверка по id user
+    console.log(routines);
+    return {
+      stats: "wellcome",
+      routines: routines,
+    };
   }
 
   @Get(':id/edit')
