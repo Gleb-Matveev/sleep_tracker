@@ -35,11 +35,9 @@
             <td>{{this.wakeDownTime}}</td>
             <td>
               {{#if this.routines}}
-                <ul>
                   {{#each this.routines}}
-                    <li>{{this.routine.id}}</li>
+                    <li>{{this.routine.name}}</li>
                   {{/each}}
-                </ul>
               {{else}}
                 <span>No routines</span>
               {{/if}}

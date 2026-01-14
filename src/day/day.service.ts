@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Day } from './entities/day.entity';
 import { Repository } from 'typeorm';
 import { DayRoutine } from './entities/day-routine.entity';
+import { Routine } from 'src/routine/entities/routine.entity';
 
 @Injectable()
 export class DayService {
@@ -13,6 +14,8 @@ export class DayService {
     private dayRepository: Repository<Day>,
     @InjectRepository(DayRoutine)
     private dayRoutineRepository: Repository<DayRoutine>,
+    @InjectRepository(Routine)
+    private routineRepository: Repository<Routine>
   ) {}
 
   async create(createDayDto: CreateDayDto): Promise<Day> {
@@ -45,11 +48,21 @@ export class DayService {
   }
 
   async findOne(id: number): Promise<Day | null> {
-    return await this.dayRepository.findOne({ where: { id } });
+    const days = await this.dayRepository.findOne({
+      where: { id },
+      relations: {
+        routines: {
+          routine: true,
+        },
+      }
+    });
+
+    return days;
   }
 
   async update(id: number, updateDayDto: UpdateDayDto): Promise<Day> {
-    await this.dayRepository.update(id, {
+    await this.dayRepository.save({
+      id,
       ...updateDayDto,
       getup_score:
         updateDayDto.getup_score !== undefined
@@ -76,5 +89,9 @@ export class DayService {
 
   async remove(id: number): Promise<void> {
     await this.dayRepository.delete(id);
+  }
+
+  async findAllRoutines(): Promise<Routine[]> {
+      return await this.routineRepository.find();
   }
 }

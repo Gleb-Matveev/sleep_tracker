@@ -8,7 +8,7 @@
     Update your sleep stats for the selected date.
   </p>
 
-  <form action="/day/{{day.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="edit-form">
+  <form action="/day/{{day.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="day-form">
     <div style="display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
       <div>
         <label for="date" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Date</label>
@@ -40,6 +40,21 @@
       <textarea id="description" name="description" rows="3" placeholder="How you slept, what helped or disturbed?">{{day.description}}</textarea>
     </div>
 
+    <div>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+        <label class="card-subtitle">Steps</label>
+        <button type="button" class="btn btn-secondary" id="add-routine-btn">+ Add step</button>
+      </div>
+      <div id="routines-list" style="display: grid; gap: 0.5rem;">
+        {{#each day.routineNames}}
+          <div class="step-row" style="display: grid; grid-template-columns: 1fr auto; gap: 0.5rem;">
+            <input name="routineIds[]" type="text" placeholder="Routine" value="{{this}}" required>
+            <button type="button" class="btn btn-secondary remove-step-btn" aria-label="Remove step">&minus;</button>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+
     <div style="display: flex; gap: 0.6rem; justify-content: flex-end;">
       <a class="btn btn-secondary" href="/day">Cancel</a>
       <button class="btn" type="submit">Update day</button>
@@ -48,19 +63,85 @@
 </section>
 
 <script>
-  document.getElementById('edit-form')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData);
-    
-    await fetch(form.action, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+  (() => {
+    const routinesList = document.getElementById('routines-list');
+    const addBtn = document.getElementById('add-routine-btn');
+
+    const createRow = (value = '') => {
+      const row = document.createElement('div');
+      row.className = 'step-row';
+      row.style.display = 'grid';
+      row.style.gridTemplateColumns = '1fr auto';
+      row.style.gap = '0.5rem';
+
+      const input = document.createElement('input');
+      input.name = 'routineIds[]';
+      input.type = 'text';
+      input.placeholder = 'Routine';
+      input.required = true;
+      input.value = value;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'btn btn-secondary remove-step-btn';
+      removeBtn.setAttribute('aria-label', 'Remove routines');
+      removeBtn.textContent = '−';
+      removeBtn.addEventListener('click', () => {
+        if (routinesList.children.length > 1) {
+          row.remove();
+        } else {
+          input.value = '';
+          input.focus();
+        }
+      });
+
+      row.appendChild(input);
+      row.appendChild(removeBtn);
+      return row;
+    };
+
+    addBtn?.addEventListener('click', () => {
+      routinesList.appendChild(createRow());
     });
-    
-    window.location.href = '/day';
-  });
+
+    document.querySelectorAll('.remove-step-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const row = btn.closest('.step-row');
+        if (routinesList.children.length > 1) {
+          row.remove();
+        } else {
+          const input = row.querySelector('input');
+          if (input) {
+            input.value = '';
+            input.focus();
+          }
+        }
+      });
+    });
+
+    document.getElementById('day-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      
+      const data = {
+        date: formData.get('date'),
+        wakeUpTime: formData.get('wakeUpTime'),
+        wakeDownTime: formData.get('wakeDownTime'),
+        getup_score: formData.get('getup_score'),
+        feeling_score: formData.get('feeling_score'),
+        description: formData.get('description'),
+        routineIds: formData.getAll('routineIds[]').filter(r => r.trim()),
+      };
+
+      await fetch(form.action, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      
+      window.location.href = '/day';
+    });
+  })();
 </script>
 

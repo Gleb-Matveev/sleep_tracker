@@ -100,6 +100,7 @@ export class DayController {
         getup_score: day.getup_score,
         feeling_score: day.feeling_score,
         description: day.description,
+        routineNames: day.routines.map((dr) => dr.routine.name),
       },
     };
   }
@@ -113,5 +114,15 @@ export class DayController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.dayService.remove(+id);
+  }
+
+  @Get('routines')
+  async findAllRoutines() {
+    const routines = await this.dayService.findAllRoutines();
+
+    return {
+      routins: true,
+      items: routines,
+    };
   }
 }
