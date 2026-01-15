@@ -3,7 +3,7 @@ import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Goal } from './entities/goal.entity';
-import { Repository } from 'typeorm';
+import { Repository, FindManyOptions } from 'typeorm';
 import { GoalsEventsService } from './goal.events';
 
 @Injectable()
@@ -24,6 +24,17 @@ export class GoalService {
 
   async findAll(): Promise<Goal[]> {
     return await this.goalRepository.find();
+  }
+
+  async findAllPaginated(page: number, limit: number): Promise<{ data: Goal[]; total: number }> {
+    const findOptions: FindManyOptions<Goal> = {
+      order: { name: 'ASC' },
+      skip: (page - 1) * limit,
+      take: limit,
+    };
+
+    const [data, total] = await this.goalRepository.findAndCount(findOptions);
+    return { data, total };
   }
 
   async findOne(id: number): Promise<Goal | null> {

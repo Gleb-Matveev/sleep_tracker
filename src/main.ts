@@ -3,7 +3,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe, ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 import { join } from 'node:path';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './utils/http-exception.filter';
+import { HttpExceptionFilter } from './common/http-exception.filter';
 import "reflect-metadata";
 
 async function bootstrap() {

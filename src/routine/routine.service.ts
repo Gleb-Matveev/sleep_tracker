@@ -3,7 +3,7 @@ import { CreateRoutineDto } from './dto/create-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Routine } from './entities/routine.entity';
-import { Repository } from 'typeorm';
+import { Repository, FindManyOptions } from 'typeorm';
 
 @Injectable()
 export class RoutineService {
@@ -20,6 +20,17 @@ export class RoutineService {
 
   async findAll(): Promise<Routine[]> {
     return await this.routineRepository.find();
+  }
+
+  async findAllPaginated(page: number, limit: number): Promise<{ data: Routine[]; total: number }> {
+    const findOptions: FindManyOptions<Routine> = {
+      order: { name: 'ASC' },
+      skip: (page - 1) * limit,
+      take: limit,
+    };
+
+    const [data, total] = await this.routineRepository.findAndCount(findOptions);
+    return { data, total };
   }
 
   async findOne(id: number): Promise<Routine | null> {

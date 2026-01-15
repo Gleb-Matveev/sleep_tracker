@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateRuleDto } from './dto/create-rule.dto';
 import { UpdateRuleDto } from './dto/update-rule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, FindManyOptions } from 'typeorm';
 import { Rule } from './entities/rule.entity';
 
 @Injectable()
@@ -19,6 +19,17 @@ export class RuleService {
 
   async findAll(): Promise<Rule[]> {
     return await this.ruleRepository.find();
+  }
+
+  async findAllPaginated(page: number, limit: number): Promise<{ data: Rule[]; total: number }> {
+    const findOptions: FindManyOptions<Rule> = {
+      order: { name: 'ASC' },
+      skip: (page - 1) * limit,
+      take: limit,
+    };
+
+    const [data, total] = await this.ruleRepository.findAndCount(findOptions);
+    return { data, total };
   }
 
   async findOne(id: number): Promise<Rule | null> {

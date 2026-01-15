@@ -9,14 +9,23 @@ import {
   HttpCode,
   HttpStatus,
   NotFoundException,
+  Query,
+  Res,
+  Req,
 } from '@nestjs/common';
 import { RoutineService } from './routine.service';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { PaginationService } from '../common/services/pagination.service';
+import type { Request, Response } from 'express';
 
 @Controller('api/routines')
 export class RoutineApiController {
-  constructor(private readonly routineService: RoutineService) {}
+  constructor(
+    private readonly routineService: RoutineService,
+    private readonly paginationService: PaginationService,
+  ) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -25,8 +34,25 @@ export class RoutineApiController {
   }
 
   @Get()
-  async findAll() {
-    return await this.routineService.findAll();
+  async findAll(
+    @Query() paginationDto: PaginationDto,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    const page = paginationDto.page || 1;
+    const limit = paginationDto.limit || 10;
+
+    const { data, total } = await this.routineService.findAllPaginated(page, limit);
+    const response = this.paginationService.createPaginatedResponse(
+      data,
+      total,
+      page,
+      limit,
+      req,
+      res,
+    );
+
+    return res.json(response);
   }
 
   @Get(':id')

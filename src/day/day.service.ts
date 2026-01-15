@@ -6,6 +6,7 @@ import { Day } from './entities/day.entity';
 import { Repository } from 'typeorm';
 import { DayRoutine } from './entities/day-routine.entity';
 import { Routine } from 'src/routine/entities/routine.entity';
+import { FindManyOptions } from 'typeorm';
 
 @Injectable()
 export class DayService {
@@ -45,6 +46,22 @@ export class DayService {
     });
 
     return days;
+  }
+
+  async findAllPaginated(page: number, limit: number): Promise<{ data: Day[]; total: number }> {
+    const findOptions: FindManyOptions<Day> = {
+      relations: {
+        routines: {
+          routine: true,
+        },
+      },
+      order: { date: 'DESC' },
+      skip: (page - 1) * limit,
+      take: limit,
+    };
+
+    const [data, total] = await this.dayRepository.findAndCount(findOptions);
+    return { data, total };
   }
 
   async findOne(id: number): Promise<Day | null> {
