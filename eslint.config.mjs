@@ -12,6 +12,12 @@ export default tseslint.config(
   ...tseslint.configs.recommendedTypeChecked,
   eslintPluginPrettierRecommended,
   {
+    files: ['**/*-api.controller.ts', '**/*.controller.ts'],
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'off',
+    },
+  },
+  {
     languageOptions: {
       globals: {
         ...globals.node,

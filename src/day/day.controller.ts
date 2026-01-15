@@ -14,7 +14,6 @@ import { CreateDayDto } from './dto/create-day.dto';
 import { UpdateDayDto } from './dto/update-day.dto';
 import { formatDate, formatTime } from '../presentation/formatters/date';
 import type { Response } from 'express';
-import { map } from 'rxjs';
 
 @Controller('day')
 export class DayController {
@@ -81,7 +80,6 @@ export class DayController {
   async newForm() {
     const routines = await this.dayService.findAllRoutines();
 
-    // проверка по id user
     console.log(routines);
     return {
       routines: routines,

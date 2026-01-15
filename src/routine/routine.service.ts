@@ -23,7 +23,14 @@ export class RoutineService {
   }
 
   async findOne(id: number): Promise<Routine | null> {
-    return await this.routineRepository.findOne({ where: { id } });
+    return await this.routineRepository.findOne({ 
+      where: { id },
+      relations: {
+        days: {
+          day: true,
+        },
+      },
+    });
   }
 
   async update(id: number, updateRoutineDto: UpdateRoutineDto): Promise<Routine> {
