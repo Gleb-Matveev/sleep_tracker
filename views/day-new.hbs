@@ -1,206 +1,3 @@
-<style>
-  .form_label {
-  position: relative;
-  min-height: 88px;
-}
-
-.form_text {
-  vertical-align: top;
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: 0.04em;
-  color: #fff;
-}
-
-.form_text:after {
-  content: "*";
-  position: relative;
-  top: 0;
-  font-size: 13px;
-  color: #f00;
-}
-
-.form_label input,
-.field_multiselect {
-  position: relative;
-  width: 100%;
-  display: block;
-  min-height: 46px;
-  border: 1px solid var(--border-subtle);
-  box-sizing: border-box;
-  border-radius: 8px;
-  padding: 12px 40px 10px 16px;
-  font-size: 14px;
-  color: rgba(148, 163, 184, 0.75);;
-  outline-color: var(--accent-soft);
-  background-color: rgba(15, 23, 42, 0.9);;
-}
-.form_label input::placeholder,
-.field_multiselect::placeholder {
-  color: #fff;
-}
-.form_label input:hover,
-.field_multiselect:hover {
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.16);
-}
-.form_label input:focus,
-.field_multiselect:focus {
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.16);
-}
-
-.field_multiselect_help {
-  position: absolute;
-  max-width: 100%;
-  background-color: #fff;
-  top: -48px;
-  left: 0;
-  opacity: 0;
-}
-
-.form_label input.error {
-  border-color: #eb5757;
-}
-
-.error_text {
-  color: #eb5757;
-}
-
-.field_multiselect {
-  padding-right: 60px;
-}
-.field_multiselect:after {
-  content: "";
-  position: absolute;
-  right: 14px;
-  top: 15px;
-  width: 6px;
-  height: 16px;
-}
-
-.multiselect_block {
-  position: relative;
-  width: 100%;
-}
-
-.field_select {
-  position: absolute;
-  top: calc(100% - 2px);
-  left: 0;
-  width: 100%;
-  border: 2px solid var(--accent-soft);
-  border-bottom-right-radius: var(--radius-md);
-  border-bottom-left-radius: var(--radius-md);
-  box-sizing: border-box;
-  outline-color: #fff;
-  z-index: 6;
-  box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.6), 0 16px 30px rgba(15, 23, 42, 0.9);
-  background: #020617;
-}
-
-.field_select[multiple] {
-  overflow-y: auto;
-}
-
-.field_select option {
-  display: block;
-  padding: 8px 16px;
-  width: calc(370px - 32px);
-  cursor: pointer;
-  border-radius: var(--radius-md);
-  margin: 2px;
-}
-.field_select option:checked {
-  background-color: var(--accent-soft);
-  color: #fff;
-}
-.field_select option:hover {
-  background-color: var(--accent-hover);
-}
-
-.field_multiselect button {
-  position: relative;
-  padding: 7px 34px 7px 8px;
-  background: var(--accent-soft);
-  border-radius: var(--radius-pill);
-  border: none;
-  color: #fff;
-  margin-right: 9px;
-  margin-bottom: 10px;
-}
-.field_multiselect button:hover, .field_multiselect button:focus {
-  background-color: var(--accent-hover);
-}
-
-.field_multiselect button:after {
-  content: "";
-  position: absolute;
-  top: 7px;
-  right: 10px;
-  width: 16px;
-  height: 16px;
-  background-size: contain;
-  background: #a855f7 url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 6 L18 18 M6 18 L18 6' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E") 
-              50% 50% no-repeat;
-}
-
-.multiselect_label {
-  position: absolute;
-  top: 1px;
-  left: 2px;
-  width: 100%;
-  height: 44px;
-  cursor: pointer;
-  z-index: 3;
-}
-
-.field_select {
-  display: none;
-}
-
-input.multiselect_checkbox {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 40px;
-  height: 40px;
-  border: none;
-  opacity: 0;
-}
-
-.multiselect_checkbox:checked ~ .field_select {
-  display: block;
-}
-
-.multiselect_checkbox:checked ~ .multiselect_label {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  left: initial;
-  border-radius: var(--radius-md);
-  right: 6px;
-  top: 4px;
-  background: #a855f7 url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 6 L18 18 M6 18 L18 6' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E") 
-              50% 50% no-repeat;
-}
-
-.multiselect_checkbox:checked ~ .field_multiselect_help {
-  opacity: 1;
-}
-</style>
-<!-- 
-Резкий угол внизу X
-Цвет при наведении X
-Цвет крестика X
-Наличие красной звездочки X
-Цвет и форма карточек при выборе X
-Выделение варианты с острыми углами X
-Поле должно разворачиваться а не создавать еще одно ниже X
-Закрытие по клику вне области
--->
-
 <section class="card">
   <div class="card-header">
     <h1 class="card-title">Add sleep day</h1>
@@ -211,7 +8,7 @@ input.multiselect_checkbox {
     Log your sleep stats for the selected date.
   </p>
 
-  <form action="/day" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;">
+  <form action="/day" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="day-new-form">
     <div style="display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
       <div>
         <label for="date" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Date</label>
@@ -251,29 +48,12 @@ input.multiselect_checkbox {
         <input id="checkbox-1" class="multiselect_checkbox" type="checkbox">
         <label for="checkbox-1" class="multiselect_label"></label>
         <select id="select-1" class="field_select" name="technology" multiple style="@media (min-width: 768px) { height: calc(4 * 38px)}">
-          <!-- <option value="all">All</option>
-          <option value="HTML">HTML</option>
-          <option value="CSS">CSS</option>
-          <option value="JavaScript">Java Script</option> -->
           {{#each routines}}
-             <option>{{this.name}}</option>
+             <option routineid={{this.id}}>{{this.name}}</option>
           {{/each}}
         </select>
       </div>
       <span class="error_text"></span>
-    </div>
-
-    <div>
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
-        <label class="card-subtitle">Steps</label>
-        <button type="button" class="btn btn-secondary" id="add-routine-btn">+ Add step</button>
-      </div>
-      <div id="routines-list" style="display: grid; gap: 0.5rem;">
-        <div class="step-row" style="display: grid; grid-template-columns: 1fr auto; gap: 0.5rem;">
-          <input name="routineIds[]" type="text" placeholder="Open curtains and get daylight" required>
-          <button type="button" class="btn btn-secondary remove-step-btn" aria-label="Remove step">&minus;</button>
-        </div>
-      </div>
     </div>
 
     <div style="display: flex; gap: 0.6rem; justify-content: flex-end;">
@@ -285,46 +65,6 @@ input.multiselect_checkbox {
 
 <script>
   (() => {
-    const routinesList = document.getElementById('routines-list');
-    const addBtn = document.getElementById('add-routine-btn');
-
-    const createRow = (value = '') => {
-      const row = document.createElement('div');
-      row.className = 'step-row';
-      row.style.display = 'grid';
-      row.style.gridTemplateColumns = '1fr auto';
-      row.style.gap = '0.5rem';
-
-      const input = document.createElement('input');
-      input.name = 'routineIds[]';
-      input.type = 'text';
-      input.placeholder = 'Routine';
-      input.required = true;
-      input.value = value;
-
-      const removeBtn = document.createElement('button');
-      removeBtn.type = 'button';
-      removeBtn.className = 'btn btn-secondary remove-step-btn';
-      removeBtn.setAttribute('aria-label', 'Remove routines');
-      removeBtn.textContent = '−';
-      removeBtn.addEventListener('click', () => {
-        if (routinesList.children.length > 1) {
-          row.remove();
-        } else {
-          input.value = '';
-          input.focus();
-        }
-      });
-
-      row.appendChild(input);
-      row.appendChild(removeBtn);
-      return row;
-    };
-
-    addBtn?.addEventListener('click', () => {
-      routinesList.appendChild(createRow());
-    });
-
     let multiselect_block = document.querySelectorAll(".multiselect_block");
     multiselect_block.forEach(parent => {
         let label = parent.querySelector(".field_multiselect");
@@ -337,6 +77,7 @@ input.multiselect_checkbox {
                 let button = document.createElement("button");
                 button.type = "button";
                 button.textContent = option.value;
+                button.setAttribute("routineid", option.getAttribute("routineid"));
                 button.onclick = _ => {
                     option.selected = false;
                     button.remove();
@@ -346,5 +87,34 @@ input.multiselect_checkbox {
             }
         })
     })
+
+     document.getElementById('day-new-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+
+      const buttons = document.querySelectorAll('.field_multiselect button[routineid]');
+      const routineIds = Array.from(buttons).map(button => 
+          button.getAttribute('routineid')
+      ).filter(id => id && id.trim());
+      
+      const data = {
+        date: formData.get('date'),
+        wakeUpTime: formData.get('wakeUpTime'),
+        wakeDownTime: formData.get('wakeDownTime'),
+        getup_score: formData.get('getup_score'),
+        feeling_score: formData.get('feeling_score'),
+        description: formData.get('description'),
+        routineIds: routineIds,
+      };
+
+      await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      
+      window.location.href = '/day';
+    });
   })();
 </script>

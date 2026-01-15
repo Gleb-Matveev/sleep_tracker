@@ -40,19 +40,19 @@
       <textarea id="description" name="description" rows="3" placeholder="How you slept, what helped or disturbed?">{{day.description}}</textarea>
     </div>
 
-    <div>
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
-        <label class="card-subtitle">Steps</label>
-        <button type="button" class="btn btn-secondary" id="add-routine-btn">+ Add step</button>
+    <div class="form_label">
+      <label for="description" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Routines completed</label>
+      <div class="multiselect_block">
+        <label for="select-1" class="field_multiselect">Your routines</label>
+        <input id="checkbox-1" class="multiselect_checkbox" type="checkbox">
+        <label for="checkbox-1" class="multiselect_label"></label>
+        <select id="select-1" class="field_select" name="technology" multiple style="@media (min-width: 768px) { height: calc(4 * 38px)}">
+          {{#each day.routines}}
+             <option routineid={{this.id}}>{{this.name}}</option>
+          {{/each}}
+        </select>
       </div>
-      <div id="routines-list" style="display: grid; gap: 0.5rem;">
-        {{#each day.routineNames}}
-          <div class="step-row" style="display: grid; grid-template-columns: 1fr auto; gap: 0.5rem;">
-            <input name="routineIds[]" type="text" placeholder="Routine" value="{{this}}" required>
-            <button type="button" class="btn btn-secondary remove-step-btn" aria-label="Remove step">&minus;</button>
-          </div>
-        {{/each}}
-      </div>
+      <span class="error_text"></span>
     </div>
 
     <div style="display: flex; gap: 0.6rem; justify-content: flex-end;">
@@ -62,67 +62,69 @@
   </form>
 </section>
 
+<script id="day-edit-data" type="application/json">
+{
+  "selectedRoutineIds": {{json day.selectedRoutineIds}}
+}
+</script>
+
 <script>
   (() => {
-    const routinesList = document.getElementById('routines-list');
-    const addBtn = document.getElementById('add-routine-btn');
+    const dayData = JSON.parse(document.getElementById('day-edit-data').textContent);
+    const selectedIds = dayData.selectedRoutineIds || [];
 
-    const createRow = (value = '') => {
-      const row = document.createElement('div');
-      row.className = 'step-row';
-      row.style.display = 'grid';
-      row.style.gridTemplateColumns = '1fr auto';
-      row.style.gap = '0.5rem';
+    let multiselect_block = document.querySelectorAll(".multiselect_block");
+    const label = document.querySelector('.field_multiselect');
+    const select = document.querySelector('.field_select');
+    let text = label.innerHTML;
 
-      const input = document.createElement('input');
-      input.name = 'routineIds[]';
-      input.type = 'text';
-      input.placeholder = 'Routine';
-      input.required = true;
-      input.value = value;
-
-      const removeBtn = document.createElement('button');
-      removeBtn.type = 'button';
-      removeBtn.className = 'btn btn-secondary remove-step-btn';
-      removeBtn.setAttribute('aria-label', 'Remove routines');
-      removeBtn.textContent = '−';
-      removeBtn.addEventListener('click', () => {
-        if (routinesList.children.length > 1) {
-          row.remove();
-        } else {
-          input.value = '';
-          input.focus();
+    if (selectedIds.length != 0)
+    {
+     label.innerHTML = " ";
+      Array.from(select.options).forEach(option => {
+        const routineId = parseInt(option.getAttribute('routineid'));
+        if (selectedIds.includes(routineId)) {
+          option.selected = true;
+          let button = document.createElement("button");
+          button.type = "button";
+          button.textContent = option.value;
+          button.setAttribute("routineid", option.getAttribute("routineid"));
+          button.onclick = _ => {
+              option.selected = false;
+              button.remove();
+              if (!select.selectedOptions.length) label.innerHTML = text
+          };
+          label.append(button);
         }
       });
+    }
 
-      row.appendChild(input);
-      row.appendChild(removeBtn);
-      return row;
-    };
-
-    addBtn?.addEventListener('click', () => {
-      routinesList.appendChild(createRow());
-    });
-
-    document.querySelectorAll('.remove-step-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const row = btn.closest('.step-row');
-        if (routinesList.children.length > 1) {
-          row.remove();
-        } else {
-          const input = row.querySelector('input');
-          if (input) {
-            input.value = '';
-            input.focus();
-          }
-        }
-      });
-    });
+    select.addEventListener("change", function(element) {
+            let selectedOptions = this.selectedOptions;
+            label.innerHTML = "";
+            for (let option of selectedOptions) {
+                let button = document.createElement("button");
+                button.type = "button";
+                button.textContent = option.value;
+                button.setAttribute("routineid", option.getAttribute("routineid"));
+                button.onclick = _ => {
+                    option.selected = false;
+                    button.remove();
+                    if (!select.selectedOptions.length) label.innerHTML = text
+                };
+                label.append(button);
+            }
+        });
 
     document.getElementById('day-form')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = e.target;
       const formData = new FormData(form);
+
+      const buttons = document.querySelectorAll('.field_multiselect button[routineid]');
+      const routineIds = Array.from(buttons).map(button => 
+          button.getAttribute('routineid')
+      ).filter(id => id && id.trim());
       
       const data = {
         date: formData.get('date'),
@@ -131,7 +133,7 @@
         getup_score: formData.get('getup_score'),
         feeling_score: formData.get('feeling_score'),
         description: formData.get('description'),
-        routineIds: formData.getAll('routineIds[]').filter(r => r.trim()),
+        routineIds: routineIds,
       };
 
       await fetch(form.action, {

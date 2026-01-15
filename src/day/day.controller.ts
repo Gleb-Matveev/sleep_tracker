@@ -21,9 +21,8 @@ export class DayController {
   constructor(private readonly dayService: DayService) {}
 
   @Post()
-  async create(@Body() createDayDto: CreateDayDto, @Res() res: Response) {
+  async create(@Body() createDayDto: CreateDayDto) {
     await this.dayService.create(createDayDto);
-    return res.redirect('/day');
   }
 
   @Get()
@@ -85,7 +84,6 @@ export class DayController {
     // проверка по id user
     console.log(routines);
     return {
-      stats: "wellcome",
       routines: routines,
     };
   }
@@ -93,21 +91,24 @@ export class DayController {
   @Get(':id/edit')
   @Render('day-edit')
   async editForm(@Param('id') id: string) {
-    const day = await this.dayService.findOne(+id);
-    if (!day) {
+    const days = await this.dayService.findOne(+id);
+    const routines = await this.dayService.findAllRoutines();
+
+    if (!days) {
       throw new Error(`Day with id ${id} not found`);
     }
+
     return {
-      stats: true,
       day: {
-        id: day.id,
-        date: day.date.toISOString().split('T')[0],
-        wakeUpTime: day.wakeUpTime,
-        wakeDownTime: day.wakeDownTime,
-        getup_score: day.getup_score,
-        feeling_score: day.feeling_score,
-        description: day.description,
-        routineNames: day.routines.map((dr) => dr.routine.name),
+        id: days.id,
+        date: days.date.toISOString().split('T')[0],
+        wakeUpTime: days.wakeUpTime,
+        wakeDownTime: days.wakeDownTime,
+        getup_score: days.getup_score,
+        feeling_score: days.feeling_score,
+        description: days.description,
+        selectedRoutineIds: days.routines.map((dr) => dr.routine.id),
+        routines: routines,
       },
     };
   }
