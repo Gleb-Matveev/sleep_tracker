@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { DatabaseType } from 'typeorm';
 
 export class RoutineInDayResponseDto {
   @ApiProperty({ description: 'Routine ID', example: 1 })
@@ -13,7 +14,7 @@ export class DayResponseDto {
   id: number;
 
   @ApiProperty({ description: 'Date of the day', example: '2024-01-15' })
-  date: Date;
+  date: Date | string;
 
   @ApiProperty({ description: 'Get up score (0-10)', example: 7.5, minimum: 0, maximum: 10 })
   getup_score: number;

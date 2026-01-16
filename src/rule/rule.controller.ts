@@ -37,6 +37,17 @@ export class RuleController {
     };
   }
 
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateRuleDto: UpdateRuleDto, @Res() res: Response) {
+    await this.ruleService.update(+id, updateRuleDto);
+    return res.redirect('/rule');
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.ruleService.remove(+id);
+  }
+
   @Get('new')
   @Render('rule/new')
   newForm() {
@@ -58,16 +69,5 @@ export class RuleController {
         description: rule.description,
       },
     };
-  }
-
-  @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateRuleDto: UpdateRuleDto, @Res() res: Response) {
-    await this.ruleService.update(+id, updateRuleDto);
-    return res.redirect('/rule');
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ruleService.remove(+id);
   }
 }

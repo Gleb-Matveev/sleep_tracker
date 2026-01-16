@@ -8,36 +8,36 @@
     Update your sleep stats for the selected date.
   </p>
 
-  <form action="/day/{{day.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="day-form">
+  <form action="/day/{{dayDto.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="day-form">
     <div style="display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
       <div>
         <label for="date" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Date</label>
-        <input id="date" name="date" type="date" value="{{day.date}}" required>
+        <input id="date" name="date" type="date" value="{{dayDto.date}}" required>
       </div>
       <div>
         <label for="wakeUpTime" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Wake up time</label>
-        <input id="wakeUpTime" name="wakeUpTime" type="time" value="{{day.wakeUpTime}}" required>
+        <input id="wakeUpTime" name="wakeUpTime" type="time" value="{{dayDto.wakeUpTime}}" required>
       </div>
       <div>
         <label for="wakeDownTime" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Bed time</label>
-        <input id="wakeDownTime" name="wakeDownTime" type="time" value="{{day.wakeDownTime}}" required>
+        <input id="wakeDownTime" name="wakeDownTime" type="time" value="{{dayDto.wakeDownTime}}" required>
       </div>
     </div>
 
     <div style="display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
       <div>
         <label for="getup_score" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">GetUp score (0-10)</label>
-        <input id="getup_score" name="getup_score" type="number" min="0" max="10" step="0.1" value="{{day.getup_score}}" required>
+        <input id="getup_score" name="getup_score" type="number" min="0" max="10" step="0.1" value="{{dayDto.getup_score}}" required>
       </div>
       <div>
         <label for="feeling_score" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Feeling score (0-10)</label>
-        <input id="feeling_score" name="feeling_score" type="number" min="0" max="10" step="0.1" value="{{day.feeling_score}}" required>
+        <input id="feeling_score" name="feeling_score" type="number" min="0" max="10" step="0.1" value="{{dayDto.feeling_score}}" required>
       </div>
     </div>
 
     <div>
       <label for="description" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Notes</label>
-      <textarea id="description" name="description" rows="3" placeholder="How you slept, what helped or disturbed?">{{day.description}}</textarea>
+      <textarea id="description" name="description" rows="3" placeholder="How you slept, what helped or disturbed?">{{dayDto.description}}</textarea>
     </div>
 
     <div class="form_label">
@@ -47,7 +47,7 @@
         <input id="checkbox-1" class="multiselect_checkbox" type="checkbox">
         <label for="checkbox-1" class="multiselect_label"></label>
         <select id="select-1" class="field_select" name="technology" multiple style="@media (min-width: 768px) { height: calc(4 * 38px)}">
-          {{#each day.routines}}
+          {{#each routines}}
              <option routineid={{this.id}}>{{this.name}}</option>
           {{/each}}
         </select>
@@ -64,7 +64,7 @@
 
 <script id="day-edit-data" type="application/json">
 {
-  "selectedRoutineIds": {{json day.selectedRoutineIds}}
+  "selectedRoutineIds": {{json selectedRoutineIds}}
 }
 </script>
 

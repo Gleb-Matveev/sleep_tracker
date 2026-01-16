@@ -35,6 +35,25 @@ export class RoutineController {
     };
   }
 
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateRoutineDto: UpdateRoutineDto, @Res() res: Response) {
+    const steps =
+      Array.isArray(updateRoutineDto.steps)
+        ? updateRoutineDto.steps.map((s) => s.trim()).filter(Boolean)
+        : undefined;
+
+    await this.routineService.update(+id, {
+      ...updateRoutineDto,
+      steps,
+    });
+    return res.redirect('/routine');
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.routineService.remove(+id);
+  }
+
   @Get('new')
   @Render('routine/new')
   newForm() {
@@ -57,24 +76,5 @@ export class RoutineController {
         steps: routine.steps,
       },
     };
-  }
-
-  @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateRoutineDto: UpdateRoutineDto, @Res() res: Response) {
-    const steps =
-      Array.isArray(updateRoutineDto.steps)
-        ? updateRoutineDto.steps.map((s) => s.trim()).filter(Boolean)
-        : undefined;
-
-    await this.routineService.update(+id, {
-      ...updateRoutineDto,
-      steps,
-    });
-    return res.redirect('/routine');
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.routineService.remove(+id);
   }
 }

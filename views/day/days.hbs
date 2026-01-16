@@ -26,7 +26,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each statistics}}
+        {{#each daysDto}}
           <tr class="day-row card-delete-trigger" data-day-id="{{this.id}}" style="cursor: pointer;" card-collection-url="day", entity-id={{this.id}}>
             <td>{{this.date}}</td>
             <td>{{this.getup_score}}</td>
@@ -36,7 +36,7 @@
             <td>
               {{#if this.routines}}
                   {{#each this.routines}}
-                    <li>{{this.routine.name}}</li>
+                    <li>{{this.name}}</li>
                   {{/each}}
               {{else}}
                 <span>No routines</span>

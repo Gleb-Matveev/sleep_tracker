@@ -46,9 +46,19 @@ export class GoalController {
     const goals = await this.goalService.findAll();
 
     return {
-      goals: true,
       items: goals,
     };
+  }
+
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto, @Res() res: Response) {
+    await this.goalService.update(+id, updateGoalDto);
+    return res.redirect('/goal');
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.goalService.remove(+id);
   }
 
   @Get('new')
@@ -73,16 +83,5 @@ export class GoalController {
         status: goal.status,
       },
     };
-  }
-
-  @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto, @Res() res: Response) {
-    await this.goalService.update(+id, updateGoalDto);
-    return res.redirect('/goal');
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.goalService.remove(+id);
   }
 }

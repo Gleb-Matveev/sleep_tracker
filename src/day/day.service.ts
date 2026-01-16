@@ -35,7 +35,7 @@ export class DayService {
     return this.dayRepository.save(day);
   }
 
-  async findAll(): Promise<any[]> {
+  async findAll(): Promise<Day[]> {
     const days = await this.dayRepository.find({
       relations: {
         routines: {
