@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -61,6 +61,10 @@ export class RoutineService {
   }
 
   async remove(id: number): Promise<void> {
+    const routine = await this.routineRepository.findOne({ where: { id } });
+    if (!routine) {
+      throw new NotFoundException(`Routine with id ${id} not found`);
+    }
     await this.routineRepository.delete(id);
   }
 }

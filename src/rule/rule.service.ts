@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRuleDto } from './dto/create-rule.dto';
 import { UpdateRuleDto } from './dto/update-rule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -46,6 +46,10 @@ export class RuleService {
   }
 
   async remove(id: number): Promise<void> {
+    const rule = await this.ruleRepository.findOne({ where: { id } });
+    if (!rule) {
+      throw new NotFoundException(`Rule with id ${id} not found`);
+    }
     await this.ruleRepository.delete(id);
   }
 }

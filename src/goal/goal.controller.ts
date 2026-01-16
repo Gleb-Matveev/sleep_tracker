@@ -17,7 +17,9 @@ import { UpdateGoalDto } from './dto/update-goal.dto';
 import type { Response } from 'express';
 import { GoalsEventsService } from './goal.events';
 import { map, Observable } from 'rxjs';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController()
 @Controller('goal')
 export class GoalController {
   constructor(private readonly goalService: GoalService,

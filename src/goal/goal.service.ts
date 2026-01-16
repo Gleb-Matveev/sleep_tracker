@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -52,10 +52,12 @@ export class GoalService {
   }
 
   async remove(id: number): Promise<void> {
-    const removed = await this.goalRepository.findOne({ where: { id } });
-    const remove_res = await this.goalRepository.delete(id);
-    if (removed && remove_res) {
-      this.goalEventsService.emit({type: 'deleted', payload: {id: removed.id, title: removed.name}});
+    const goal = await this.goalRepository.findOne({ where: { id } });
+    if (!goal) {
+      throw new NotFoundException(`Goal with id ${id} not found`);
     }
+    
+    await this.goalRepository.delete(id);
+    this.goalEventsService.emit({type: 'deleted', payload: {id: goal.id, title: goal.name}});
   }
 }

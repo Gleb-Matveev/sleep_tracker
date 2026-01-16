@@ -5,11 +5,22 @@ import { join } from 'node:path';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/http-exception.filter';
 import "reflect-metadata";
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
   );
+
+  // Swagger setup
+  const config = new DocumentBuilder()
+   .setTitle('Sleep tracker API')
+   .setDescription('The sleep tracker API description')
+   .setVersion('1.0')
+   .addTag('sleep_tracker')
+   .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/swagger', app, documentFactory);
 
   // Global exception filter
   app.useGlobalFilters(new HttpExceptionFilter());

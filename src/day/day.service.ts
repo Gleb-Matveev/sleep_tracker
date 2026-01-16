@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDayDto } from './dto/create-day.dto';
 import { UpdateDayDto } from './dto/update-day.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -105,6 +105,10 @@ export class DayService {
   }
 
   async remove(id: number): Promise<void> {
+    const day = await this.dayRepository.findOne({ where: { id } });
+    if (!day) {
+      throw new NotFoundException(`Day with id ${id} not found`);
+    }
     await this.dayRepository.delete(id);
   }
 

@@ -14,7 +14,9 @@ import { CreateDayDto } from './dto/create-day.dto';
 import { UpdateDayDto } from './dto/update-day.dto';
 import { formatDate, formatTime } from '../presentation/formatters/date';
 import type { Response } from 'express';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController()
 @Controller('day')
 export class DayController {
   constructor(private readonly dayService: DayService) {}

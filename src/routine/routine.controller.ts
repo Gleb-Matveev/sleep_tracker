@@ -3,7 +3,9 @@ import { RoutineService } from './routine.service';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
 import type { Response } from 'express';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController()
 @Controller('routine')
 export class RoutineController {
   constructor(private readonly routineService: RoutineService) {}

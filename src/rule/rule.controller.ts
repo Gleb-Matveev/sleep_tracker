@@ -13,7 +13,9 @@ import { RuleService } from './rule.service';
 import { CreateRuleDto } from './dto/create-rule.dto';
 import { UpdateRuleDto } from './dto/update-rule.dto';
 import type { Response } from 'express';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController()
 @Controller('rule')
 export class RuleController {
   constructor(private readonly ruleService: RuleService) {}
