@@ -27,7 +27,7 @@ export class DayController {
   }
 
   @Get()
-  @Render('day')
+  @Render('day/days')
   async findAll() {
     const stats = await this.dayService.findAll();
 
@@ -78,7 +78,7 @@ export class DayController {
   }
 
   @Get('new')
-  @Render('day-new')
+  @Render('day/new')
   async newForm() {
     const routines = await this.dayService.findAllRoutines();
 
@@ -89,7 +89,7 @@ export class DayController {
   }
 
   @Get(':id/edit')
-  @Render('day-edit')
+  @Render('day/edit')
   async editForm(@Param('id') id: string) {
     const days = await this.dayService.findOne(+id);
     const routines = await this.dayService.findAllRoutines();

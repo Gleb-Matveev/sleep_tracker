@@ -25,7 +25,7 @@ export class RoutineController {
   }
 
   @Get()
-  @Render('routins')
+  @Render('routine/routins')
   async findAll() {
     const routines = await this.routineService.findAll();
 
@@ -36,13 +36,13 @@ export class RoutineController {
   }
 
   @Get('new')
-  @Render('routine-new')
+  @Render('routine/new')
   newForm() {
     return { routins: true };
   }
 
   @Get(':id/edit')
-  @Render('routine-edit')
+  @Render('routine/edit')
   async editForm(@Param('id') id: string) {
     const routine = await this.routineService.findOne(+id);
     if (!routine) {

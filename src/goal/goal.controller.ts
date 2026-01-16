@@ -41,7 +41,7 @@ export class GoalController {
   }
 
   @Get()
-  @Render('goals')
+  @Render('goal/goals')
   async findAll() {
     const goals = await this.goalService.findAll();
 
@@ -52,13 +52,13 @@ export class GoalController {
   }
 
   @Get('new')
-  @Render('goal-new')
+  @Render('goal/new')
   newForm() {
     return { goals: true };
   }
 
   @Get(':id/edit')
-  @Render('goal-edit')
+  @Render('goal/edit')
   async editForm(@Param('id') id: string) {
     const goal = await this.goalService.findOne(+id);
     if (!goal) {

@@ -27,7 +27,7 @@ export class RuleController {
   }
 
   @Get()
-  @Render('rules')
+  @Render('rule/rules')
   async findAll() {
     const rules = await this.ruleService.findAll();
 
@@ -38,13 +38,13 @@ export class RuleController {
   }
 
   @Get('new')
-  @Render('rule-new')
+  @Render('rule/new')
   newForm() {
     return { rules: true };
   }
 
   @Get(':id/edit')
-  @Render('rule-edit')
+  @Render('rule/edit')
   async editForm(@Param('id') id: string) {
     const rule = await this.ruleService.findOne(+id);
     if (!rule) {
