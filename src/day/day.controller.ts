@@ -33,7 +33,7 @@ export class DayController {
 
   @Get()
   @Render('day/days')
-  async findAll(): Promise<{ daysDto: DayResponseDto[] }> {
+  async findAll(): Promise<{ days: boolean; daysDto: DayResponseDto[] }> {
     const stats = await this.dayService.findAll();
 
     const daysDto: DayResponseDto[] = stats.map((day) => ({
@@ -53,7 +53,10 @@ export class DayController {
       description: day.description,
     }));
 
-    return { daysDto };
+    return {
+      days: true,
+      daysDto,
+    };
   }
 
   @Patch(':id')
@@ -73,17 +76,19 @@ export class DayController {
 
   @Get('new')
   @Render('day/new')
-  async newForm() {
+  async newForm(): Promise<{ days: boolean; routines: RoutineResponseDto[] }> {
     const routines = await this.dayService.findAllRoutines();
 
-    return { routines };
+    return { 
+      days: true,
+      routines 
+    };
   }
 
   @Get(':id/edit')
   @Render('day/edit')
-  async editForm(
-    @Param('id') id: string,
-  ): Promise<{
+  async editForm(@Param('id') id: string): Promise<{
+    days: boolean;
     dayDto: DayResponseDto;
     routines: RoutineResponseDto[];
     selectedRoutineIds: number[];
@@ -123,10 +128,11 @@ export class DayController {
       description: day.description,
     };
 
-    return { 
-      dayDto, 
-      routines: routinesDto, 
-      selectedRoutineIds 
+    return {
+      days: true,
+      dayDto,
+      routines: routinesDto,
+      selectedRoutineIds,
     };
   }
 

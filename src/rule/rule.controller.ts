@@ -14,6 +14,7 @@ import { CreateRuleDto } from './dto/create-rule.dto';
 import { UpdateRuleDto } from './dto/update-rule.dto';
 import type { Response } from 'express';
 import { ApiExcludeController } from '@nestjs/swagger';
+import { RuleResponseDto } from './dto/rule-response.dto';
 
 @ApiExcludeController()
 @Controller('rule')
@@ -28,12 +29,18 @@ export class RuleController {
 
   @Get()
   @Render('rule/rules')
-  async findAll() {
+  async findAll(): Promise<{ rules: boolean; items: RuleResponseDto[] }> {
     const rules = await this.ruleService.findAll();
+
+    const rulesDto: RuleResponseDto[] = rules.map((rule) => ({
+      id: rule.id,
+      name: rule.name,
+      description: rule.description,
+    }));
 
     return {
       rules: true,
-      items: rules,
+      items: rulesDto,
     };
   }
 
@@ -50,24 +57,28 @@ export class RuleController {
 
   @Get('new')
   @Render('rule/new')
-  newForm() {
+  newForm(): { rules: boolean } {
     return { rules: true };
   }
 
   @Get(':id/edit')
   @Render('rule/edit')
-  async editForm(@Param('id') id: string) {
+  async editForm(@Param('id') id: string): Promise<{ rules: boolean; rule: RuleResponseDto }> {
     const rule = await this.ruleService.findOne(+id);
+    
     if (!rule) {
       throw new Error(`Rule with id ${id} not found`);
     }
+
+    const ruleDto: RuleResponseDto = {
+      id: rule.id,
+      name: rule.name,
+      description: rule.description,
+    };
+
     return {
       rules: true,
-      rule: {
-        id: rule.id,
-        name: rule.name,
-        description: rule.description,
-      },
+      rule: ruleDto,
     };
   }
 }

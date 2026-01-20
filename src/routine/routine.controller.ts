@@ -4,6 +4,7 @@ import { CreateRoutineDto } from './dto/create-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
 import type { Response } from 'express';
 import { ApiExcludeController } from '@nestjs/swagger';
+import { RoutineResponseDto } from './dto/routine-response.dto';
 
 @ApiExcludeController()
 @Controller('routine')
@@ -25,13 +26,20 @@ export class RoutineController {
   }
 
   @Get()
-  @Render('routine/routins')
-  async findAll() {
+  @Render('routine/routines')
+  async findAll(): Promise<{ routines: boolean; items: RoutineResponseDto[] }> {
     const routines = await this.routineService.findAll();
 
+    const routinesDto: RoutineResponseDto[] = routines.map((routine) => ({
+      id: routine.id,
+      name: routine.name,
+      period: routine.period,
+      steps: routine.steps,
+    }));
+
     return {
-      routins: true,
-      items: routines,
+      routines: true,
+      items: routinesDto,
     };
   }
 
@@ -56,25 +64,29 @@ export class RoutineController {
 
   @Get('new')
   @Render('routine/new')
-  newForm() {
-    return { routins: true };
+  newForm(): { routines: boolean } {
+    return { routines: true };
   }
 
   @Get(':id/edit')
   @Render('routine/edit')
-  async editForm(@Param('id') id: string) {
+  async editForm(@Param('id') id: string): Promise<{ routines: boolean; routine: RoutineResponseDto }> {
     const routine = await this.routineService.findOne(+id);
+    
     if (!routine) {
       throw new Error(`Routine with id ${id} not found`);
     }
+
+    const routineDto: RoutineResponseDto = {
+      id: routine.id,
+      name: routine.name,
+      period: routine.period,
+      steps: routine.steps,
+    };
+
     return {
       routines: true,
-      routine: {
-        id: routine.id,
-        name: routine.name,
-        period: routine.period,
-        steps: routine.steps,
-      },
+      routine: routineDto,
     };
   }
 }

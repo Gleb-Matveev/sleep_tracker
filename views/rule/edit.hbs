@@ -8,15 +8,15 @@
     Update your sleep rule.
   </p>
 
-  <form action="/rule/{{rule.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="edit-form">
+  <form action="/rule/{{this.rule.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="edit-form">
     <div>
       <label for="name" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Title</label>
-      <input id="name" name="name" type="text" placeholder="e.g. No caffeine after 16:00" value="{{rule.name}}" required>
+      <input id="name" name="name" type="text" placeholder="e.g. No caffeine after 16:00" value="{{this.rule.name}}" required>
     </div>
 
     <div>
       <label for="description" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Description</label>
-      <textarea id="description" name="description" rows="3" placeholder="Why and how to follow this rule?" required>{{rule.description}}</textarea>
+      <textarea id="description" name="description" rows="3" placeholder="Why and how to follow this rule?" required>{{this.rule.description}}</textarea>
     </div>
 
     <div style="display: flex; gap: 0.6rem; justify-content: flex-end;">

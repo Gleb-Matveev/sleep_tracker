@@ -18,6 +18,7 @@ import type { Response } from 'express';
 import { GoalsEventsService } from './goal.events';
 import { map, Observable } from 'rxjs';
 import { ApiExcludeController } from '@nestjs/swagger';
+import { GoalResponseDto } from './dto/goal-response.dto';
 
 @ApiExcludeController()
 @Controller('goal')
@@ -42,11 +43,19 @@ export class GoalController {
 
   @Get()
   @Render('goal/goals')
-  async findAll() {
+  async findAll(): Promise<{ goals: boolean; items: GoalResponseDto[] }> {
     const goals = await this.goalService.findAll();
 
+    const goalsDto: GoalResponseDto[] = goals.map((goal) => ({
+      id: goal.id,
+      name: goal.name,
+      description: goal.description,
+      status: goal.status,
+    }));
+
     return {
-      items: goals,
+      goals: true,
+      items: goalsDto,
     };
   }
 
@@ -63,13 +72,13 @@ export class GoalController {
 
   @Get('new')
   @Render('goal/new')
-  newForm() {
+  newForm(): { goals: boolean } {
     return { goals: true };
   }
 
   @Get(':id/edit')
   @Render('goal/edit')
-  async editForm(@Param('id') id: string) {
+  async editForm(@Param('id') id: string): Promise<{ goals: boolean; goal: GoalResponseDto }> {
     const goal = await this.goalService.findOne(+id);
     if (!goal) {
       throw new Error(`Goal with id ${id} not found`);

@@ -8,22 +8,22 @@
     Update your sleep goal.
   </p>
 
-  <form action="/goal/{{goal.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="edit-form">
+  <form action="/goal/{{this.goal.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="edit-form">
     <div>
       <label for="name" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Title</label>
-      <input id="name" name="name" type="text" placeholder="e.g. Sleep 8 hours on weekdays" value="{{goal.name}}" required>
+      <input id="name" name="name" type="text" placeholder="e.g. Sleep 8 hours on weekdays" value="{{this.goal.name}}" required>
     </div>
 
     <div>
       <label for="description" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Description</label>
-      <textarea id="description" name="description" rows="3" placeholder="What exactly should be achieved?" required>{{goal.description}}</textarea>
+      <textarea id="description" name="description" rows="3" placeholder="What exactly should be achieved?" required>{{this.goal.description}}</textarea>
     </div>
 
     <div>
       <label for="status" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Status</label>
       <select id="status" name="status">
-        <option value="Not done" {{#eq goal.status "Not done"}}selected{{/eq}}>Not done</option>
-        <option value="Done" {{#eq goal.status "Done"}}selected{{/eq}}>Done</option>
+        <option value="Not done" {{#eq this.goal.status "Not done"}}selected{{/eq}}>Not done</option>
+        <option value="Done" {{#eq this.goal.status "Done"}}selected{{/eq}}>Done</option>
       </select>
     </div>
 

@@ -8,17 +8,17 @@
     Update your routine steps.
   </p>
 
-  <form action="/routine/{{routine.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="routine-form">
+  <form action="/routine/{{this.routine.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="routine-form">
     <div>
       <label for="name" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Title</label>
-      <input id="name" name="name" type="text" placeholder="e.g. Evening wind-down" value="{{routine.name}}" required>
+      <input id="name" name="name" type="text" placeholder="e.g. Evening wind-down" value="{{this.routine.name}}" required>
     </div>
 
     <div>
       <label for="period" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Period</label>
       <select id="period" name="period">
-        <option value="Night" {{#eq routine.period "Night"}}selected{{/eq}}>Night</option>
-        <option value="Day" {{#eq routine.period "Day"}}selected{{/eq}}>Day</option>
+        <option value="Night" {{#eq this.routine.period "Night"}}selected{{/eq}}>Night</option>
+        <option value="Day" {{#eq this.routine.period "Day"}}selected{{/eq}}>Day</option>
       </select>
     </div>
 
@@ -28,13 +28,13 @@
         <button type="button" class="btn btn-secondary" id="add-step-btn">+ Add step</button>
       </div>
       <div id="steps-list" style="display: grid; gap: 0.5rem;">
-        {{#each routine.steps}}
+        {{#each this.routine.steps}}
           <div class="step-row" style="display: grid; grid-template-columns: 1fr auto; gap: 0.5rem;">
             <input name="steps[]" type="text" placeholder="Describe the step" value="{{this}}" required>
             <button type="button" class="btn btn-secondary remove-step-btn" aria-label="Remove step">&minus;</button>
           </div>
         {{/each}}
-        {{#unless routine.steps}}
+        {{#unless this.routine.steps}}
           <div class="step-row" style="display: grid; grid-template-columns: 1fr auto; gap: 0.5rem;">
             <input name="steps[]" type="text" placeholder="Describe the step" required>
             <button type="button" class="btn btn-secondary remove-step-btn" aria-label="Remove step">&minus;</button>

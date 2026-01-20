@@ -40,7 +40,6 @@
       <textarea id="description" name="description" rows="3" placeholder="How you slept, what helped or disturbed?"></textarea>
     </div>
 
-    <p>{{stats}}</p>
     <div class="form_label">
       <label for="description" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Routines completed</label>
       <div class="multiselect_block">
@@ -48,7 +47,7 @@
         <input id="checkbox-1" class="multiselect_checkbox" type="checkbox">
         <label for="checkbox-1" class="multiselect_label"></label>
         <select id="select-1" class="field_select" name="technology" multiple style="@media (min-width: 768px) { height: calc(4 * 38px)}">
-          {{#each routines}}
+          {{#each this.routines}}
              <option routineid={{this.id}}>{{this.name}}</option>
           {{/each}}
         </select>

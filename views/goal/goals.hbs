@@ -12,7 +12,7 @@
   </p>
 
   <div style="margin-top: 1rem; display: grid; gap: 1rem;">
-    {{#each items}}
+    {{#each this.items}}
       <article class="card card-hover card-delete-trigger" style="padding: 1rem 1.1rem; cursor: pointer;" card-collection-url="goal", entity-id={{this.id}}>
         <div class="card-header" style="margin-bottom: 0.4rem;">
           <h2 class="card-title" style="font-size: 0.95rem;">{{this.name}}</h2>
