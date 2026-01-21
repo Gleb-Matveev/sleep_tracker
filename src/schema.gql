@@ -1,0 +1,30 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Goal1 {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Query {
+  Goal1s: [Goal1!]!
+  Goal1(id: Int!): Goal1!
+}
+
+type Mutation {
+  createGoal1(createGoal1Input: CreateGoal1Input!): Goal1!
+  updateGoal1(updateGoal1Input: UpdateGoal1Input!): Goal1!
+  removeGoal1(id: Int!): Goal1!
+}
+
+input CreateGoal1Input {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateGoal1Input {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}

@@ -6,10 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Goal } from './entities/goal.entity';
 import { GoalsEventsService } from './goal.events';
 import { CommonModule } from '../common/common.module';
+import { GoalResolver } from './goal.resolver';
+import { GoalAdapter } from './goal.adapter';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Goal]), CommonModule],
   controllers: [GoalController, GoalApiController],
-  providers: [GoalService, GoalsEventsService],
+  providers: [GoalService, GoalsEventsService, GoalResolver, GoalAdapter],
 })
 export class GoalModule {}

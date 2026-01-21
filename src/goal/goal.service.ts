@@ -15,6 +15,7 @@ export class GoalService {
   ) {}
 
   async create(createGoalDto: CreateGoalDto): Promise<Goal> {
+    console.log('Creating goal:', createGoalDto);
     const goal = this.goalRepository.create(createGoalDto);
     if (goal) {
       this.goalEventsService.emit({type: 'created', payload: {id: goal.id, title: goal.name}});
@@ -37,8 +38,14 @@ export class GoalService {
     return { data, total };
   }
 
-  async findOne(id: number): Promise<Goal | null> {
-    return await this.goalRepository.findOne({ where: { id } });
+  async findOne(id: number): Promise<Goal> {
+    const goal = await this.goalRepository.findOne({ where: { id } });
+
+    if (!goal) {
+      throw new NotFoundException(`Goal with id ${id} not found`);
+    }
+
+    return goal;
   }
 
   async update(id: number, updateGoalDto: UpdateGoalDto): Promise<Goal> {
