@@ -2,29 +2,59 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Goal1 {
-  """Example field (placeholder)"""
-  exampleField: Int!
+"""Goal"""
+type GoalModel {
+  """Unique identifier for the goal"""
+  id: ID
+
+  """Name of the goal"""
+  name: String!
+
+  """Description of the goal"""
+  description: String!
+
+  """Status of the goal"""
+  status: GoalStatus!
+}
+
+"""Goal status"""
+enum GoalStatus {
+  DONE
+  NOTDONE
 }
 
 type Query {
-  Goal1s: [Goal1!]!
-  Goal1(id: Int!): Goal1!
+  goals: [GoalModel!]!
+  goal(id: Int!): GoalModel!
 }
 
 type Mutation {
-  createGoal1(createGoal1Input: CreateGoal1Input!): Goal1!
-  updateGoal1(updateGoal1Input: UpdateGoal1Input!): Goal1!
-  removeGoal1(id: Int!): Goal1!
+  """Create new goal"""
+  createGoal(createGoalInput: CreateGoalInput!): GoalModel!
+  updateGoal(id: Int!, updateGoalInput: UpdateGoalInput!): GoalModel!
+  removeGoal(id: Int!): GoalModel!
 }
 
-input CreateGoal1Input {
-  """Example field (placeholder)"""
-  exampleField: Int!
+"""Input type for creating a goal"""
+input CreateGoalInput {
+  """Name of the goal"""
+  name: String!
+
+  """Description of the goal"""
+  description: String!
+
+  """Status of the goal"""
+  status: GoalStatus!
 }
 
-input UpdateGoal1Input {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+"""Input type for updating a goal"""
+input UpdateGoalInput {
+  """Name of the goal"""
+  name: String
+
+  """Description of the goal"""
+  description: String
+
+  """Status of the goal"""
+  status: GoalStatus
 }
