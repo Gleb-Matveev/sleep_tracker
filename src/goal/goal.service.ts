@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Goal } from './entities/goal.entity';
+import { Goal, Status } from './entities/goal.entity';
 import { Repository, FindManyOptions } from 'typeorm';
 import { GoalsEventsService } from './goal.events';
 
@@ -66,5 +66,41 @@ export class GoalService {
     await this.goalRepository.delete(id);
     this.goalEventsService.emit({type: 'deleted', payload: {id: goal.id, title: goal.name}});
     return goal;
+  }
+
+  async completeGoal(id: number): Promise<Goal> {
+    const updatable = await this.goalRepository.findOne({ where: { id } });
+    if (!updatable) {
+      throw new Error(`Goal with id ${id} not found`);
+    }
+    const updateGoalDto: UpdateGoalDto = {
+      status: Status.DONE
+    }
+    await this.goalRepository.update(id, updateGoalDto);
+    return {
+      id: updatable.id,
+      name: updatable.name,
+      description: updatable.description,
+      status: Status.DONE,
+      user: updatable.user
+    };
+  }
+
+  async uncompleteGoal(id: number): Promise<Goal> {
+    const updatable = await this.goalRepository.findOne({ where: { id } });
+    if (!updatable) {
+      throw new Error(`Goal with id ${id} not found`);
+    }
+    const updateGoalDto: UpdateGoalDto = {
+      status: Status.NOTDONE
+    }
+    await this.goalRepository.update(id, updateGoalDto);
+    return {
+      id: updatable.id,
+      name: updatable.name,
+      description: updatable.description,
+      status: Status.NOTDONE,
+      user: updatable.user
+    };
   }
 }

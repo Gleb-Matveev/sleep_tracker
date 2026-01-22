@@ -45,11 +45,12 @@ export class RuleService {
     return updated;
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number): Promise<Rule> {
     const rule = await this.ruleRepository.findOne({ where: { id } });
     if (!rule) {
       throw new NotFoundException(`Rule with id ${id} not found`);
     }
     await this.ruleRepository.delete(id);
+    return rule;
   }
 }

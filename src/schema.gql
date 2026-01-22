@@ -23,16 +23,55 @@ enum GoalStatus {
   NOTDONE
 }
 
+"""Rule"""
+type RuleModel {
+  """Unique identifier for the rule"""
+  id: ID
+
+  """Name of the rule"""
+  name: String!
+
+  """Description of the rule"""
+  description: String!
+}
+
 type Query {
+  rules: [RuleModel!]!
+  rule(id: Int!): RuleModel!
   goals: [GoalModel!]!
   goal(id: Int!): GoalModel!
 }
 
 type Mutation {
+  """Create new Rule"""
+  createRule(createRuleInput: CreateRuleInput!): RuleModel!
+  updateRule(id: Int!, updateRuleInput: UpdateRuleInput!): RuleModel!
+  removeRule(id: Int!): RuleModel!
+
   """Create new goal"""
   createGoal(createGoalInput: CreateGoalInput!): GoalModel!
   updateGoal(id: Int!, updateGoalInput: UpdateGoalInput!): GoalModel!
   removeGoal(id: Int!): GoalModel!
+  completeGoal(id: Int!): GoalModel!
+  uncompleteGoal(id: Int!): GoalModel!
+}
+
+"""Input type for creating a rule"""
+input CreateRuleInput {
+  """Name of the rule"""
+  name: String!
+
+  """Description of the rule"""
+  description: String!
+}
+
+"""Input type for updating a rule"""
+input UpdateRuleInput {
+  """Name of the rule"""
+  name: String
+
+  """Description of the rule"""
+  description: String
 }
 
 """Input type for creating a goal"""

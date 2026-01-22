@@ -61,4 +61,18 @@ export class GoalResolver {
     const goalModel = this.goalAdapter.toModel(goal);
     return goalModel;
   }
+
+  @Mutation(() => GoalModel)
+  async completeGoal(@Args('id', { type: () => Int }) id: number): Promise<GoalModel> {
+    const goal = await this.goalService.completeGoal(id);
+    const goalModel = this.goalAdapter.toModel(goal);
+    return goalModel;
+  }
+
+  @Mutation(() => GoalModel)
+  async uncompleteGoal(@Args('id', { type: () => Int }) id: number): Promise<GoalModel> {
+    const goal = await this.goalService.uncompleteGoal(id);
+    const goalModel = this.goalAdapter.toModel(goal);
+    return goalModel;
+  }
 }
