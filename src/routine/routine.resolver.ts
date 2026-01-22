@@ -40,11 +40,6 @@ export class RoutineResolver {
     @Args('id', { type: () => Int }) id: number,
   ): Promise<RoutineModel> {
     const routine = await this.routineService.findOne(id);
-
-    if (!routine) {
-      throw new Error(`Routine with id ${id} not found`);
-    }
-
     const routineModel = this.routineAdapter.toModel(routine);
     return routineModel;
   }

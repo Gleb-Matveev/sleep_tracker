@@ -32,8 +32,14 @@ export class RuleService {
     return { data, total };
   }
 
-  async findOne(id: number): Promise<Rule | null> {
-    return await this.ruleRepository.findOne({ where: { id } });
+  async findOne(id: number): Promise<Rule> {
+    const rule = await this.ruleRepository.findOne({ where: { id } });
+
+    if (!rule) {
+      throw new NotFoundException(`Rule with id ${id} not found`);
+    }
+
+    return rule;
   }
 
   async update(id: number, updateRuleDto: UpdateRuleDto): Promise<Rule> {

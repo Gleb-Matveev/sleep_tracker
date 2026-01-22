@@ -17,13 +17,13 @@ export class DayModel {
   @Field(() => Number, {description: 'How well did you feel throughtout the day'})
   feeling_score: number;
 
-  @Field(() => Date, {description: 'Wake up time'})
+  @Field(() => String, {description: 'Wake up time'})
   wakeUpTime: string;
 
-  @Field(() => Date, {description: 'Time you went to sleep'})
+  @Field(() => String, {description: 'Time you went to sleep'})
   wakeDownTime: string;
 
-  @Field(() => Date, {description: 'Any additional info on the day'})
+  @Field(() => String, {description: 'Any additional info on the day'})
   description: string;
 
   @Field(() => [RoutineModel], {description: 'Routines you completed this day'})

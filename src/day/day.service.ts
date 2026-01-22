@@ -16,7 +16,7 @@ export class DayService {
     @InjectRepository(DayRoutine)
     private dayRoutineRepository: Repository<DayRoutine>,
     @InjectRepository(Routine)
-    private routineRepository: Repository<Routine>
+    private routineRepository: Repository<Routine>,
   ) {}
 
   async create(createDayDto: CreateDayDto): Promise<Day> {
@@ -32,7 +32,26 @@ export class DayService {
       ),
     });
 
-    return this.dayRepository.save(day);
+    const saved = await this.dayRepository.save(day);
+    if (!day) {
+      throw new Error("Could't save instance");
+    }
+
+    console.log("Saved:", saved);
+    const res = await this.dayRepository.findOne({
+      where: { id: saved.id },
+      relations: {
+        routines: {
+          routine: true,
+        },
+      },
+    });
+
+    if (!res) {
+      throw new Error("Could't save instance");
+    }
+
+    return res;
   }
 
   async findAll(): Promise<Day[]> {
@@ -48,7 +67,10 @@ export class DayService {
     return days;
   }
 
-  async findAllPaginated(page: number, limit: number): Promise<{ data: Day[]; total: number }> {
+  async findAllPaginated(
+    page: number,
+    limit: number,
+  ): Promise<{ data: Day[]; total: number }> {
     const findOptions: FindManyOptions<Day> = {
       relations: {
         routines: {
@@ -64,17 +86,21 @@ export class DayService {
     return { data, total };
   }
 
-  async findOne(id: number): Promise<Day | null> {
-    const days = await this.dayRepository.findOne({
+  async findOne(id: number): Promise<Day> {
+    const day = await this.dayRepository.findOne({
       where: { id },
       relations: {
         routines: {
           routine: true,
         },
-      }
+      },
     });
 
-    return days;
+    if (!day) {
+      throw new NotFoundException(`Day with id ${id} not found`);
+    }
+
+    return day;
   }
 
   async update(id: number, updateDayDto: UpdateDayDto): Promise<Day> {
@@ -97,22 +123,41 @@ export class DayService {
             )
           : undefined,
     });
-    const updated = await this.dayRepository.findOne({ where: { id } });
+    const updated = await this.dayRepository.findOne({
+      where: { id },
+      relations: {
+        routines: {
+          routine: true,
+        },
+      },
+    });
+
     if (!updated) {
       throw new Error(`Day with id ${id} not found`);
     }
+
     return updated;
   }
 
-  async remove(id: number): Promise<void> {
-    const day = await this.dayRepository.findOne({ where: { id } });
+  async remove(id: number): Promise<Day> {
+    const day = await this.dayRepository.findOne({
+      where: { id },
+      relations: {
+        routines: {
+          routine: true,
+        },
+      },
+    });
+
     if (!day) {
       throw new NotFoundException(`Day with id ${id} not found`);
     }
+    
     await this.dayRepository.delete(id);
+    return day;
   }
 
   async findAllRoutines(): Promise<Routine[]> {
-      return await this.routineRepository.find();
+    return await this.routineRepository.find();
   }
 }

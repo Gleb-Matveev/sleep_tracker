@@ -33,8 +33,8 @@ export class RoutineService {
     return { data, total };
   }
 
-  async findOne(id: number): Promise<Routine | null> {
-    return await this.routineRepository.findOne({ 
+  async findOne(id: number): Promise<Routine> {
+    const routine = await this.routineRepository.findOne({ 
       where: { id },
       relations: {
         days: {
@@ -42,6 +42,12 @@ export class RoutineService {
         },
       },
     });
+
+    if (!routine) {
+      throw new NotFoundException(`Routine with id ${id} not found`);
+    }
+
+    return routine;
   }
 
   async update(id: number, updateRoutineDto: UpdateRoutineDto): Promise<Routine> {

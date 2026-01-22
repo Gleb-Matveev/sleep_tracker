@@ -36,11 +36,6 @@ export class GoalResolver {
   @Query(() => GoalModel, { name: 'goal' })
   async findOne(@Args('id', { type: () => Int }) id: number): Promise<GoalModel> {
     const goal = await this.goalService.findOne(id);
-
-    if (!goal) {
-      throw new Error(`Goal with id ${id} not found`);
-    }
-
     const goalModel = this.goalAdapter.toModel(goal);
     return goalModel;
   }

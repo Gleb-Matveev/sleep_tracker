@@ -35,11 +35,6 @@ export class RuleResolver {
   @Query(() => RuleModel, { name: 'rule' })
   async findOne(@Args('id', { type: () => Int }) id: number): Promise<RuleModel> {
     const rule = await this.ruleService.findOne(id);
-
-    if (!rule) {
-      throw new Error(`Rule with id ${id} not found`);
-    }
-
     const ruleModel = this.ruleAdapter.toModel(rule);
     return ruleModel;
   }

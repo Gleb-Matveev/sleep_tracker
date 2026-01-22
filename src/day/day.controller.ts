@@ -96,10 +96,6 @@ export class DayController {
     const day = await this.dayService.findOne(+id);
     const routines = await this.dayService.findAllRoutines();
 
-    if (!day) {
-      throw new Error(`Day with id ${id} not found`);
-    }
-
     const routinesDto: RoutineResponseDto[] = routines.map((routine) => ({
       id: routine.id,
       name: routine.name,

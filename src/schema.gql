@@ -2,27 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""Goal"""
-type GoalModel {
-  """Unique identifier for the goal"""
-  id: ID
-
-  """Name of the goal"""
-  name: String!
-
-  """Description of the goal"""
-  description: String!
-
-  """Status of the goal"""
-  status: GoalStatus!
-}
-
-"""Goal status"""
-enum GoalStatus {
-  DONE
-  NOTDONE
-}
-
 """Routine"""
 type RoutineModel {
   """Unique identifier for the routine"""
@@ -44,6 +23,59 @@ enum RoutinePeriod {
   NIGHT
 }
 
+"""Day"""
+type DayModel {
+  """Unique identifier for the day"""
+  id: ID!
+
+  """Date"""
+  date: DateTime!
+
+  """How easy was it to get up"""
+  getup_score: Float!
+
+  """How well did you feel throughtout the day"""
+  feeling_score: Float!
+
+  """Wake up time"""
+  wakeUpTime: String!
+
+  """Time you went to sleep"""
+  wakeDownTime: String!
+
+  """Any additional info on the day"""
+  description: String!
+
+  """Routines you completed this day"""
+  routines: [RoutineModel!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""Goal"""
+type GoalModel {
+  """Unique identifier for the goal"""
+  id: ID
+
+  """Name of the goal"""
+  name: String!
+
+  """Description of the goal"""
+  description: String!
+
+  """Status of the goal"""
+  status: GoalStatus!
+}
+
+"""Goal status"""
+enum GoalStatus {
+  DONE
+  NOTDONE
+}
+
 """Rule"""
 type RuleModel {
   """Unique identifier for the rule"""
@@ -63,6 +95,12 @@ type Query {
   goal(id: Int!): GoalModel!
   routines: [RoutineModel!]!
   routine(id: Int!): RoutineModel!
+
+  """Retrieve all days"""
+  days: [DayModel!]!
+
+  """Retrieve day with specified id"""
+  day(id: Int!): DayModel!
 }
 
 type Mutation {
@@ -88,6 +126,11 @@ type Mutation {
 
   """Change period day/night"""
   changePeriod(id: Int!): RoutineModel!
+
+  """Create a new day"""
+  createDay(createDayInput: CreateDayInput!): DayModel!
+  updateDay(id: Int!, updateDayInput: UpdateDayInput!): DayModel!
+  removeDay(id: Int!): DayModel!
 }
 
 """Input type for creating a rule"""
@@ -154,4 +197,52 @@ input UpdateRoutineInput {
 
   """Particular steps of the routine"""
   steps: [String!]!
+}
+
+"""Input type for creating a day"""
+input CreateDayInput {
+  """Date"""
+  date: DateTime!
+
+  """How easy was it to get up"""
+  getup_score: Float!
+
+  """How well did you feel throughtout the day"""
+  feeling_score: Float!
+
+  """Wake up time"""
+  wakeUpTime: String!
+
+  """Time you went to sleep"""
+  wakeDownTime: String!
+
+  """Any additional info on the day"""
+  description: String!
+
+  """Routines you completed this day"""
+  routines: [Float!]!
+}
+
+"""Input type for updating a day"""
+input UpdateDayInput {
+  """Date"""
+  date: DateTime
+
+  """How easy was it to get up"""
+  getup_score: Float
+
+  """How well did you feel throughtout the day"""
+  feeling_score: Float
+
+  """Wake up time"""
+  wakeUpTime: String
+
+  """Time you went to sleep"""
+  wakeDownTime: String
+
+  """Any additional info on the day"""
+  description: String
+
+  """Routines you completed this day"""
+  routines: [Float!]
 }
