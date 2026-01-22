@@ -48,6 +48,9 @@ type DayModel {
 
   """Routines you completed this day"""
   routines: [RoutineModel!]!
+
+  """Routines related to the day"""
+  toRoutine: [RoutineModel!]!
 }
 
 """

@@ -33,25 +33,10 @@ export class DayService {
     });
 
     const saved = await this.dayRepository.save(day);
-    if (!day) {
-      throw new Error("Could't save instance");
+    if (!saved) {
+      throw new Error(`Coudn't create new day`);
     }
-
-    console.log("Saved:", saved);
-    const res = await this.dayRepository.findOne({
-      where: { id: saved.id },
-      relations: {
-        routines: {
-          routine: true,
-        },
-      },
-    });
-
-    if (!res) {
-      throw new Error("Could't save instance");
-    }
-
-    return res;
+    return saved;
   }
 
   async findAll(): Promise<Day[]> {
@@ -123,14 +108,7 @@ export class DayService {
             )
           : undefined,
     });
-    const updated = await this.dayRepository.findOne({
-      where: { id },
-      relations: {
-        routines: {
-          routine: true,
-        },
-      },
-    });
+    const updated = await this.dayRepository.findOne({where: { id }});
 
     if (!updated) {
       throw new Error(`Day with id ${id} not found`);
@@ -152,7 +130,7 @@ export class DayService {
     if (!day) {
       throw new NotFoundException(`Day with id ${id} not found`);
     }
-    
+
     await this.dayRepository.delete(id);
     return day;
   }

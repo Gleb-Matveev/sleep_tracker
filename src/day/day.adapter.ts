@@ -21,9 +21,10 @@ export class DayAdapter {
       wakeDownTime: day.wakeDownTime,
       description: day.description,
       routines:
-        day.routines?.map((dayRoutine) =>
-          this.toRoutineModel(dayRoutine.routine),
-        ) ?? [],
+        day.routines
+          ?.map((dr) => dr.routine)
+          .filter((r): r is Routine => r !== undefined)
+          .map((r) => this.toRoutineModel(r)) ?? [],
     };
   }
 

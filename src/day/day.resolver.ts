@@ -1,9 +1,10 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { DayModel } from './models/day.model';
 import { DayService } from './day.service';
 import { DayAdapter } from './day.adapter';
 import { CreateDayInput } from './inputs/create-day.input';
 import { UpdateDayInput } from './inputs/update-day.input';
+import { RoutineModel } from 'src/routine/models/routine.model';
 
 @Resolver(() => DayModel)
 export class DayResolver {
@@ -67,5 +68,21 @@ export class DayResolver {
     const day = await this.dayService.remove(id);
     const dayModel = this.dayAdapter.toModel(day);
     return dayModel;
+  }
+
+  @ResolveField(() => [RoutineModel], {
+    name: "toRoutine",
+    description: "Routines related to the day"
+  })
+  async getRoutine(@Parent() day: DayModel): Promise<RoutineModel[]> {
+    if (!day.routines) {
+        const day_with_routines = await this.dayService.findOne(day.id);
+        if (!day_with_routines.routines) {
+            return [];
+        } else {
+            return day_with_routines.routines.map((routine) => this.dayAdapter.toRoutineModel(routine.routine));
+        }
+    }
+    return day.routines;
   }
 }
