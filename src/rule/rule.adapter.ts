@@ -4,7 +4,9 @@ import { CreateRuleInput } from "./inputs/create-rule.input";
 import { UpdateRuleInput } from "./inputs/update-rule.input";
 import { Rule } from "./entities/rule.entity";
 import { RuleModel } from "./models/rule.model"
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class RuleAdapter {
     toModel(rule: Rule): RuleModel {
         return {

@@ -23,6 +23,27 @@ enum GoalStatus {
   NOTDONE
 }
 
+"""Routine"""
+type RoutineModel {
+  """Unique identifier for the routine"""
+  id: ID
+
+  """Name of the routine"""
+  name: String!
+
+  """Period of the routine: day or night"""
+  period: RoutinePeriod!
+
+  """Particular steps of the routine"""
+  steps: [String!]!
+}
+
+"""Day or night"""
+enum RoutinePeriod {
+  DAY
+  NIGHT
+}
+
 """Rule"""
 type RuleModel {
   """Unique identifier for the rule"""
@@ -40,6 +61,8 @@ type Query {
   rule(id: Int!): RuleModel!
   goals: [GoalModel!]!
   goal(id: Int!): GoalModel!
+  routines: [RoutineModel!]!
+  routine(id: Int!): RoutineModel!
 }
 
 type Mutation {
@@ -54,6 +77,17 @@ type Mutation {
   removeGoal(id: Int!): GoalModel!
   completeGoal(id: Int!): GoalModel!
   uncompleteGoal(id: Int!): GoalModel!
+
+  """Create new routine"""
+  createRoutine(createRoutineInput: CreateRoutineInput!): RoutineModel!
+  updateRoutine(id: Int!, updateRoutineInput: UpdateRoutineInput!): RoutineModel!
+  removeRoutine(id: Int!): RoutineModel!
+
+  """Adds steps to the specified routine"""
+  addSteps(id: Int!, steps: [String!]!): RoutineModel!
+
+  """Change period day/night"""
+  changePeriod(id: Int!): RoutineModel!
 }
 
 """Input type for creating a rule"""
@@ -96,4 +130,28 @@ input UpdateGoalInput {
 
   """Status of the goal"""
   status: GoalStatus
+}
+
+"""Input type for creating routine"""
+input CreateRoutineInput {
+  """Name of the routine"""
+  name: String!
+
+  """Period of the routine: day or night"""
+  period: RoutinePeriod!
+
+  """Particular steps of the routine"""
+  steps: [String!]!
+}
+
+"""Input type for updating routine"""
+input UpdateRoutineInput {
+  """Name of the routine"""
+  name: String!
+
+  """Period of the routine: day or night"""
+  period: RoutinePeriod!
+
+  """Particular steps of the routine"""
+  steps: [String!]!
 }

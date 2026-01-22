@@ -23,7 +23,8 @@ import { GoalResponseDto } from './dto/goal-response.dto';
 @ApiExcludeController()
 @Controller('goal')
 export class GoalController {
-  constructor(private readonly goalService: GoalService,
+  constructor(
+    private readonly goalService: GoalService,
     private goalEventsService: GoalsEventsService
   ) {}
 

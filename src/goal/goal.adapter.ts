@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
 import { Goal } from './entities/goal.entity';
@@ -5,6 +6,7 @@ import { CreateGoalInput } from './inputs/create-goal.input';
 import { UpdateGoalInput } from './inputs/update-goal.input';
 import { GoalModel } from './models/goal.model';
 
+@Injectable()
 export class GoalAdapter {
     toModel(goal: Goal): GoalModel {
         return {

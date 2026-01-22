@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, OneToMany, ManyToOne } from 'typeorm';
 import { DayRoutine } from '../../day/entities/day-routine.entity';
 import { User } from '../../user/entities/user.entity';
+import { registerEnumType } from '@nestjs/graphql';
 
 export enum RoutinePeriod {
   DAY = 'Day',
