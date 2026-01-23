@@ -5,6 +5,7 @@ import { DayAdapter } from './day.adapter';
 import { CreateDayInput } from './inputs/create-day.input';
 import { UpdateDayInput } from './inputs/update-day.input';
 import { RoutineModel } from 'src/routine/models/routine.model';
+import { DaysPaginationModel } from './models/day-pagination.model';
 
 @Resolver(() => DayModel)
 export class DayResolver {
@@ -36,6 +37,28 @@ export class DayResolver {
       this.dayAdapter.toModel(day),
     );
     return daysModel;
+  }
+
+  @Query(() => DaysPaginationModel, {
+    name: "daysPaginated",
+    description: 'Retrieve all days with pagination',
+  })
+  async findAllPaginated(
+    @Args('page', {type: () => Int}) page: number,
+    @Args('limit', {type: () => Int}) limit: number
+  ): Promise<DaysPaginationModel> {
+    const { data, total } = await this.dayService.findAllPaginated(page, limit);
+    console.log("Data:", data);
+    console.log("Total:", total);
+    const daysModel: DayModel[] = data.map((day) =>
+      this.dayAdapter.toModel(day),
+    );
+    const daysPaginated = new DaysPaginationModel();
+    daysPaginated.days = daysModel;
+    daysPaginated.total = total;
+
+    console.log("Result:", daysPaginated);
+    return daysPaginated;
   }
 
   @Query(() => DayModel, { 
