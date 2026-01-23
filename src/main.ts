@@ -6,6 +6,7 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/http-exception.filter';
 import "reflect-metadata";
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { RequestTimeInterceptor } from './common/request-time.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
@@ -32,6 +33,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  // Request logging interceptor
+  app.useGlobalInterceptors(new RequestTimeInterceptor());
 
   // Set up Handlebars as the view engine
   app.useStaticAssets(join(__dirname, '..', 'public'));

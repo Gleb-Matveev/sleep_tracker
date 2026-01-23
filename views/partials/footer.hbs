@@ -1,5 +1,8 @@
 <footer class="footer">
     <div class="footer-inner">
         <span>Sleep Tracker · {{year}}</span>
+        {{#if serverResponseTime}}
+            <span>Your request took: {{serverResponseTime}}ms</span>
+        {{/if}}
     </div>
 </footer>
