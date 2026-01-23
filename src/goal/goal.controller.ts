@@ -37,9 +37,8 @@ export class GoalController {
   }
 
   @Post()
-  async create(@Body() createGoalDto: CreateGoalDto, @Res() res: Response) {
+  async create(@Body() createGoalDto: CreateGoalDto) {
     await this.goalService.create(createGoalDto);
-    return res.redirect('/goal');
   }
 
   @Get()
@@ -61,9 +60,8 @@ export class GoalController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto, @Res() res: Response) {
+  async update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto) {
     await this.goalService.update(+id, updateGoalDto);
-    return res.redirect('/goal');
   }
 
   @Delete(':id')

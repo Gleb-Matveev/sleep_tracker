@@ -63,10 +63,8 @@ export class DayController {
   async update(
     @Param('id') id: string,
     @Body() updateDayDto: UpdateDayDto,
-    @Res() res: Response,
   ) {
     await this.dayService.update(+id, updateDayDto);
-    return res.redirect('/day');
   }
 
   @Delete(':id')

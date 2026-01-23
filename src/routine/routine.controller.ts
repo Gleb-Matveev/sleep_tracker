@@ -12,7 +12,7 @@ export class RoutineController {
   constructor(private readonly routineService: RoutineService) {}
 
   @Post()
-  async create(@Body() createRoutineDto: CreateRoutineDto, @Res() res: Response) {
+  async create(@Body() createRoutineDto: CreateRoutineDto) {
     const steps =
       Array.isArray(createRoutineDto.steps)
         ? createRoutineDto.steps.map((s) => s.trim()).filter(Boolean)
@@ -22,7 +22,6 @@ export class RoutineController {
       ...createRoutineDto,
       steps,
     });
-    return res.redirect('/routine');
   }
 
   @Get()
@@ -44,7 +43,7 @@ export class RoutineController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateRoutineDto: UpdateRoutineDto, @Res() res: Response) {
+  async update(@Param('id') id: string, @Body() updateRoutineDto: UpdateRoutineDto) {
     const steps =
       Array.isArray(updateRoutineDto.steps)
         ? updateRoutineDto.steps.map((s) => s.trim()).filter(Boolean)
@@ -54,7 +53,6 @@ export class RoutineController {
       ...updateRoutineDto,
       steps,
     });
-    return res.redirect('/routine');
   }
 
   @Delete(':id')

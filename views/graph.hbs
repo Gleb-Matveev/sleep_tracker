@@ -6,39 +6,10 @@
     <p class="card-subtitle">
         {{ message }}
     </p>
-<canvas id="myChart"></canvas>
-<script>
-    const labels = {{{json labels}}};
-    const getup_data = {{{json getup_data}}};
-    const feeling_data = {{{json feeling_data}}};
-
-    new Chart(document.getElementById('myChart'), {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Feeling score',
-                data: getup_data,
-            },
-            {
-                label: 'Get up score',
-                data: feeling_data,
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    min: 0,
-                    max: 10,
-                    beginAtZero: true
-                }
-            },
-            animations: {
-                y: {
-                    from: 0
-                }
-            }
-        }
-    });
-</script>
+<canvas id="myChart"
+        data-labels='{{json labels}}'
+        data-getup='{{json getup_data}}'
+        data-feeling='{{json feeling_data}}'></canvas>
+<script src="/scripts/graph.js"></script>
+</section>
 </section>

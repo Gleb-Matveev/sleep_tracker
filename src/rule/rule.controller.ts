@@ -22,14 +22,13 @@ export class RuleController {
   constructor(private readonly ruleService: RuleService) {}
 
   @Post()
-  async create(@Body() createRuleDto: CreateRuleDto, @Res() res: Response) {
+  async create(@Body() createRuleDto: CreateRuleDto) {
     await this.ruleService.create(createRuleDto);
-    return res.redirect('/rule');
   }
 
   @Get()
   @Render('rule/rules')
-  async findAll(): Promise<{ rules: boolean; items: RuleResponseDto[] }> {
+  async findAll(): Promise<{ rules: boolean; items: RuleResponseDto[]}> {
     const rules = await this.ruleService.findAll();
 
     const rulesDto: RuleResponseDto[] = rules.map((rule) => ({
@@ -45,9 +44,8 @@ export class RuleController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateRuleDto: UpdateRuleDto, @Res() res: Response) {
+  async update(@Param('id') id: string, @Body() updateRuleDto: UpdateRuleDto) {
     await this.ruleService.update(+id, updateRuleDto);
-    return res.redirect('/rule');
   }
 
   @Delete(':id')
