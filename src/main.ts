@@ -17,6 +17,7 @@ import { RequestTimeInterceptor } from './common/request-time.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const assetVersion = Date.now().toString();
 
   // Swagger setup
   const config = new DocumentBuilder()
@@ -39,7 +40,7 @@ async function bootstrap() {
     }),
   );
 
-  // Request logging interceptor
+  // Request time logging interceptor
   app.useGlobalInterceptors(new RequestTimeInterceptor());
 
   // Set up Handlebars as the view engine
@@ -51,8 +52,10 @@ async function bootstrap() {
     },
   });
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
-  app.setViewEngine('hbs');
+  app.getHttpAdapter().getInstance().locals.assetVersion = assetVersion;
 
+  // Hbs
+  app.setViewEngine('hbs');
   const hbs = require('hbs');
   hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
   hbs.registerHelper('json', (context) => JSON.stringify(context));
