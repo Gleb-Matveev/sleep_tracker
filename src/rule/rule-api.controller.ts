@@ -32,8 +32,6 @@ import {
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 import { RuleResponseDto, PaginatedRuleResponseDto } from './dto/rule-response.dto';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import type { Cache } from 'cache-manager';
 
 @ApiTags('Rules')
 @Controller('api/rules')
@@ -41,8 +39,6 @@ export class RuleApiController {
   constructor(
     private readonly ruleService: RuleService,
     private readonly paginationService: PaginationService,
-    @Inject(CACHE_MANAGER)
-    private cacheManager: Cache,
   ) {}
 
   @Post()
@@ -63,7 +59,6 @@ export class RuleApiController {
     description: 'Invalid request data. Check the format and required fields' 
   })
   async create(@Body() createRuleDto: CreateRuleDto) {
-    await this.invalidateCollectionCache();
     return await this.ruleService.create(createRuleDto);
   }
 
@@ -157,7 +152,6 @@ export class RuleApiController {
     description: 'Invalid request data or ID format' 
   })
   async update(@Param('id') id: string, @Body() updateRuleDto: UpdateRuleDto) {
-    await this.invalidateCollectionCache();
     return await this.ruleService.update(+id, updateRuleDto);
   }
 
@@ -184,11 +178,6 @@ export class RuleApiController {
     description: 'Invalid ID format (must be a number)' 
   })
   async remove(@Param('id') id: string) {
-    await this.invalidateCollectionCache();
     await this.ruleService.remove(+id);
-  }
-
-  async invalidateCollectionCache() {
-    await this.cacheManager.del('findall');
   }
 }

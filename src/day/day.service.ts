@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDayDto } from './dto/create-day.dto';
 import { UpdateDayDto } from './dto/update-day.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { DayRoutine } from './entities/day-routine.entity';
 import { Routine } from 'src/routine/entities/routine.entity';
 import { FindManyOptions } from 'typeorm';
+import { DayCacheService } from './day-cache.service';
 
 @Injectable()
 export class DayService {
@@ -17,9 +18,12 @@ export class DayService {
     private dayRoutineRepository: Repository<DayRoutine>,
     @InjectRepository(Routine)
     private routineRepository: Repository<Routine>,
+    @Inject()
+    private readonly dayCacheService: DayCacheService,
   ) {}
 
   async create(createDayDto: CreateDayDto): Promise<Day> {
+    await this.dayCacheService.invalidateDays();
     const day = this.dayRepository.create({
       ...createDayDto,
       getup_score: Number(createDayDto.getup_score),
@@ -40,7 +44,13 @@ export class DayService {
   }
 
   async findAll(): Promise<Day[]> {
-    const days = await this.dayRepository.find({
+    let days = await this.dayCacheService.getDays();
+    if (days) {
+      console.log("Returned cached days");
+      return days;
+    }
+
+    days = await this.dayRepository.find({
       relations: {
         routines: {
           routine: true,
@@ -48,6 +58,7 @@ export class DayService {
       },
       order: { date: 'DESC' },
     });
+    await this.dayCacheService.saveDays(days);
 
     return days;
   }
@@ -89,6 +100,7 @@ export class DayService {
   }
 
   async update(id: number, updateDayDto: UpdateDayDto): Promise<Day> {
+    await this.dayCacheService.invalidateDays();
     await this.dayRepository.save({
       id,
       ...updateDayDto,
@@ -118,6 +130,7 @@ export class DayService {
   }
 
   async remove(id: number): Promise<Day> {
+    await this.dayCacheService.invalidateDays();
     const day = await this.dayRepository.findOne({
       where: { id },
       relations: {
