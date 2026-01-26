@@ -23,8 +23,8 @@ export class RequestTimeInterceptor implements NestInterceptor {
               response.setHeader('X-Elapsed-Time', `${elapsed}ms`);
             }
             
-            //console.log("Entered interceptor");
             if (data && typeof data === 'object' && !Array.isArray(data)) {
+              console.log("Here 1");
               return { ...data, serverResponseTime: elapsed };
             }
           } else if (context.getType<string>() === 'graphql') {

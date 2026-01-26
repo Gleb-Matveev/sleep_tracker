@@ -8,6 +8,8 @@ import {
   Delete,
   Render,
   Res,
+  Header,
+  UseInterceptors,
 } from '@nestjs/common';
 import { RuleService } from './rule.service';
 import { CreateRuleDto } from './dto/create-rule.dto';
@@ -15,6 +17,7 @@ import { UpdateRuleDto } from './dto/update-rule.dto';
 import type { Response } from 'express';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { RuleResponseDto } from './dto/rule-response.dto';
+import { EtagInterceptor } from 'src/common/etag.interceptor';
 
 @ApiExcludeController()
 @Controller('rule')
@@ -41,6 +44,21 @@ export class RuleController {
       rules: true,
       items: rulesDto,
     };
+  }
+
+  @Get('cached')
+  @UseInterceptors(EtagInterceptor)
+  @Header('Cache-Control', 'max-age=3600')
+  async findAllCached(): Promise<RuleResponseDto[]> {
+    const rules = await this.ruleService.findAll();
+
+    const rulesDto: RuleResponseDto[] = rules.map((rule) => ({
+      id: rule.id,
+      name: rule.name,
+      description: rule.description,
+    }));
+
+    return rulesDto;
   }
 
   @Patch(':id')
