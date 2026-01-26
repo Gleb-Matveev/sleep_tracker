@@ -24,7 +24,6 @@ export class RequestTimeInterceptor implements NestInterceptor {
             }
             
             if (data && typeof data === 'object' && !Array.isArray(data)) {
-              console.log("Here 1");
               return { ...data, serverResponseTime: elapsed };
             }
           } else if (context.getType<string>() === 'graphql') {
