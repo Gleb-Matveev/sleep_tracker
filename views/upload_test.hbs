@@ -1,0 +1,34 @@
+<section class='card'>
+  <div class='card-header'>
+    <h1 class='card-title'>Gallery</h1>
+    <span class='badge-pill'>Your images</span>
+  </div>
+  <form
+    action='/s3bucket/file'
+    method='post'
+    enctype="multipart/form-data"
+    style='margin-top: 1rem; display: grid; gap: 0.9rem;'
+    id='file-input-form'
+  >
+    <label for='avatar'>Choose a profile picture:</label>
+    <input
+      type='file'
+      id='file'
+      name='file'
+      accept='image/png, image/jpeg'
+    />
+
+    <div style='display: flex; gap: 0.6rem; justify-content: flex-end;'>
+      <button class='btn' type='submit'>Send image</button>
+    </div>
+  </form>
+
+  {{#if text}}
+    <span>{{text}}</span>
+  {{/if}}
+  {{#if imageUrl}}
+    <div class='item'>
+      <img src='{{imageUrl}}' alt='image' />
+    </div>
+  {{/if}}
+</section>

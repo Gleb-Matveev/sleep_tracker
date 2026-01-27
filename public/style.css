@@ -662,3 +662,18 @@ input.multiselect_checkbox {
 .multiselect_checkbox:checked ~ .field_multiselect_help {
   opacity: 1;
 }
+
+/*----------------------------------*/
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.item {
+    width: 500px;
+    min-height: 500px;
+    max-height: auto;
+    float: left;
+    margin: 3px;
+    padding: 3px;
+}

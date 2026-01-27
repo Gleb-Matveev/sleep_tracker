@@ -12,6 +12,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { CacheModule } from '@nestjs/cache-manager';
+import { S3bucketModule } from './s3bucket/s3bucket.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CacheModule } from '@nestjs/cache-manager';
     GoalModule,
     RoutineModule,
     DayModule,
+    S3bucketModule,
   ],
   controllers: [AppController],
   providers: [AppService],
