@@ -9,7 +9,9 @@ import {
   Render,
   Res,
   MessageEvent,
-  Sse
+  Sse,
+  UseInterceptors,
+  UploadedFile
 } from '@nestjs/common';
 import { GoalService } from './goal.service';
 import { CreateGoalDto } from './dto/create-goal.dto';
@@ -19,6 +21,7 @@ import { GoalsEventsService } from './goal.events';
 import { map, Observable } from 'rxjs';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { GoalResponseDto } from './dto/goal-response.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiExcludeController()
 @Controller('goal')
@@ -37,8 +40,12 @@ export class GoalController {
   }
 
   @Post()
-  async create(@Body() createGoalDto: CreateGoalDto) {
-    await this.goalService.create(createGoalDto);
+  @UseInterceptors(FileInterceptor('file'))
+  async create(
+    @Body() createGoalDto: CreateGoalDto,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    await this.goalService.create(createGoalDto, file);
   }
 
   @Get()
@@ -50,6 +57,7 @@ export class GoalController {
       id: goal.id,
       name: goal.name,
       description: goal.description,
+      image_url: goal.image_url,
       status: goal.status,
     }));
 
@@ -60,8 +68,9 @@ export class GoalController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto) {
-    await this.goalService.update(+id, updateGoalDto);
+  @UseInterceptors(FileInterceptor('file'))
+  async update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto, @UploadedFile() file: Express.Multer.File) {
+    await this.goalService.update(+id, updateGoalDto, file);
   }
 
   @Delete(':id')

@@ -8,7 +8,7 @@
     Update your sleep goal.
   </p>
 
-  <form action="/goal/{{this.goal.id}}" method="post" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="edit-form">
+  <form action="/goal/{{this.goal.id}}" method="post" enctype="multipart/form-data" style="margin-top: 1rem; display: grid; gap: 0.9rem;" id="edit-form">
     <div>
       <label for="name" class="card-subtitle" style="display: block; margin-bottom: 0.35rem;">Title</label>
       <input id="name" name="name" type="text" placeholder="e.g. Sleep 8 hours on weekdays" value="{{this.goal.name}}" required>
@@ -25,6 +25,16 @@
         <option value="Not done" {{#eq this.goal.status "Not done"}}selected{{/eq}}>Not done</option>
         <option value="Done" {{#eq this.goal.status "Done"}}selected{{/eq}}>Done</option>
       </select>
+    </div>
+
+    <div>
+      <label for='avatar'>Choose a profile picture:</label>
+      <input
+        type='file'
+        id='file'
+        name='file'
+        accept='image/png, image/jpeg'
+      />
     </div>
 
     <div style="display: flex; gap: 0.6rem; justify-content: flex-end;">

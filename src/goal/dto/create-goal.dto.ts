@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsNotEmpty } from 'class-validator';
+import { IsString, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Status } from "../entities/goal.entity";
 
@@ -20,6 +20,14 @@ export class CreateGoalDto {
   @IsString()
   @IsNotEmpty()
   description: string;
+
+  @ApiProperty({ 
+    description: 'Assocciated image url', 
+    example: 'https:://...',
+  })
+  @IsString()
+  @IsOptional()
+  image_url?: string;
 
   @ApiProperty({ 
     description: 'Goal status', 

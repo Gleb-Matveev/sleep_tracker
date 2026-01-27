@@ -72,21 +72,26 @@ export class S3bucketService {
     return await getSignedUrl(this.s3Client, command, { expiresIn: 3600 });
   }
 
-  async saveImage(file: Express.Multer.File): Promise<boolean> {
+  getConstImageUrl(): string {
+    return "https://glebsite.storage.yandexcloud.net/root.png";
+  }
+
+  async saveImage(file: Express.Multer.File): Promise<string | undefined> {
     const putCommand = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: file.originalname,
       Body: file.buffer,
       ContentType: file.mimetype,
+      ACL: "public-read",
     });
 
     const res = await this.s3Client.send(putCommand);
 
     if (res.$metadata.httpStatusCode !== 200) 
     {
-        return false;
+        return;
     }
 
-    return true;
+    return `https://glebsite.storage.yandexcloud.net/${file.originalname}`;
   }
 }

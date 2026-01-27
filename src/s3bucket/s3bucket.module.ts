@@ -7,5 +7,6 @@ import { ConfigModule } from '@nestjs/config';
   controllers: [S3bucketController],
   providers: [S3bucketService],
   imports: [ConfigModule],
+  exports: [S3bucketService]
 })
 export class S3bucketModule {}

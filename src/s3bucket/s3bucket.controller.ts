@@ -21,9 +21,9 @@ export class S3bucketController {
   @Get()
   @Render('upload_test')
   async uploadPic() {
-    const url = await this.s3bucketService.getPresignedImageUrl('w15.jpg');
+    //const url = await this.s3bucketService.getPresignedImageUrl('w15.jpg');
+    const url = await this.s3bucketService.getConstImageUrl();
 
-    //console.log("Url:", url);
     return {
       upload: true,
       imageUrl: url
@@ -36,13 +36,9 @@ export class S3bucketController {
     @Body() body: SampleDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    //console.log("Here");
-    //console.log("File:", file);
+    const url = await this.s3bucketService.saveImage(file);
 
-    const res = await this.s3bucketService.saveImage(file);
-
-    return {
-      uploaded: res
-    };
+    console.log("Url:", url);
+    return;
   }
 }

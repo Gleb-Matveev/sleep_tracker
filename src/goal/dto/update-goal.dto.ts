@@ -1,25 +1,34 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { CreateGoalDto } from './create-goal.dto';
 import { Status } from '../entities/goal.entity';
+import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateGoalDto extends PartialType(CreateGoalDto) {
-  @ApiPropertyOptional({ 
-    description: 'Goal name', 
-    example: 'Sleep 8 hours'
+  @ApiPropertyOptional({
+    description: 'Goal name',
+    example: 'Sleep 8 hours',
   })
   name?: string;
 
-  @ApiPropertyOptional({ 
-    description: 'Goal description', 
-    example: 'Sleep at least 8 hours every night'
+  @ApiPropertyOptional({
+    description: 'Goal description',
+    example: 'Sleep at least 8 hours every night',
   })
   description?: string;
 
-  @ApiPropertyOptional({ 
-    description: 'Goal status', 
+  @ApiProperty({
+    description: 'Assocciated image url',
+    example: 'https:://...',
+  })
+  @IsString()
+  @IsOptional()
+  image_url?: string;
+
+  @ApiPropertyOptional({
+    description: 'Goal status',
     enum: Status,
-    example: Status.DONE
+    example: Status.DONE,
   })
   status?: Status;
 }

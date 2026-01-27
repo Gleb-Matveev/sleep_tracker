@@ -1,39 +1,55 @@
-<section class="card">
-  <div class="card-header">
-    <h1 class="card-title">Sleep goals</h1>
-    <div style="display: flex; align-items: center; gap: 0.6rem;">
-      <span class="badge-pill">Your priorities</span>
-      <a class="btn btn-secondary" href="/goal/new" aria-label="Add goal">+</a>
+<section class='card'>
+  <div class='card-header'>
+    <h1 class='card-title'>Sleep goals</h1>
+    <div style='display: flex; align-items: center; gap: 0.6rem;'>
+      <span class='badge-pill'>Your priorities</span>
+      <a class='btn btn-secondary' href='/goal/new' aria-label='Add goal'>+</a>
     </div>
   </div>
 
-  <p class="card-subtitle">
+  <p class='card-subtitle'>
     Long-term targets that help you improve your sleep step by step.
   </p>
 
-  <div style="margin-top: 1rem; display: grid; gap: 1rem;">
+  <div style='margin-top: 1rem; display: grid; gap: 1rem;'>
     {{#each this.items}}
-      <article class="card card-hover card-delete-trigger" style="padding: 1rem 1.1rem; cursor: pointer;" card-collection-url="goal", entity-id={{this.id}}>
-        <div class="card-header" style="margin-bottom: 0.4rem;">
-          <h2 class="card-title" style="font-size: 0.95rem;">{{this.name}}</h2>
+      <article
+        class='card card-hover card-delete-trigger'
+        style='padding: 1rem 1.1rem; cursor: pointer;'
+        card-collection-url='goal'
+        entity-id='{{this.id}}'
+      >
+
+        <div
+          class='card-header'
+          style='margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.6rem;'
+        >
+
+          <img
+            src='{{this.image_url}}' 
+            alt='image'
+            style='width: 24px; height: 24px; object-fit: cover; border-radius: 4px;'
+          />
+
+          <h2 class='card-title' style='font-size: 0.95rem; margin: 0;'>
+            {{this.name}}
+          </h2>
+
           <button
-            type="button"
-            class="btn btn-secondary js-delete-trigger"
-            style="padding-inline: 0.75rem; font-size: 0.8rem;"
-            data-delete-url="/goal/{{this.id}}"
-            data-remove-closest=".card"
-            data-delete-message="Delete this goal?"
+            type='button'
+            class='btn btn-secondary js-delete-trigger'
+            style='padding-inline: 0.75rem; font-size: 0.8rem; margin-left: auto;'
+            data-delete-url='/goal/{{this.id}}'
+            data-remove-closest='.card'
+            data-delete-message='Delete this goal?'
           >
             Delete
           </button>
         </div>
-        <p class="card-subtitle">
+        <p class='card-subtitle'>
           {{this.description}}
         </p>
       </article>
     {{/each}}
   </div>
 </section>
-
-
-

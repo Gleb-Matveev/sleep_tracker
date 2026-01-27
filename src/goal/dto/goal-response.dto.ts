@@ -8,32 +8,41 @@ export class GoalResponseDto {
   @ApiProperty({ description: 'Goal name', example: 'Sleep 8 hours' })
   name: string;
 
-  @ApiProperty({ description: 'Goal description', example: 'Sleep at least 8 hours every night' })
+  @ApiProperty({
+    description: 'Goal description',
+    example: 'Sleep at least 8 hours every night',
+  })
   description: string;
 
-  @ApiProperty({ 
-    description: 'Goal status', 
+  @ApiProperty({
+    description: 'Assocciated image url',
+    example: 'https:://...',
+  })
+  image_url?: string;
+
+  @ApiProperty({
+    description: 'Goal status',
     enum: Status,
-    example: Status.NOTDONE 
+    example: Status.NOTDONE,
   })
   status: Status;
 }
 
 export class PaginatedGoalResponseDto {
-  @ApiProperty({ 
-    description: 'Array of goals', 
-    type: [GoalResponseDto] 
+  @ApiProperty({
+    description: 'Array of goals',
+    type: [GoalResponseDto],
   })
   data: GoalResponseDto[];
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Pagination metadata',
     example: {
       total: 50,
       page: 1,
       limit: 10,
-      totalPages: 5
-    }
+      totalPages: 5,
+    },
   })
   meta: {
     total: number;
