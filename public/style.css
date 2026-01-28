@@ -677,3 +677,20 @@ img {
     margin: 3px;
     padding: 3px;
 }
+
+input::file-selector-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    border-radius: var(--radius-pill);
+    border: none;
+    padding: 0.55rem 1.3rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+    color: #f9fafb;
+    transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s ease-out;
+    text-decoration: none;
+}
