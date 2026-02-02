@@ -12,20 +12,6 @@ export function requireEnv(name: string): string {
   return value;
 }
 
-function isBrowserDocumentRequest(req: any): boolean {
-  const accept = String(req.headers?.accept ?? '');
-  const secFetchDest = String(req.headers?.['sec-fetch-dest'] ?? '');
-  return accept.includes('text/html') || secFetchDest === 'document';
-}
-
-function isGraphQLRequest(req: any): boolean {
-  const url = String(req.originalUrl ?? req.url ?? '');
-  if (url.startsWith('/graphql')) return true;
-
-  const body = req.body;
-  return !!(body && (typeof body.query === 'string' || typeof body.operationName === 'string'));
-}
-
 export const supertokensConfig = (): TypeInput => ({
   appInfo: {
     appName: requireEnv('SUPERTOKENS_APP_NAME'),

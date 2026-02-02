@@ -25,17 +25,25 @@ export class RuleService {
   async findAll(): Promise<Rule[]> {
     let res = await this.cacheManager.get<Rule[]>('findall');
     if (res) {
-      console.log("Returned cached");
+      console.log('Returned cached');
       return res;
     }
 
-    res = await this.ruleRepository.find()
+    res = await this.ruleRepository.find(/*{
+      where: {
+        user: { id: userId },
+      },
+      relations: { user: false },
+    }*/);
     await this.cacheManager.set('findall', res, 0);
 
     return res;
   }
 
-  async findAllPaginated(page: number, limit: number): Promise<{ data: Rule[]; total: number }> {
+  async findAllPaginated(
+    page: number,
+    limit: number,
+  ): Promise<{ data: Rule[]; total: number }> {
     const findOptions: FindManyOptions<Rule> = {
       order: { name: 'ASC' },
       skip: (page - 1) * limit,

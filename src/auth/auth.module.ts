@@ -10,6 +10,7 @@ import { SupertokensService } from './supertokens/supertokens.service';
 import { supertokensConfig } from './supertokens.config';
 import { AuthController } from './auth.controller';
 import { RequireAuthMiddleware } from './requireauth.middleware';
+import { UserModule } from 'src/user/user.module';
 
 @Module({})
 export class AuthModule implements NestModule {
@@ -22,6 +23,7 @@ export class AuthModule implements NestModule {
         '/register',
         'auth/login',
         'auth/register',
+        //'user',
       )
       .forRoutes('*');
   }
@@ -37,7 +39,7 @@ export class AuthModule implements NestModule {
       ],
       controllers: [AuthController],
       exports: [],
-      imports: [],
+      imports: [UserModule],
       module: AuthModule,
     };
   }

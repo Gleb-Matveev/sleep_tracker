@@ -4,13 +4,24 @@ import { Routine } from '../../routine/entities/routine.entity';
 import { Goal } from '../../goal/entities/goal.entity';
 import { Rule } from '../../rule/entities/rule.entity';
 
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
 @Entity('user')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  name: string;
+  supertoken_id: string;
+
+  @Column()
+  email: string;
+
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
+  role: UserRole;
 
   @OneToMany(() => Day, day => day.user)
   days: Day[];

@@ -1,10 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import {
-  getSession,
-} from 'supertokens-node/recipe/session';
-import type { 
-  VerifySessionOptions } from 'supertokens-node/recipe/session';
+import { getSession } from 'supertokens-node/recipe/session';
+import type { VerifySessionOptions } from 'supertokens-node/recipe/session';
 import { IS_PUBLIC_KEY } from './supertokens/public.decorator';
 
 @Injectable()
@@ -29,6 +26,10 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
+    req.user = {
+      id: session.getUserId(),
+      sessionHandle: session.getHandle(),
+    };
     req.session = session;
     return true;
   }

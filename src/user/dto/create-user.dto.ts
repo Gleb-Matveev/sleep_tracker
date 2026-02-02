@@ -1,7 +1,16 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsUUID, IsEnum } from 'class-validator';
+import { UserRole } from '../entities/user.entity';
 
 export class CreateUserDto {
+  @IsUUID()
+  @IsNotEmpty()
+  supertoken_id: string;
+
   @IsString()
   @IsNotEmpty()
-  name: string;
+  email: string;
+
+  @IsEnum(UserRole)
+  @IsNotEmpty()
+  role: UserRole;
 }

@@ -20,21 +20,4 @@ export class AppController {
   @Render('register')
   register() {
   }
-
-  /*@Get()
-  redirect(@Res() res: express.Response) {
-    res.redirect('/day');
-  }*/
-
-  /*@Get()
-  @Render('index')
-  root(@Query('auth') auth: string) {
-    if (auth == 'auth') {
-      return this.getCommonViewData({
-        home: true,
-        message: 'Track your sleep and wake up better every day 💤',
-      });
-    }
-    return;
-  }*/
 }
