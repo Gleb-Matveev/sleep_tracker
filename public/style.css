@@ -694,3 +694,15 @@ input::file-selector-button {
     transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s ease-out;
     text-decoration: none;
 }
+
+.login-card 
+{
+    display: flex;
+    flex-direction: column;  
+    justify-content: center;
+    align-items: center;
+}
+
+.register-link a {
+    color: var(--accent-soft);
+}

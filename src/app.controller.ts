@@ -2,23 +2,29 @@ import { Controller, Get, Render, Query, Res } from '@nestjs/common';
 import express from 'express';
 import { AppService } from './app.service';
 import { ApiExcludeController } from '@nestjs/swagger';
+import { Public } from './auth/supertokens/public.decorator';
 
 @ApiExcludeController()
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  private getCommonViewData(extra: Record<string, unknown> = {}) {
-    return {
-      year: new Date().getFullYear(),
-      ...extra,
-    };
+  @Public()
+  @Get()
+  @Render('login')
+  login() {
   }
 
-  @Get()
+  @Public()
+  @Get('register')
+  @Render('register')
+  register() {
+  }
+
+  /*@Get()
   redirect(@Res() res: express.Response) {
     res.redirect('/day');
-  }
+  }*/
 
   /*@Get()
   @Render('index')

@@ -14,10 +14,20 @@ import { HttpExceptionFilter } from './common/http-exception.filter';
 import 'reflect-metadata';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RequestTimeInterceptor } from './common/request-time.interceptor';
+import supertokens from 'supertokens-node';
+import { requireEnv } from './auth/supertokens.config';
+import { AuthGuard } from './auth/auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const assetVersion = Date.now().toString();
+
+  // CORS for auth
+  app.enableCors({
+    origin: [requireEnv('SUPERTOKENS_WEBSITE_DOMAIN')],
+    allowedHeaders: ['content-type', ...supertokens.getAllCORSHeaders()],
+    credentials: true,
+  });
 
   // Swagger setup
   const config = new DocumentBuilder()

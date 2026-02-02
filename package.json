@@ -55,6 +55,7 @@
     "pg-connection-string": "^2.9.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "supertokens-node": "^24.0.1",
     "toastr": "^2.1.4",
     "typeorm": "^0.3.28"
   },
