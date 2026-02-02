@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate {
     const session = await getSession(req, res, { sessionRequired: false });
 
     if (!session) {
-      return res.redirect('/');
+      return false;
     }
 
     req.session = session;
