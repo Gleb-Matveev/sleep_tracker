@@ -8,6 +8,7 @@ import {
   Req,
   Res,
   UnauthorizedException,
+  Session,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import { Public } from './supertokens/public.decorator';
@@ -53,7 +54,10 @@ export class AuthController {
     if (!req.user) {
       throw new UnauthorizedException('User not found');
     }
-    await this.supertokenService.signOut(req.user.sessionHandle);
+    const session = await this.supertokenService.getSession(req, res);
+    if (session) {
+      await session.revokeSession();
+    }
     return res.redirect('/');
   }
 }
