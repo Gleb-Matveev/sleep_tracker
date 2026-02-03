@@ -1,7 +1,8 @@
 declare namespace Express {
   export interface Request {
     user?: {
-      id: string;
+      db_id: string,
+      supertoken_id: string;
       sessionHandle: string;
     };
   }

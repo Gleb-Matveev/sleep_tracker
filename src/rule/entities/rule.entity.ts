@@ -1,5 +1,5 @@
 import { User } from '../../user/entities/user.entity';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity('rule')
 export class Rule {
@@ -12,6 +12,10 @@ export class Rule {
   @Column()
   description: string;
 
-  @ManyToOne(() => User, user => user.rules)
+  @Column()
+  userId: number;
+
+  @ManyToOne(() => User, user => user.rules, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
   user: User;
 }

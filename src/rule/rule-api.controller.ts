@@ -32,6 +32,7 @@ import {
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 import { RuleResponseDto, PaginatedRuleResponseDto } from './dto/rule-response.dto';
+import { UserId } from 'src/auth/supertokens/userid.decorator';
 
 @ApiTags('Rules')
 @Controller('api/rules')
@@ -58,8 +59,11 @@ export class RuleApiController {
   @ApiBadRequestResponse({ 
     description: 'Invalid request data. Check the format and required fields' 
   })
-  async create(@Body() createRuleDto: CreateRuleDto) {
-    return await this.ruleService.create(createRuleDto);
+  async create(
+    @Body() createRuleDto: CreateRuleDto,
+    @UserId() userId: number
+  ) {
+    return await this.ruleService.create(createRuleDto, userId);
   }
 
   @Get()
@@ -78,11 +82,12 @@ export class RuleApiController {
     @Query() paginationDto: PaginationDto,
     @Req() req: Request,
     @Res() res: Response,
+    @UserId() userId: number
   ) {
     const page = paginationDto.page || 1;
     const limit = paginationDto.limit || 10;
 
-    const { data, total } = await this.ruleService.findAllPaginated(page, limit);
+    const { data, total } = await this.ruleService.findAllPaginated(page, limit, userId);
     const response = this.paginationService.createPaginatedResponse(
       data,
       total,
@@ -117,8 +122,11 @@ export class RuleApiController {
   @ApiBadRequestResponse({ 
     description: 'Invalid ID format (must be a number)' 
   })
-  async findOne(@Param('id') id: string) {
-    const rule = await this.ruleService.findOne(+id);
+  async findOne(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ) {
+    const rule = await this.ruleService.findOne(+id, userId);
     if (!rule) {
       throw new NotFoundException(`Rule with id ${id} not found`);
     }
@@ -151,8 +159,12 @@ export class RuleApiController {
   @ApiBadRequestResponse({ 
     description: 'Invalid request data or ID format' 
   })
-  async update(@Param('id') id: string, @Body() updateRuleDto: UpdateRuleDto) {
-    return await this.ruleService.update(+id, updateRuleDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateRuleDto: UpdateRuleDto,
+    @UserId() userId: number
+  ) {
+    return await this.ruleService.update(+id, updateRuleDto, userId);
   }
 
   @Delete(':id')
@@ -177,7 +189,10 @@ export class RuleApiController {
   @ApiBadRequestResponse({ 
     description: 'Invalid ID format (must be a number)' 
   })
-  async remove(@Param('id') id: string) {
-    await this.ruleService.remove(+id);
+  async remove(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ) {
+    await this.ruleService.remove(+id, userId);
   }
 }

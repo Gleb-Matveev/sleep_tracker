@@ -12,30 +12,19 @@ export class RuleService {
   constructor(
     @InjectRepository(Rule)
     private ruleRepository: Repository<Rule>,
-    @Inject(CACHE_MANAGER)
-    private cacheManager: Cache,
   ) {}
 
-  async create(createRuleDto: CreateRuleDto): Promise<Rule> {
-    await this.invalidateCollectionCache();
-    const rule = this.ruleRepository.create(createRuleDto);
+  async create(createRuleDto: CreateRuleDto, userId: number): Promise<Rule> {
+    const rule = this.ruleRepository.create({ ...createRuleDto, userId });
     return this.ruleRepository.save(rule);
   }
 
-  async findAll(): Promise<Rule[]> {
-    let res = await this.cacheManager.get<Rule[]>('findall');
-    if (res) {
-      console.log('Returned cached');
-      return res;
-    }
-
-    res = await this.ruleRepository.find(/*{
+  async findAll(userId: number): Promise<Rule[]> {
+    const res = await this.ruleRepository.find({
       where: {
-        user: { id: userId },
-      },
-      relations: { user: false },
-    }*/);
-    await this.cacheManager.set('findall', res, 0);
+        userId: userId
+      }
+    });
 
     return res;
   }
@@ -43,8 +32,12 @@ export class RuleService {
   async findAllPaginated(
     page: number,
     limit: number,
+    userId: number
   ): Promise<{ data: Rule[]; total: number }> {
     const findOptions: FindManyOptions<Rule> = {
+      where: {
+        userId: userId
+      },
       order: { name: 'ASC' },
       skip: (page - 1) * limit,
       take: limit,
@@ -54,8 +47,11 @@ export class RuleService {
     return { data, total };
   }
 
-  async findOne(id: number): Promise<Rule> {
-    const rule = await this.ruleRepository.findOne({ where: { id } });
+  async findOne(
+    id: number,
+    userId: number
+  ): Promise<Rule> {
+    const rule = await this.ruleRepository.findOne({ where: { id, userId } });
 
     if (!rule) {
       throw new NotFoundException(`Rule with id ${id} not found`);
@@ -64,27 +60,32 @@ export class RuleService {
     return rule;
   }
 
-  async update(id: number, updateRuleDto: UpdateRuleDto): Promise<Rule> {
-    await this.invalidateCollectionCache();
-    await this.ruleRepository.update(id, updateRuleDto);
-    const updated = await this.ruleRepository.findOne({ where: { id } });
+  async update(
+    id: number, 
+    updateRuleDto: UpdateRuleDto,
+    userId: number
+  ): Promise<Rule> {
+    await this.ruleRepository.update({ id, userId }, updateRuleDto);
+
+    const updated = await this.ruleRepository.findOne({ where: { id, userId } });
     if (!updated) {
       throw new Error(`Rule with id ${id} not found`);
     }
+
     return updated;
   }
 
-  async remove(id: number): Promise<Rule> {
-    await this.invalidateCollectionCache();
-    const rule = await this.ruleRepository.findOne({ where: { id } });
+  async remove(
+    id: number,
+    userId: number
+  ): Promise<Rule> {
+    const rule = await this.ruleRepository.findOne({ where: { id, userId } });
+
     if (!rule) {
       throw new NotFoundException(`Rule with id ${id} not found`);
     }
-    await this.ruleRepository.delete(id);
+    
+    await this.ruleRepository.delete({ id, userId });
     return rule;
-  }
-
-  async invalidateCollectionCache() {
-    await this.cacheManager.del('findall');
   }
 }

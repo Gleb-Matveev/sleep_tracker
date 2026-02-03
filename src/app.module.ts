@@ -16,6 +16,8 @@ import { S3bucketModule } from './s3bucket/s3bucket.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -29,7 +31,7 @@ import { APP_GUARD } from '@nestjs/core';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       context: ({ req, res }) => ({ req, res }),
-    }),
+    }), // "request.credentials": "include" for pesochnica
     DatabaseModule,
     UserModule,
     RuleModule,
@@ -38,6 +40,7 @@ import { APP_GUARD } from '@nestjs/core';
     RoutineModule,
     DayModule,
     AuthModule,
+    TypeOrmModule.forFeature([User]),
   ],
   controllers: [AppController],
   providers: [
