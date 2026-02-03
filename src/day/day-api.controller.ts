@@ -32,6 +32,7 @@ import {
 } from '@nestjs/swagger';
 import { DayResponseDto, PaginatedDayResponseDto } from './dto/day-response.dto';
 import { RoutineResponseDto } from '../routine/dto/routine-response.dto';
+import { UserId } from 'src/auth/decorators/userid.decorator';
 
 @ApiTags('Days')
 @Controller('api/days')
@@ -43,23 +44,26 @@ export class DayApiController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ 
-    summary: 'Create a new day', 
+  @ApiOperation({
+    summary: 'Create a new day',
     description: 'Creates a new day with the provided data' 
   })
   @ApiBody({ 
-    type: CreateDayDto, 
+    type: CreateDayDto,
     description: 'Data for creating a day' 
   })
-  @ApiCreatedResponse({ 
-    type: DayResponseDto, 
+  @ApiCreatedResponse({
+    type: DayResponseDto,
     description: 'Day successfully created' 
   })
-  @ApiBadRequestResponse({ 
+  @ApiBadRequestResponse({
     description: 'Invalid request data. Check the format and required fields' 
   })
-  async create(@Body() createDayDto: CreateDayDto) {
-    return await this.dayService.create(createDayDto);
+  async create(
+    @Body() createDayDto: CreateDayDto,
+    @UserId() userId: number
+  ) {
+    return await this.dayService.create(createDayDto, userId);
   }
 
   @Get()
@@ -78,11 +82,12 @@ export class DayApiController {
     @Query() paginationDto: PaginationDto,
     @Req() req: Request,
     @Res() res: Response,
+    @UserId() userId: number
   ) {
     const page = paginationDto.page || 1;
     const limit = paginationDto.limit || 10;
 
-    const { data, total } = await this.dayService.findAllPaginated(page, limit);
+    const { data, total } = await this.dayService.findAllPaginated(page, limit, userId);
     const response = this.paginationService.createPaginatedResponse(
       data,
       total,
@@ -117,8 +122,11 @@ export class DayApiController {
   @ApiBadRequestResponse({ 
     description: 'Invalid ID format (must be a number)' 
   })
-  async findOne(@Param('id') id: string) {
-    const day = await this.dayService.findOne(+id);
+  async findOne(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ) {
+    const day = await this.dayService.findOne(+id, userId);
     if (!day) {
       throw new NotFoundException(`Day with id ${id} not found`);
     }
@@ -151,8 +159,12 @@ export class DayApiController {
   @ApiBadRequestResponse({ 
     description: 'Invalid request data or ID format' 
   })
-  async update(@Param('id') id: string, @Body() updateDayDto: UpdateDayDto) {
-    return await this.dayService.update(+id, updateDayDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateDayDto: UpdateDayDto,
+    @UserId() userId: number
+  ) {
+    return await this.dayService.update(+id, updateDayDto, userId);
   }
 
   @Delete(':id')
@@ -177,8 +189,11 @@ export class DayApiController {
   @ApiBadRequestResponse({ 
     description: 'Invalid ID format (must be a number)' 
   })
-  async remove(@Param('id') id: string) {
-    await this.dayService.remove(+id);
+  async remove(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ) {
+    await this.dayService.remove(+id, userId);
   }
 
   @Get(':id/routines')
@@ -203,8 +218,11 @@ export class DayApiController {
   @ApiBadRequestResponse({ 
     description: 'Invalid ID format (must be a number)' 
   })
-  async getDayRoutines(@Param('id') id: string) {
-    const day = await this.dayService.findOne(+id);
+  async getDayRoutines(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ) {
+    const day = await this.dayService.findOne(+id, userId);
     if (!day) {
       throw new NotFoundException(`Day with id ${id} not found`);
     }
@@ -242,8 +260,9 @@ export class DayApiController {
   async getDayRoutine(
     @Param('dayId') dayId: string,
     @Param('routineId') routineId: string,
+    @UserId() userId: number
   ) {
-    const day = await this.dayService.findOne(+dayId);
+    const day = await this.dayService.findOne(+dayId, userId);
     if (!day) {
       throw new NotFoundException(`Day with id ${dayId} not found`);
     }

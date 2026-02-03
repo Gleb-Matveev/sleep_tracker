@@ -32,7 +32,7 @@ import {
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 import { RuleResponseDto, PaginatedRuleResponseDto } from './dto/rule-response.dto';
-import { UserId } from 'src/auth/supertokens/userid.decorator';
+import { UserId } from 'src/auth/decorators/userid.decorator';
 
 @ApiTags('Rules')
 @Controller('api/rules')

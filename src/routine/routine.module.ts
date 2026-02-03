@@ -7,9 +7,10 @@ import { Routine } from './entities/routine.entity';
 import { CommonModule } from '../common/common.module';
 import { RoutineResolver } from './routine.resolver';
 import { RoutineAdapter } from './routine.adapter';
+import { DayModule } from 'src/day/day.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Routine]), CommonModule],
+  imports: [TypeOrmModule.forFeature([Routine]), CommonModule, DayModule],
   controllers: [RoutineController, RoutineApiController],
   providers: [RoutineService, RoutineResolver, RoutineAdapter],
 })

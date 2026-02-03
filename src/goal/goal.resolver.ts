@@ -5,7 +5,7 @@ import { GoalAdapter } from './goal.adapter';
 import { GoalModel } from './models/goal.model';
 import { CreateGoalInput } from './inputs/create-goal.input';
 import { UpdateGoalInput } from './inputs/update-goal.input';
-import { GQLUserId } from 'src/auth/supertokens/user-id-ql.decorator';
+import { GQLUserId } from 'src/auth/decorators/user-id-ql.decorator';
 
 @Resolver(() => GoalModel)
 export class GoalResolver {

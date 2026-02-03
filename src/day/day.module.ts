@@ -15,5 +15,6 @@ import { DayCacheService } from './day-cache.service';
   imports: [TypeOrmModule.forFeature([Day, DayRoutine, Routine]), CommonModule],
   controllers: [DayController, DayApiController],
   providers: [DayService, DayResolver, DayAdapter, DayCacheService],
+  exports: [DayCacheService]
 })
 export class DayModule {}

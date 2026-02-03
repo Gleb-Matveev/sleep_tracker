@@ -11,13 +11,15 @@ import {
   Session,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { Public } from './supertokens/public.decorator';
+import { Public } from './decorators/public.decorator';
 import { SupertokensService } from './supertokens/supertokens.service';
+import { DayCacheService } from 'src/day/day-cache.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly supertokenService: SupertokensService,
+    private readonly dayCacheService: DayCacheService,
   ) {}
 
   @Public()
@@ -57,6 +59,7 @@ export class AuthController {
     const session = await this.supertokenService.getSession(req, res);
     if (session) {
       await session.revokeSession();
+      this.dayCacheService.invalidateDays();
     }
     return res.redirect('/');
   }

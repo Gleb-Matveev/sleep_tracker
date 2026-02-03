@@ -22,7 +22,7 @@ import { map, Observable } from 'rxjs';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { GoalResponseDto } from './dto/goal-response.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UserId } from 'src/auth/supertokens/userid.decorator';
+import { UserId } from 'src/auth/decorators/userid.decorator';
 
 @ApiExcludeController()
 @Controller('goal')

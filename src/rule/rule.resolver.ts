@@ -4,7 +4,7 @@ import { RuleService } from './rule.service'
 import { CreateRuleInput } from './inputs/create-rule.input';
 import { UpdateRuleInput } from './inputs/update-rule.input';
 import { RuleAdapter } from './rule.adapter';
-import { GQLUserId } from 'src/auth/supertokens/user-id-ql.decorator';
+import { GQLUserId } from 'src/auth/decorators/user-id-ql.decorator';
 
 @Resolver(() => RuleModel)
 export class RuleResolver {

@@ -15,8 +15,8 @@ import 'reflect-metadata';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RequestTimeInterceptor } from './common/request-time.interceptor';
 import supertokens from 'supertokens-node';
-import { requireEnv } from './auth/supertokens.config';
-import { AuthGuard } from './auth/auth.guard';
+import { requireEnv } from './auth/supertokens/supertokens.config';
+import { AuthGuard } from './auth/guards/auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

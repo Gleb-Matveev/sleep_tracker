@@ -80,11 +80,6 @@ type RuleModel {
 }
 
 type Query {
-  rules: [RuleModel!]!
-  rule(id: Int!): RuleModel!
-  routines: [RoutineModel!]!
-  routine(id: Int!): RoutineModel!
-
   """Retrieve all days"""
   days: [DayModel!]!
 
@@ -93,9 +88,18 @@ type Query {
 
   """Retrieve day with specified id"""
   day(id: Int!): DayModel!
+  rules: [RuleModel!]!
+  rule(id: Int!): RuleModel!
+  routines: [RoutineModel!]!
+  routine(id: Int!): RoutineModel!
 }
 
 type Mutation {
+  """Create a new day"""
+  createDay(createDayInput: CreateDayInput!): DayModel!
+  updateDay(id: Int!, updateDayInput: UpdateDayInput!): DayModel!
+  removeDay(id: Int!): DayModel!
+
   """Create new Rule"""
   createRule(createRuleInput: CreateRuleInput!): RuleModel!
   updateRule(id: Int!, updateRuleInput: UpdateRuleInput!): RuleModel!
@@ -111,53 +115,6 @@ type Mutation {
 
   """Change period day/night"""
   changePeriod(id: Int!): RoutineModel!
-
-  """Create a new day"""
-  createDay(createDayInput: CreateDayInput!): DayModel!
-  updateDay(id: Int!, updateDayInput: UpdateDayInput!): DayModel!
-  removeDay(id: Int!): DayModel!
-}
-
-"""Input type for creating a rule"""
-input CreateRuleInput {
-  """Name of the rule"""
-  name: String!
-
-  """Description of the rule"""
-  description: String!
-}
-
-"""Input type for updating a rule"""
-input UpdateRuleInput {
-  """Name of the rule"""
-  name: String
-
-  """Description of the rule"""
-  description: String
-}
-
-"""Input type for creating routine"""
-input CreateRoutineInput {
-  """Name of the routine"""
-  name: String!
-
-  """Period of the routine: day or night"""
-  period: RoutinePeriod!
-
-  """Particular steps of the routine"""
-  steps: [String!]!
-}
-
-"""Input type for updating routine"""
-input UpdateRoutineInput {
-  """Name of the routine"""
-  name: String!
-
-  """Period of the routine: day or night"""
-  period: RoutinePeriod!
-
-  """Particular steps of the routine"""
-  steps: [String!]!
 }
 
 """Input type for creating a day"""
@@ -206,4 +163,46 @@ input UpdateDayInput {
 
   """Routines you completed this day"""
   routines: [Float!]
+}
+
+"""Input type for creating a rule"""
+input CreateRuleInput {
+  """Name of the rule"""
+  name: String!
+
+  """Description of the rule"""
+  description: String!
+}
+
+"""Input type for updating a rule"""
+input UpdateRuleInput {
+  """Name of the rule"""
+  name: String
+
+  """Description of the rule"""
+  description: String
+}
+
+"""Input type for creating routine"""
+input CreateRoutineInput {
+  """Name of the routine"""
+  name: String!
+
+  """Period of the routine: day or night"""
+  period: RoutinePeriod!
+
+  """Particular steps of the routine"""
+  steps: [String!]!
+}
+
+"""Input type for updating routine"""
+input UpdateRoutineInput {
+  """Name of the routine"""
+  name: String!
+
+  """Period of the routine: day or night"""
+  period: RoutinePeriod!
+
+  """Particular steps of the routine"""
+  steps: [String!]!
 }

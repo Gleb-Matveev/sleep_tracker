@@ -34,7 +34,7 @@ import {
   GoalResponseDto,
   PaginatedGoalResponseDto,
 } from './dto/goal-response.dto';
-import { UserId } from 'src/auth/supertokens/userid.decorator';
+import { UserId } from 'src/auth/decorators/userid.decorator';
 
 @ApiTags('Goals')
 @Controller('api/goals')

@@ -14,7 +14,7 @@ import { join } from 'path';
 import { CacheModule } from '@nestjs/cache-manager';
 import { S3bucketModule } from './s3bucket/s3bucket.module';
 import { AuthModule } from './auth/auth.module';
-import { AuthGuard } from './auth/auth.guard';
+import { AuthGuard } from './auth/guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';

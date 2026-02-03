@@ -2,7 +2,7 @@ import { Controller, Get, Render, Query, Res } from '@nestjs/common';
 import express from 'express';
 import { AppService } from './app.service';
 import { ApiExcludeController } from '@nestjs/swagger';
-import { Public } from './auth/supertokens/public.decorator';
+import { Public } from './auth/decorators/public.decorator';
 
 @ApiExcludeController()
 @Controller()

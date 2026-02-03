@@ -21,6 +21,7 @@ import {
   RoutineInDayResponseDto,
 } from './dto/day-response.dto';
 import { RoutineResponseDto } from 'src/routine/dto/routine-response.dto';
+import { UserId } from 'src/auth/decorators/userid.decorator';
 
 @ApiExcludeController()
 @Controller('day')
@@ -28,14 +29,19 @@ export class DayController {
   constructor(private readonly dayService: DayService) {}
 
   @Post()
-  async create(@Body() createDayDto: CreateDayDto) {
-    await this.dayService.create(createDayDto);
+  async create(
+    @Body() createDayDto: CreateDayDto,
+    @UserId() userId: number
+  ) {
+    await this.dayService.create(createDayDto, userId);
   }
 
   @Get()
   @Render('day/days')
-  async findAll(): Promise<{ days: boolean; daysDto: DayResponseDto[] }> {
-    const stats = await this.dayService.findAll();
+  async findAll(
+    @UserId() userId: number
+  ): Promise<{ days: boolean; daysDto: DayResponseDto[] }> {
+    const stats = await this.dayService.findAll(userId);
 
     const daysDto: DayResponseDto[] = stats.map((day) => ({
       id: day.id,
@@ -62,38 +68,47 @@ export class DayController {
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id') id: string, 
     @Body() updateDayDto: UpdateDayDto,
+    @UserId() userId: number
   ) {
-    await this.dayService.update(+id, updateDayDto);
+    await this.dayService.update(+id, updateDayDto, userId);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.dayService.remove(+id);
+  remove(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ) {
+    return this.dayService.remove(+id, userId);
   }
 
   @Get('new')
   @Render('day/new')
-  async newForm(): Promise<{ days: boolean; routines: RoutineResponseDto[] }> {
-    const routines = await this.dayService.findAllRoutines();
+  async newForm(
+    @UserId() userId: number
+  ): Promise<{ days: boolean; routines: RoutineResponseDto[] }> {
+    const routines = await this.dayService.findAllRoutines(userId);
 
-    return { 
+    return {
       days: true,
-      routines 
+      routines,
     };
   }
 
   @Get(':id/edit')
   @Render('day/edit')
-  async editForm(@Param('id') id: string): Promise<{
+  async editForm(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ): Promise<{
     days: boolean;
     dayDto: DayResponseDto;
     routines: RoutineResponseDto[];
     selectedRoutineIds: number[];
   }> {
-    const day = await this.dayService.findOne(+id);
-    const routines = await this.dayService.findAllRoutines();
+    const day = await this.dayService.findOne(+id, userId);
+    const routines = await this.dayService.findAllRoutines(userId);
 
     const routinesDto: RoutineResponseDto[] = routines.map((routine) => ({
       id: routine.id,
@@ -133,8 +148,10 @@ export class DayController {
 
   @Get('graph')
   @Render('graph')
-  async graph() {
-    const stats = await this.dayService.findAll();
+  async graph(
+    @UserId() userId: number
+  ) {
+    const stats = await this.dayService.findAll(userId);
 
     type Mapped = {
       labels: string[];
@@ -161,8 +178,10 @@ export class DayController {
   }
 
   @Get('routines')
-  async findAllRoutines(): Promise<{ routinesDto: RoutineResponseDto[] }> {
-    const routines = await this.dayService.findAllRoutines();
+  async findAllRoutines(
+    @UserId() userId: number
+  ): Promise<{ routinesDto: RoutineResponseDto[] }> {
+    const routines = await this.dayService.findAllRoutines(userId);
 
     const routinesDto: RoutineResponseDto[] = routines.map((routine) => ({
       id: routine.id,

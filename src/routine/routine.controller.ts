@@ -5,6 +5,7 @@ import { UpdateRoutineDto } from './dto/update-routine.dto';
 import type { Response } from 'express';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { RoutineResponseDto } from './dto/routine-response.dto';
+import { UserId } from 'src/auth/decorators/userid.decorator';
 
 @ApiExcludeController()
 @Controller('routine')
@@ -12,7 +13,10 @@ export class RoutineController {
   constructor(private readonly routineService: RoutineService) {}
 
   @Post()
-  async create(@Body() createRoutineDto: CreateRoutineDto) {
+  async create(
+    @Body() createRoutineDto: CreateRoutineDto,
+    @UserId() userId: number
+  ) {
     const steps =
       Array.isArray(createRoutineDto.steps)
         ? createRoutineDto.steps.map((s) => s.trim()).filter(Boolean)
@@ -21,13 +25,15 @@ export class RoutineController {
     await this.routineService.create({
       ...createRoutineDto,
       steps,
-    });
+    }, userId);
   }
 
   @Get()
   @Render('routine/routines')
-  async findAll(): Promise<{ routines: boolean; items: RoutineResponseDto[] }> {
-    const routines = await this.routineService.findAll();
+  async findAll(
+    @UserId() userId: number
+  ): Promise<{ routines: boolean; items: RoutineResponseDto[] }> {
+    const routines = await this.routineService.findAll(userId);
 
     const routinesDto: RoutineResponseDto[] = routines.map((routine) => ({
       id: routine.id,
@@ -43,7 +49,11 @@ export class RoutineController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateRoutineDto: UpdateRoutineDto) {
+  async update(
+    @Param('id') id: string, 
+    @Body() updateRoutineDto: UpdateRoutineDto,
+    @UserId() userId: number
+  ) {
     const steps =
       Array.isArray(updateRoutineDto.steps)
         ? updateRoutineDto.steps.map((s) => s.trim()).filter(Boolean)
@@ -51,13 +61,16 @@ export class RoutineController {
 
     await this.routineService.update(+id, {
       ...updateRoutineDto,
-      steps,
-    });
+      steps
+    }, userId);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.routineService.remove(+id);
+  remove(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ) {
+    return this.routineService.remove(+id, userId);
   }
 
   @Get('new')
@@ -68,8 +81,11 @@ export class RoutineController {
 
   @Get(':id/edit')
   @Render('routine/edit')
-  async editForm(@Param('id') id: string): Promise<{ routines: boolean; routine: RoutineResponseDto }> {
-    const routine = await this.routineService.findOne(+id);
+  async editForm(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ): Promise<{ routines: boolean; routine: RoutineResponseDto }> {
+    const routine = await this.routineService.findOne(+id, userId);
     
     if (!routine) {
       throw new Error(`Routine with id ${id} not found`);

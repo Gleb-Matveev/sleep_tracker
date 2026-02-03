@@ -16,7 +16,7 @@ import { UpdateRuleDto } from './dto/update-rule.dto';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { RuleResponseDto } from './dto/rule-response.dto';
 import { EtagInterceptor } from 'src/common/etag.interceptor';
-import { UserId } from 'src/auth/supertokens/userid.decorator';
+import { UserId } from 'src/auth/decorators/userid.decorator';
 
 @ApiExcludeController()
 @Controller('rule')

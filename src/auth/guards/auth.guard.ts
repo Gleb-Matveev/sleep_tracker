@@ -2,10 +2,10 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { Reflector } from '@nestjs/core';
 import { getSession } from 'supertokens-node/recipe/session';
 import type { VerifySessionOptions } from 'supertokens-node/recipe/session';
-import { IS_PUBLIC_KEY } from './supertokens/public.decorator';
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { UserService } from 'src/user/user.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../user/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
@@ -30,6 +30,8 @@ export class AuthGuard implements CanActivate {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    let supertoken_id: string;
+
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -37,12 +39,10 @@ export class AuthGuard implements CanActivate {
     if (isPublic) return true;
 
     const { req, res } = this.getReqRes(context);
-
     const session = await getSession(req, res, { sessionRequired: false });
     if (!session) { return false; }
 
-    const supertoken_id = session.getUserId();
-
+    supertoken_id = session.getUserId();
     const user = await this.userRepository.findOne({ where: { supertoken_id } });
     if (!user) {
       throw new UnauthorizedException('Authenticated but no user was found');

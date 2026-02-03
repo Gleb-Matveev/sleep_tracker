@@ -1,9 +1,14 @@
-import { Body, Controller, Get, Post, Render, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, Render, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { S3bucketService } from './s3bucket.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SampleDto } from './sample.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { UserRole } from 'src/user/entities/user.entity';
+import { RolesGuard } from 'src/auth/guards/role.guard';
 
 @Controller('s3bucket')
+@UseGuards(RolesGuard)
+@Roles(UserRole.ADMIN)
 export class S3bucketController {
   constructor(private readonly s3bucketService: S3bucketService) {}
 
@@ -29,7 +34,7 @@ export class S3bucketController {
       imageUrl: url
     };
   }
-  
+
   @UseInterceptors(FileInterceptor('file'))
   @Post('file')
   async uploadFile(

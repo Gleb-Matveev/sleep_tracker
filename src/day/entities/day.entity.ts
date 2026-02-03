@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { DayRoutine  } from './day-routine.entity';
 import { User } from '../../user/entities/user.entity';
 
@@ -32,6 +32,10 @@ export class Day {
   })
   routines: DayRoutine[];
 
-  @ManyToOne(() => User, user => user.days)
+  @Column()
+  userId: number;
+
+  @ManyToOne(() => User, user => user.days, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
   user: User;
 }

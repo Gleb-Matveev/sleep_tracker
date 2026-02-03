@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { DayRoutine } from '../../day/entities/day-routine.entity';
 import { User } from '../../user/entities/user.entity';
 import { registerEnumType } from '@nestjs/graphql';
@@ -25,6 +25,10 @@ export class Routine {
   @OneToMany(() => DayRoutine, dr => dr.routine)
   days: DayRoutine[];
 
-  @ManyToOne(() => User, user => user.routines)
+  @Column()
+  userId: number;
+  
+  @ManyToOne(() => User, user => user.routines, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
   user: User;
 }

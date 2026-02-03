@@ -22,7 +22,10 @@ export class DayService {
     private readonly dayCacheService: DayCacheService,
   ) {}
 
-  async create(createDayDto: CreateDayDto): Promise<Day> {
+  async create(
+    createDayDto: CreateDayDto,
+    userId: number
+  ): Promise<Day> {
     await this.dayCacheService.invalidateDays();
     const day = this.dayRepository.create({
       ...createDayDto,
@@ -34,6 +37,7 @@ export class DayService {
           routine: { id },
         }),
       ),
+      userId,
     });
 
     const saved = await this.dayRepository.save(day);
@@ -43,14 +47,19 @@ export class DayService {
     return saved;
   }
 
-  async findAll(): Promise<Day[]> {
+  async findAll(
+    userId: number
+  ): Promise<Day[]> {
     let days = await this.dayCacheService.getDays();
     if (days) {
-      console.log("Returned cached days");
+      console.log('Returned cached days');
       return days;
     }
 
     days = await this.dayRepository.find({
+      where: {
+        userId
+      },
       relations: {
         routines: {
           routine: true,
@@ -66,8 +75,12 @@ export class DayService {
   async findAllPaginated(
     page: number,
     limit: number,
+    userId: number
   ): Promise<{ data: Day[]; total: number }> {
     const findOptions: FindManyOptions<Day> = {
+      where: {
+        userId
+      },
       relations: {
         routines: {
           routine: true,
@@ -82,9 +95,12 @@ export class DayService {
     return { data, total };
   }
 
-  async findOne(id: number): Promise<Day> {
+  async findOne(
+    id: number,
+    userId: number
+  ): Promise<Day> {
     const day = await this.dayRepository.findOne({
-      where: { id },
+      where: { id, userId },
       relations: {
         routines: {
           routine: true,
@@ -99,7 +115,11 @@ export class DayService {
     return day;
   }
 
-  async update(id: number, updateDayDto: UpdateDayDto): Promise<Day> {
+  async update(
+    id: number,
+    updateDayDto: UpdateDayDto,
+    userId: number
+  ): Promise<Day> {
     await this.dayCacheService.invalidateDays();
     await this.dayRepository.save({
       id,
@@ -119,8 +139,9 @@ export class DayService {
               this.dayRoutineRepository.create({ routine: { id } }),
             )
           : undefined,
+      userId
     });
-    const updated = await this.dayRepository.findOne({where: { id }});
+    const updated = await this.dayRepository.findOne({ where: { id, userId } });
 
     if (!updated) {
       throw new Error(`Day with id ${id} not found`);
@@ -129,10 +150,13 @@ export class DayService {
     return updated;
   }
 
-  async remove(id: number): Promise<Day> {
+  async remove(
+    id: number,
+    userId: number
+  ): Promise<Day> {
     await this.dayCacheService.invalidateDays();
     const day = await this.dayRepository.findOne({
-      where: { id },
+      where: { id, userId },
       relations: {
         routines: {
           routine: true,
@@ -144,11 +168,13 @@ export class DayService {
       throw new NotFoundException(`Day with id ${id} not found`);
     }
 
-    await this.dayRepository.delete(id);
+    await this.dayRepository.delete({id, userId});
     return day;
   }
 
-  async findAllRoutines(): Promise<Routine[]> {
-    return await this.routineRepository.find();
+  async findAllRoutines(
+    userId: number
+  ): Promise<Routine[]> {
+    return await this.routineRepository.find({where: {userId}});
   }
 }

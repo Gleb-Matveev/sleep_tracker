@@ -32,6 +32,7 @@ import {
 } from '@nestjs/swagger';
 import { RoutineResponseDto, PaginatedRoutineResponseDto } from './dto/routine-response.dto';
 import { DayResponseDto } from '../day/dto/day-response.dto';
+import { UserId } from 'src/auth/decorators/userid.decorator';
 
 @ApiTags('Routines')
 @Controller('api/routines')
@@ -58,8 +59,11 @@ export class RoutineApiController {
   @ApiBadRequestResponse({ 
     description: 'Invalid request data. Check the format and required fields' 
   })
-  async create(@Body() createRoutineDto: CreateRoutineDto) {
-    return await this.routineService.create(createRoutineDto);
+  async create(
+    @Body() createRoutineDto: CreateRoutineDto,
+    @UserId() userId: number
+  ) {
+    return await this.routineService.create(createRoutineDto, userId);
   }
 
   @Get()
@@ -78,11 +82,12 @@ export class RoutineApiController {
     @Query() paginationDto: PaginationDto,
     @Req() req: Request,
     @Res() res: Response,
+    @UserId() userId: number
   ) {
     const page = paginationDto.page || 1;
     const limit = paginationDto.limit || 10;
 
-    const { data, total } = await this.routineService.findAllPaginated(page, limit);
+    const { data, total } = await this.routineService.findAllPaginated(page, limit, userId);
     const response = this.paginationService.createPaginatedResponse(
       data,
       total,
@@ -117,8 +122,11 @@ export class RoutineApiController {
   @ApiBadRequestResponse({ 
     description: 'Invalid ID format (must be a number)' 
   })
-  async findOne(@Param('id') id: string) {
-    const routine = await this.routineService.findOne(+id);
+  async findOne(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ) {
+    const routine = await this.routineService.findOne(+id, userId);
     if (!routine) {
       throw new NotFoundException(`Routine with id ${id} not found`);
     }
@@ -154,8 +162,9 @@ export class RoutineApiController {
   async update(
     @Param('id') id: string,
     @Body() updateRoutineDto: UpdateRoutineDto,
+    @UserId() userId: number
   ) {
-    return await this.routineService.update(+id, updateRoutineDto);
+    return await this.routineService.update(+id, updateRoutineDto, userId);
   }
 
   @Delete(':id')
@@ -180,8 +189,11 @@ export class RoutineApiController {
   @ApiBadRequestResponse({ 
     description: 'Invalid ID format (must be a number)' 
   })
-  async remove(@Param('id') id: string) {
-    await this.routineService.remove(+id);
+  async remove(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ) {
+    await this.routineService.remove(+id, userId);
   }
 
   @Get(':id/days')
@@ -206,8 +218,11 @@ export class RoutineApiController {
   @ApiBadRequestResponse({ 
     description: 'Invalid ID format (must be a number)' 
   })
-  async getRoutineDays(@Param('id') id: string) {
-    const routine = await this.routineService.findOne(+id);
+  async getRoutineDays(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ) {
+    const routine = await this.routineService.findOne(+id, userId);
     if (!routine) {
       throw new NotFoundException(`Routine with id ${id} not found`);
     }
@@ -245,8 +260,9 @@ export class RoutineApiController {
   async getRoutineDay(
     @Param('routineId') routineId: string,
     @Param('dayId') dayId: string,
+    @UserId() userId: number
   ) {
-    const routine = await this.routineService.findOne(+routineId);
+    const routine = await this.routineService.findOne(+routineId, userId);
     if (!routine) {
       throw new NotFoundException(`Routine with id ${routineId} not found`);
     }
