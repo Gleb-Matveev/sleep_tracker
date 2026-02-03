@@ -11,7 +11,7 @@ import {
   MessageEvent,
   Sse,
   UseInterceptors,
-  UploadedFile
+  UploadedFile,
 } from '@nestjs/common';
 import { GoalService } from './goal.service';
 import { CreateGoalDto } from './dto/create-goal.dto';
@@ -22,20 +22,21 @@ import { map, Observable } from 'rxjs';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { GoalResponseDto } from './dto/goal-response.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UserId } from 'src/auth/supertokens/userid.decorator';
 
 @ApiExcludeController()
 @Controller('goal')
 export class GoalController {
   constructor(
     private readonly goalService: GoalService,
-    private goalEventsService: GoalsEventsService
+    private goalEventsService: GoalsEventsService,
   ) {}
 
   @Sse('events')
   stream(): Observable<MessageEvent> {
-    const events$ = this.goalEventsService.asObservable().pipe(
-      map((event) => ({ data: JSON.stringify(event) }))
-    );
+    const events$ = this.goalEventsService
+      .asObservable()
+      .pipe(map((event) => ({ data: JSON.stringify(event) })));
     return events$;
   }
 
@@ -43,15 +44,18 @@ export class GoalController {
   @UseInterceptors(FileInterceptor('file'))
   async create(
     @Body() createGoalDto: CreateGoalDto,
-    @UploadedFile() file: Express.Multer.File
+    @UploadedFile() file: Express.Multer.File,
+    @UserId() userId: number
   ) {
-    await this.goalService.create(createGoalDto, file);
+    await this.goalService.create(createGoalDto, userId, file);
   }
 
   @Get()
   @Render('goal/goals')
-  async findAll(): Promise<{ goals: boolean; items: GoalResponseDto[] }> {
-    const goals = await this.goalService.findAll();
+  async findAll(
+    @UserId() userId: number
+  ): Promise<{ goals: boolean; items: GoalResponseDto[] }> {
+    const goals = await this.goalService.findAll(userId);
 
     const goalsDto: GoalResponseDto[] = goals.map((goal) => ({
       id: goal.id,
@@ -69,13 +73,21 @@ export class GoalController {
 
   @Patch(':id')
   @UseInterceptors(FileInterceptor('file'))
-  async update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto, @UploadedFile() file: Express.Multer.File) {
-    await this.goalService.update(+id, updateGoalDto, file);
+  async update(
+    @Param('id') id: string,
+    @Body() updateGoalDto: UpdateGoalDto,
+    @UserId() userId: number,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    await this.goalService.update(+id, updateGoalDto, userId, file);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.goalService.remove(+id);
+  remove(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ) {
+    return this.goalService.remove(+id, userId);
   }
 
   @Get('new')
@@ -86,8 +98,11 @@ export class GoalController {
 
   @Get(':id/edit')
   @Render('goal/edit')
-  async editForm(@Param('id') id: string): Promise<{ goals: boolean; goal: GoalResponseDto }> {
-    const goal = await this.goalService.findOne(+id);
+  async editForm(
+    @Param('id') id: string,
+    @UserId() userId: number
+  ): Promise<{ goals: boolean; goal: GoalResponseDto }> {
+    const goal = await this.goalService.findOne(+id, userId);
     if (!goal) {
       throw new Error(`Goal with id ${id} not found`);
     }

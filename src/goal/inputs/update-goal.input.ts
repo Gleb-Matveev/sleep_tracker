@@ -24,6 +24,4 @@ export class UpdateGoalInput {
   @IsEnum(Status)
   @IsOptional()
   status: Status;
-
-  //user: User;
 }

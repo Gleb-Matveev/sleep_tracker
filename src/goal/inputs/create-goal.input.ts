@@ -15,6 +15,4 @@ export class CreateGoalInput {
   @Field(() => Status, { description: 'Status of the goal' })
   @IsEnum(Status)
   status: Status;
-
-  //user: User;
 }

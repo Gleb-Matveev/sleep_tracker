@@ -8,6 +8,7 @@ import {
   ManyToMany,
   JoinTable,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 export enum Status {
@@ -32,6 +33,10 @@ export class Goal {
   @Column({ type: 'enum', enum: Status })
   status: Status;
 
-  @ManyToOne(() => User, (user) => user.goals)
+  @Column()
+  userId: number;
+
+  @ManyToOne(() => User, (user) => user.goals, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
   user: User;
 }

@@ -18,6 +18,7 @@ export class GoalService {
 
   async create(
     createGoalDto: CreateGoalDto,
+    userId: number,
     file?: Express.Multer.File,
   ): Promise<Goal> {
     if (file) {
@@ -25,7 +26,7 @@ export class GoalService {
       createGoalDto.image_url = url;
     }
 
-    const goal = this.goalRepository.create(createGoalDto);
+    const goal = this.goalRepository.create({ ...createGoalDto, userId});
     if (goal) {
       this.goalEventsService.emit({
         type: 'created',
@@ -35,15 +36,21 @@ export class GoalService {
     return this.goalRepository.save(goal);
   }
 
-  async findAll(): Promise<Goal[]> {
-    return await this.goalRepository.find();
+  async findAll(
+    userId: number,
+  ): Promise<Goal[]> {
+    return await this.goalRepository.find({ where: { userId }});
   }
 
   async findAllPaginated(
     page: number,
     limit: number,
+    userId: number
   ): Promise<{ data: Goal[]; total: number }> {
     const findOptions: FindManyOptions<Goal> = {
+      where: {
+        userId
+      },
       order: { name: 'ASC' },
       skip: (page - 1) * limit,
       take: limit,
@@ -53,8 +60,11 @@ export class GoalService {
     return { data, total };
   }
 
-  async findOne(id: number): Promise<Goal> {
-    const goal = await this.goalRepository.findOne({ where: { id } });
+  async findOne(
+    id: number,
+    userId: number
+  ): Promise<Goal> {
+    const goal = await this.goalRepository.findOne({ where: { id, userId } });
 
     if (!goal) {
       throw new NotFoundException(`Goal with id ${id} not found`);
@@ -66,6 +76,7 @@ export class GoalService {
   async update(
     id: number,
     updateGoalDto: UpdateGoalDto,
+    userId: number,
     file?: Express.Multer.File,
   ): Promise<Goal> {
     if (file) {
@@ -73,8 +84,8 @@ export class GoalService {
       updateGoalDto.image_url = url;
     }
 
-    await this.goalRepository.update(id, updateGoalDto);
-    const updated = await this.goalRepository.findOne({ where: { id } });
+    await this.goalRepository.update({ id, userId }, updateGoalDto);
+    const updated = await this.goalRepository.findOne({ where: { id, userId } });
     if (!updated) {
       throw new Error(`Goal with id ${id} not found`);
     }
@@ -85,14 +96,17 @@ export class GoalService {
     return updated;
   }
 
-  async remove(id: number): Promise<Goal> {
+  async remove(
+    id: number,
+    userId: number
+  ): Promise<Goal> {
     // TO DO: remove associeated image
-    const goal = await this.goalRepository.findOne({ where: { id } });
+    const goal = await this.goalRepository.findOne({ where: { id, userId } });
     if (!goal) {
       throw new NotFoundException(`Goal with id ${id} not found`);
     }
 
-    await this.goalRepository.delete(id);
+    await this.goalRepository.delete({id, userId});
     this.goalEventsService.emit({
       type: 'deleted',
       payload: { id: goal.id, title: goal.name },
@@ -100,40 +114,48 @@ export class GoalService {
     return goal;
   }
 
-  async completeGoal(id: number): Promise<Goal> {
-    const updatable = await this.goalRepository.findOne({ where: { id } });
+  async completeGoal(
+    id: number,
+    userId: number
+  ): Promise<Goal> {
+    const updatable = await this.goalRepository.findOne({ where: { id, userId } });
     if (!updatable) {
       throw new Error(`Goal with id ${id} not found`);
     }
     const updateGoalDto: UpdateGoalDto = {
       status: Status.DONE,
     };
-    await this.goalRepository.update(id, updateGoalDto);
+    await this.goalRepository.update({id, userId}, updateGoalDto);
     return {
       id: updatable.id,
       name: updatable.name,
       description: updatable.description,
       image_url: updatable.image_url,
       status: Status.DONE,
+      userId: updatable.userId,
       user: updatable.user,
     };
   }
 
-  async uncompleteGoal(id: number): Promise<Goal> {
-    const updatable = await this.goalRepository.findOne({ where: { id } });
+  async uncompleteGoal(
+    id: number,
+    userId: number
+  ): Promise<Goal> {
+    const updatable = await this.goalRepository.findOne({ where: {id, userId} });
     if (!updatable) {
       throw new Error(`Goal with id ${id} not found`);
     }
     const updateGoalDto: UpdateGoalDto = {
       status: Status.NOTDONE,
     };
-    await this.goalRepository.update(id, updateGoalDto);
+    await this.goalRepository.update({id, userId}, updateGoalDto);
     return {
       id: updatable.id,
       name: updatable.name,
       description: updatable.description,
       image_url: updatable.image_url,
       status: Status.NOTDONE,
+      userId: updatable.userId,
       user: updatable.user,
     };
   }
