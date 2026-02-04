@@ -27,7 +27,6 @@ export class AuthController {
     private readonly dayCacheService: DayCacheService,
   ) {}
 
-  @Public()
   @Post('register')
   @UseInterceptors(FileInterceptor('file'))
   async signUp(
@@ -40,7 +39,6 @@ export class AuthController {
     return res.redirect('/?success=registration_complete');
   }
 
-  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async signIn(
@@ -54,7 +52,6 @@ export class AuthController {
       return res.redirect('/');
     }
     await this.supertokenService.createSession(req, res, result.recipeUserId);
-    console.log("HERE");
     return res.redirect('/day');
   }
 

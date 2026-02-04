@@ -9,13 +9,11 @@ import { Public } from './auth/decorators/public.decorator';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Public()
   @Get()
   @Render('login')
   login() {
   }
 
-  @Public()
   @Get('register')
   @Render('register')
   register() {

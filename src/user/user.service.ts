@@ -22,8 +22,11 @@ export class UserService {
   }
 
   async findOne(id: number) {
-    console.log("Id:", id);
     return await this.userRepository.findOne({ where: { id } });
+  }
+
+  async findBysuperTokenId(supertoken_id: string) {
+    return await this.userRepository.findOne({ where: { supertoken_id } });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

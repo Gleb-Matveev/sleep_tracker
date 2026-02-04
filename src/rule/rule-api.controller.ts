@@ -63,6 +63,7 @@ export class RuleApiController {
     @Body() createRuleDto: CreateRuleDto,
     @UserId() userId: number
   ) {
+    console.log("Create");
     return await this.ruleService.create(createRuleDto, userId);
   }
 

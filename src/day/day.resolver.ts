@@ -54,8 +54,6 @@ export class DayResolver {
     @GQLUserId() userId: number
   ): Promise<DaysPaginationModel> {
     const { data, total } = await this.dayService.findAllPaginated(page, limit, userId);
-    console.log("Data:", data);
-    console.log("Total:", total);
     const daysModel: DayModel[] = data.map((day) =>
       this.dayAdapter.toModel(day),
     );
@@ -63,7 +61,6 @@ export class DayResolver {
     daysPaginated.days = daysModel;
     daysPaginated.total = total;
 
-    console.log("Result:", daysPaginated);
     return daysPaginated;
   }
 

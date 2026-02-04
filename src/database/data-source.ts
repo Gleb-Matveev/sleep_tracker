@@ -9,9 +9,7 @@ if (!databaseUrl) {
   throw new Error('DATABASE_URL environment variable is not set');
 }
 
-console.log("URL:", URL);
 const connectionOptions = parse(databaseUrl);
-console.log("Options:", connectionOptions);
 
 export const AppDataSource = new DataSource({
   type: 'postgres',

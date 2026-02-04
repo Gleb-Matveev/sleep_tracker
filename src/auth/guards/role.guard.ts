@@ -26,6 +26,7 @@ export class RolesGuard implements CanActivate {
     const dbUser = await this.userService.findOne(user.db_id as number);
     if (!dbUser) throw new Error('Unable to find user');
 
+    console.log("Includes:", requiredRoles.includes(dbUser.role));
     return requiredRoles.includes(dbUser.role);
   }
 }

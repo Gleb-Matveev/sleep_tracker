@@ -48,7 +48,6 @@ export class S3bucketService {
   }
 
   async getText() {
-    console.log('Getting your "bucket-text" object');
     const { Body } = await this.s3Client.send(
       new GetObjectCommand({
         Bucket: this.bucketName,
@@ -56,7 +55,6 @@ export class S3bucketService {
       }),
     );
     if (!Body) {
-      console.log("Couldn't find the object");
       return '';
     }
 

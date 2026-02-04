@@ -31,17 +31,17 @@ export class AuthModule implements NestModule {
 
   static forRoot(): DynamicModule {
     return {
+      module: AuthModule,
+      imports: [UserModule, DayModule, S3bucketModule],
+      controllers: [AuthController],
       providers: [
         {
           useFactory: () => supertokensConfig(),
           provide: 'SUPERTOKEN-CONFIG',
         },
         SupertokensService,
+        RequireAuthMiddleware,
       ],
-      controllers: [AuthController],
-      exports: [],
-      imports: [UserModule, DayModule, S3bucketModule],
-      module: AuthModule,
     };
   }
 }

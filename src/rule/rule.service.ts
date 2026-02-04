@@ -69,7 +69,7 @@ export class RuleService {
 
     const updated = await this.ruleRepository.findOne({ where: { id, userId } });
     if (!updated) {
-      throw new Error(`Rule with id ${id} not found`);
+      throw new NotFoundException(`Rule with id ${id} not found`);
     }
 
     return updated;

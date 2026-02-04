@@ -58,7 +58,6 @@
     .getElementById('routine-form')
     ?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      console.log("HKJHLSAKJHDLKASJHDLK");
       const form = e.target;
       const formData = new FormData(form);
       const steps = formData.getAll('steps[]').filter((s) => s.trim());

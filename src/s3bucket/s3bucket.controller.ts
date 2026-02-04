@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post, Render, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { S3bucketService } from './s3bucket.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { SampleDto } from './sample.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { UserRole } from 'src/user/entities/user.entity';
 import { RolesGuard } from 'src/auth/guards/role.guard';
@@ -28,6 +27,7 @@ export class S3bucketController {
   @Get()
   @Render('upload_test')
   async uploadPic() {
+    console.log("Some");
     //const url = await this.s3bucketService.getPresignedImageUrl('w15.jpg');
     const url = await this.s3bucketService.getConstImageUrl();
 
@@ -40,12 +40,10 @@ export class S3bucketController {
   @UseInterceptors(FileInterceptor('file'))
   @Post('file')
   async uploadFile(
-    @Body() body: SampleDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
     const url = await this.s3bucketService.saveImage(file);
 
-    console.log("Url:", url);
     return;
   }
 }

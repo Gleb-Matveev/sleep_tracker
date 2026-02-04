@@ -39,16 +39,15 @@ import { User } from './user/entities/user.entity';
     GoalModule,
     RoutineModule,
     DayModule,
-    AuthModule,
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [AppController],
   providers: [
-    AppService,
+    AppService/*,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
-    }
+    }*/
   ],
 })
 export class AppModule {}

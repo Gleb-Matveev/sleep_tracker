@@ -9,7 +9,6 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  //@Public()
   @Get()
   async findAll() {
     return await this.userService.findAll();
