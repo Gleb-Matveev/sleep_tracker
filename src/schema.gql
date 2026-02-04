@@ -67,6 +67,27 @@ type DaysPaginationModel {
   total: Int!
 }
 
+"""Goal"""
+type GoalModel {
+  """Unique identifier for the goal"""
+  id: ID
+
+  """Name of the goal"""
+  name: String!
+
+  """Description of the goal"""
+  description: String!
+
+  """Status of the goal"""
+  status: GoalStatus!
+}
+
+"""Goal status"""
+enum GoalStatus {
+  DONE
+  NOTDONE
+}
+
 """Rule"""
 type RuleModel {
   """Unique identifier for the rule"""
@@ -90,6 +111,8 @@ type Query {
   day(id: Int!): DayModel!
   rules: [RuleModel!]!
   rule(id: Int!): RuleModel!
+  goals: [GoalModel!]!
+  goal(id: Int!): GoalModel!
   routines: [RoutineModel!]!
   routine(id: Int!): RoutineModel!
 }
@@ -104,6 +127,13 @@ type Mutation {
   createRule(createRuleInput: CreateRuleInput!): RuleModel!
   updateRule(id: Int!, updateRuleInput: UpdateRuleInput!): RuleModel!
   removeRule(id: Int!): RuleModel!
+
+  """Create new goal"""
+  createGoal(createGoalInput: CreateGoalInput!): GoalModel!
+  updateGoal(id: Int!, updateGoalInput: UpdateGoalInput!): GoalModel!
+  removeGoal(id: Int!): GoalModel!
+  completeGoal(id: Int!): GoalModel!
+  uncompleteGoal(id: Int!): GoalModel!
 
   """Create new routine"""
   createRoutine(createRoutineInput: CreateRoutineInput!): RoutineModel!
@@ -181,6 +211,30 @@ input UpdateRuleInput {
 
   """Description of the rule"""
   description: String
+}
+
+"""Input type for creating a goal"""
+input CreateGoalInput {
+  """Name of the goal"""
+  name: String!
+
+  """Description of the goal"""
+  description: String!
+
+  """Status of the goal"""
+  status: GoalStatus!
+}
+
+"""Input type for updating a goal"""
+input UpdateGoalInput {
+  """Name of the goal"""
+  name: String
+
+  """Description of the goal"""
+  description: String
+
+  """Status of the goal"""
+  status: GoalStatus
 }
 
 """Input type for creating routine"""

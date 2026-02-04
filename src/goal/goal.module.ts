@@ -13,6 +13,6 @@ import { S3bucketModule } from 'src/s3bucket/s3bucket.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Goal]), CommonModule, S3bucketModule],
   controllers: [GoalController, GoalApiController],
-  providers: [GoalService, GoalsEventsService, /*GoalResolver,*/ GoalAdapter],
+  providers: [GoalService, GoalsEventsService, GoalResolver, GoalAdapter],
 })
 export class GoalModule {}

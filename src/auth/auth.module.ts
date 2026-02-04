@@ -12,6 +12,7 @@ import { AuthController } from './auth.controller';
 import { RequireAuthMiddleware } from './requireauth.middleware';
 import { UserModule } from 'src/user/user.module';
 import { DayModule } from 'src/day/day.module';
+import { S3bucketModule } from 'src/s3bucket/s3bucket.module';
 
 @Module({})
 export class AuthModule implements NestModule {
@@ -39,7 +40,7 @@ export class AuthModule implements NestModule {
       ],
       controllers: [AuthController],
       exports: [],
-      imports: [UserModule, DayModule],
+      imports: [UserModule, DayModule, S3bucketModule],
       module: AuthModule,
     };
   }

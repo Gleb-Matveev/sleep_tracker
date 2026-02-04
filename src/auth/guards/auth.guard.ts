@@ -39,6 +39,8 @@ export class AuthGuard implements CanActivate {
     if (isPublic) return true;
 
     const { req, res } = this.getReqRes(context);
+    res.locals.isLoggedIn = false;
+
     const session = await getSession(req, res, { sessionRequired: false });
     if (!session) { return false; }
 
@@ -48,6 +50,10 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Authenticated but no user was found');
     }
 
+    res.locals.isLoggedIn = true;
+    res.locals.email = user.email;
+    res.locals.avatarUrl = user.avatar_url;
+
     req.user = {
       db_id: user.id,
       supertoken_id,
@@ -55,6 +61,7 @@ export class AuthGuard implements CanActivate {
     };
     req.session = session;
 
+    console.log("End of guard");
     return true;
   }
 }

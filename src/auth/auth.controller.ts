@@ -9,11 +9,14 @@ import {
   Res,
   UnauthorizedException,
   Session,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import { Public } from './decorators/public.decorator';
 import { SupertokensService } from './supertokens/supertokens.service';
 import { DayCacheService } from 'src/day/day-cache.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('auth')
 export class AuthController {
@@ -24,12 +27,14 @@ export class AuthController {
 
   @Public()
   @Post('register')
+  @UseInterceptors(FileInterceptor('file'))
   async signUp(
     @Body('email') email: string,
     @Body('password') password: string,
     @Res() res: Response,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    await this.supertokenService.createUser(email, password);
+    await this.supertokenService.createUser(email, password, file);
     return res.redirect('/?success=registration_complete');
   }
 
@@ -47,6 +52,7 @@ export class AuthController {
       return res.redirect('/');
     }
     await this.supertokenService.createSession(req, res, result.recipeUserId);
+    console.log("HERE");
     return res.redirect('/day');
   }
 
