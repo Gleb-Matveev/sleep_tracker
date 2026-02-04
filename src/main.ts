@@ -34,7 +34,11 @@ async function bootstrap() {
     .setTitle('Sleep tracker API')
     .setDescription('The sleep tracker API description')
     .setVersion('1.0')
-    .addTag('sleep_tracker')
+    .addTag('User')
+    .addTag('Days')
+    .addTag('Rules')
+    .addTag('Goals')
+    .addTag('Routines')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/swagger', app, documentFactory);

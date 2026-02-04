@@ -25,7 +25,10 @@ export class RuleResolver {
     return this.ruleAdapter.toModel(rule);
   }
 
-  @Query(() => [RuleModel], { name: 'rules' })
+  @Query(() => [RuleModel], {
+    name: 'rules',
+    description: 'Retrieve all rules',
+  })
   async findAll(
     @GQLUserId() userId: number
   ): Promise<RuleModel[]> {
@@ -36,7 +39,10 @@ export class RuleResolver {
     return rulesModel;
   }
 
-  @Query(() => RuleModel, { name: 'rule' })
+  @Query(() => RuleModel, {
+    name: 'rule',
+    description: 'Retrieve rule with specified id',
+  })
   async findOne(
     @Args('id', { type: () => Int }) id: number,
     @GQLUserId() userId: number
@@ -46,7 +52,10 @@ export class RuleResolver {
     return ruleModel;
   }
 
-  @Mutation(() => RuleModel)
+  @Mutation(() => RuleModel, {
+    name: 'updateRule',
+    description: 'Update rule with specified id',
+  })
   async updateRule(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateRuleInput') updateRuleInput: UpdateRuleInput,
@@ -57,7 +66,10 @@ export class RuleResolver {
     return ruleModel;
   }
 
-  @Mutation(() => RuleModel)
+  @Mutation(() => RuleModel, {
+    name: 'removeRule',
+    description: 'Remove rule with specified id',
+  })
   async removeRule(
     @Args('id', { type: () => Int }) id: number, 
     @GQLUserId() userId: number

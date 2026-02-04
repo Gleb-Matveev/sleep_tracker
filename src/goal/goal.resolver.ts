@@ -26,7 +26,10 @@ export class GoalResolver {
     return this.goalAdapter.toModel(goal);
   }
 
-  @Query(() => [GoalModel], { name: 'goals' })
+  @Query(() => [GoalModel], { 
+    name: "goals", 
+    description: 'Retrieve all goals',
+  })
   async findAll(
     @GQLUserId() userId: number
   ): Promise<GoalModel[]> {
@@ -37,7 +40,10 @@ export class GoalResolver {
     return goalsModel;
   }
 
-  @Query(() => GoalModel, { name: 'goal' })
+  @Query(() => GoalModel, { 
+    name: "goal", 
+    description: 'Retrieve goal wth specified id',
+  })
   async findOne(
     @Args('id', { type: () => Int }) id: number,
     @GQLUserId() userId: number
@@ -47,7 +53,10 @@ export class GoalResolver {
     return goalModel;
   }
 
-  @Mutation(() => GoalModel)
+  @Mutation(() => GoalModel, { 
+    name: "updateGoal", 
+    description: 'Update goal wth specified id',
+  })
   async updateGoal(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateGoalInput') updateGoalInput: UpdateGoalInput,
@@ -58,7 +67,10 @@ export class GoalResolver {
     return goalModel;
   }
 
-  @Mutation(() => GoalModel)
+  @Mutation(() => GoalModel, { 
+    name: "removeGoal", 
+    description: 'Remove goal wth specified id',
+  })
   async removeGoal(
     @Args('id', { type: () => Int }) id: number,
     @GQLUserId() userId: number
@@ -68,7 +80,10 @@ export class GoalResolver {
     return goalModel;
   }
 
-  @Mutation(() => GoalModel)
+  @Mutation(() => GoalModel, { 
+    name: "completeGoal", 
+    description: 'Marked as complete goal wth specified id',
+  })
   async completeGoal(
     @Args('id', { type: () => Int }) id: number,
     @GQLUserId() userId: number
@@ -78,7 +93,10 @@ export class GoalResolver {
     return goalModel;
   }
 
-  @Mutation(() => GoalModel)
+  @Mutation(() => GoalModel, { 
+    name: "uncompleteGoal", 
+    description: 'Marked as uncomplete goal wth specified id',
+  })
   async uncompleteGoal(
     @Args('id', { type: () => Int }) id: number,
     @GQLUserId() userId: number

@@ -80,7 +80,10 @@ export class DayResolver {
     return dayModel;
   }
 
-  @Mutation(() => DayModel)
+  @Mutation(() => DayModel, { 
+    name: "updateDay", 
+    description: 'Update day with specified id',
+  })
   async updateDay(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateDayInput') updateDayInput: UpdateDayInput,
@@ -95,7 +98,10 @@ export class DayResolver {
     return dayModel;
   }
 
-  @Mutation(() => DayModel)
+  @Mutation(() => DayModel, { 
+    name: "removeDay", 
+    description: 'Remove day with specified id',
+  })
   async removeDay(
     @Args('id', { type: () => Int }) id: number,
     @GQLUserId() userId: number

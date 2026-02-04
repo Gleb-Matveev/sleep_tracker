@@ -29,7 +29,10 @@ export class RoutineResolver {
     return this.routineAdapter.toModel(routine);
   }
 
-  @Query(() => [RoutineModel], { name: 'routines' })
+  @Query(() => [RoutineModel], {
+    name: 'routines',
+    description: 'Retrieve all routines',
+  })
   async findAll(
     @GQLUserId() userId: number
   ): Promise<RoutineModel[]> {
@@ -40,7 +43,10 @@ export class RoutineResolver {
     return routineModels;
   }
 
-  @Query(() => RoutineModel, { name: 'routine' })
+  @Query(() => RoutineModel, {
+    name: 'routine',
+    description: 'Retrieve routine with specified id',
+  })
   async findOne(
     @Args('id', { type: () => Int }) id: number,
     @GQLUserId() userId: number
@@ -50,7 +56,10 @@ export class RoutineResolver {
     return routineModel;
   }
 
-  @Mutation(() => RoutineModel)
+  @Mutation(() => RoutineModel, {
+    name: 'updateRoutine',
+    description: 'Update routine with specified id',
+  })
   async updateRoutine(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateRoutineInput') updateRoutineInput: UpdateRoutineInput,
@@ -65,7 +74,10 @@ export class RoutineResolver {
     return routineModel;
   }
 
-  @Mutation(() => RoutineModel)
+  @Mutation(() => RoutineModel, {
+    name: 'removeRoutine',
+    description: 'Remove routine with specified id',
+  })
   async removeRoutine(
     @Args('id', { type: () => Int }) id: number,
     @GQLUserId() userId: number
@@ -75,7 +87,10 @@ export class RoutineResolver {
     return routineModel;
   }
 
-  @Mutation(() => RoutineModel, {description: "Adds steps to the specified routine"})
+  @Mutation(() => RoutineModel, {
+    name: 'addStepsToRoutines',
+    description: 'Add steps to specified routine',
+  })
   async addSteps(
     @Args('id', { type: () => Int }) id: number,
     @Args('steps', { type: () => [String]}) steps: string[],
@@ -90,7 +105,10 @@ export class RoutineResolver {
     return routineModel;
   }
 
-  @Mutation(() => RoutineModel, {description: "Change period day/night"})
+  @Mutation(() => RoutineModel, {
+    name: 'changePeriodOfRoutines',
+    description: 'Change period of specified routine',
+  })
   async changePeriod(
     @Args('id', { type: () => Int }) id: number,
     @GQLUserId() userId: number

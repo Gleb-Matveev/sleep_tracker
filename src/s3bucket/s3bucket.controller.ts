@@ -5,7 +5,9 @@ import { SampleDto } from './sample.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { UserRole } from 'src/user/entities/user.entity';
 import { RolesGuard } from 'src/auth/guards/role.guard';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController()
 @Controller('s3bucket')
 @UseGuards(RolesGuard)
 @Roles(UserRole.ADMIN)

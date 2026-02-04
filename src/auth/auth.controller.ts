@@ -17,7 +17,9 @@ import { Public } from './decorators/public.decorator';
 import { SupertokensService } from './supertokens/supertokens.service';
 import { DayCacheService } from 'src/day/day-cache.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController()
 @Controller('auth')
 export class AuthController {
   constructor(

@@ -109,42 +109,74 @@ type Query {
 
   """Retrieve day with specified id"""
   day(id: Int!): DayModel!
+
+  """Retrieve all rules"""
   rules: [RuleModel!]!
+
+  """Retrieve rule with specified id"""
   rule(id: Int!): RuleModel!
+
+  """Retrieve all goals"""
   goals: [GoalModel!]!
+
+  """Retrieve goal wth specified id"""
   goal(id: Int!): GoalModel!
+
+  """Retrieve all routines"""
   routines: [RoutineModel!]!
+
+  """Retrieve routine with specified id"""
   routine(id: Int!): RoutineModel!
 }
 
 type Mutation {
   """Create a new day"""
   createDay(createDayInput: CreateDayInput!): DayModel!
+
+  """Update day with specified id"""
   updateDay(id: Int!, updateDayInput: UpdateDayInput!): DayModel!
+
+  """Remove day with specified id"""
   removeDay(id: Int!): DayModel!
 
   """Create new Rule"""
   createRule(createRuleInput: CreateRuleInput!): RuleModel!
+
+  """Update rule with specified id"""
   updateRule(id: Int!, updateRuleInput: UpdateRuleInput!): RuleModel!
+
+  """Remove rule with specified id"""
   removeRule(id: Int!): RuleModel!
 
   """Create new goal"""
   createGoal(createGoalInput: CreateGoalInput!): GoalModel!
+
+  """Update goal wth specified id"""
   updateGoal(id: Int!, updateGoalInput: UpdateGoalInput!): GoalModel!
+
+  """Remove goal wth specified id"""
   removeGoal(id: Int!): GoalModel!
+
+  """Marked as complete goal wth specified id"""
   completeGoal(id: Int!): GoalModel!
+
+  """Marked as uncomplete goal wth specified id"""
   uncompleteGoal(id: Int!): GoalModel!
 
   """Create new routine"""
   createRoutine(createRoutineInput: CreateRoutineInput!): RoutineModel!
+
+  """Update routine with specified id"""
   updateRoutine(id: Int!, updateRoutineInput: UpdateRoutineInput!): RoutineModel!
+
+  """Remove routine with specified id"""
   removeRoutine(id: Int!): RoutineModel!
 
-  """Adds steps to the specified routine"""
-  addSteps(id: Int!, steps: [String!]!): RoutineModel!
+  """Add steps to specified routine"""
+  addStepsToRoutines(id: Int!, steps: [String!]!): RoutineModel!
 
-  """Change period day/night"""
-  changePeriod(id: Int!): RoutineModel!
+  """Change period of specified routine"""
+  changePeriodOfRoutines(id: Int!): RoutineModel!
 }
 
 """Input type for creating a day"""
