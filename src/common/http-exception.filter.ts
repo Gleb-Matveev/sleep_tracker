@@ -5,6 +5,7 @@ import { Request, Response } from 'express';
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
+    console.log("Exception!!!!!");
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
@@ -12,7 +13,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let message = 'Internal server error';
 
     const gqlHost = GqlArgumentsHost.create(host);
-    const isGraphQL = !!gqlHost.getContext();
+    const isGraphQL = !gqlHost.getContext();
     
     if (isGraphQL) {
       return {
