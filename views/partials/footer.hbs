@@ -2,7 +2,10 @@
     <div class="footer-inner">
         <span>Sleep Tracker · {{year}}</span>
         {{#if serverResponseTime}}
-            <span>Your request took: {{serverResponseTime}}ms</span>
+            <span>Your request took on server: {{serverResponseTime}}ms</span>
         {{/if}}
+        <div class="client-response-time-div">
+            <span id="client-time"></span>
+        </div>
     </div>
 </footer>

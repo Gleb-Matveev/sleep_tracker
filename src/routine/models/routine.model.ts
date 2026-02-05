@@ -20,6 +20,4 @@ export class RoutineModel {
 
   @Field(() => [String], {description: "Particular steps of the routine"})
   steps: string[];
-
-  //user: User;
 }

@@ -100,7 +100,6 @@ export class GoalService {
     id: number,
     userId: number
   ): Promise<Goal> {
-    // TO DO: remove associeated image
     const goal = await this.goalRepository.findOne({ where: { id, userId } });
     if (!goal) {
       throw new NotFoundException(`Goal with id ${id} not found`);

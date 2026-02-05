@@ -37,7 +37,7 @@ export class RequireAuthMiddleware implements NestMiddleware {
         sessionHandle: session.getHandle(),
       };
       //(req as any).session = session;
-      console.log("Middleware success");
+      //console.log("Middleware success");
       return next();
     } catch (e) {
       if (wantsHtml) {

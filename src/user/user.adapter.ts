@@ -76,7 +76,6 @@ export class UserAdapter {
 
   // GraphQL mappers
   toModel(user: User): UserModel {
-    //console.log("User:", user);
     const userModel = new UserModel();
     userModel.id = user.id;
     userModel.supertoken_id = user.supertoken_id;

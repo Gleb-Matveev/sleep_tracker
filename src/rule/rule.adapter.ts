@@ -14,7 +14,6 @@ export class RuleAdapter {
             id: rule.id,
             name: rule.name,
             description: rule.description,
-            //user: rule.user
         };
     }
     
@@ -22,7 +21,6 @@ export class RuleAdapter {
         const rule = new CreateRuleDto();
         rule.name = createRuleInput.name;
         rule.description = createRuleInput.description;
-        //rule.user = createRuleInput.user;
         return rule;
     }
 
@@ -30,7 +28,6 @@ export class RuleAdapter {
         const rule = new UpdateRuleDto();
         rule.name = updateRuleDto.name;
         rule.description = updateRuleDto.description;
-        //rule.user = createRuleInput.user;
         return rule;
     }
 

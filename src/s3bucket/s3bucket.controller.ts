@@ -27,7 +27,6 @@ export class S3bucketController {
   @Get()
   @Render('upload_test')
   async uploadPic() {
-    console.log("Some");
     //const url = await this.s3bucketService.getPresignedImageUrl('w15.jpg');
     const url = await this.s3bucketService.getConstImageUrl();
 

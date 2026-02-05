@@ -159,7 +159,7 @@ export class DayController {
       feeling_data: number[];
     };
 
-    const mapped = stats.reverse().reduce<Mapped>(
+    const mapped = [...stats].reverse().reduce<Mapped>(
       (acc, day) => {
         acc.labels.push(formatDate(day.date));
         acc.getup_data.push(day.getup_score);

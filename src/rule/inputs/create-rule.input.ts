@@ -10,6 +10,4 @@ export class CreateRuleInput {
   @Field(() => String, { description: 'Description of the rule' })
   @IsString()
   description: string;
-
-  //user: User;
 }

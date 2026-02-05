@@ -21,7 +21,6 @@ export class UserResolver {
     const usersModel: UserModel[] = users.map((user) => {
       return this.userAdapter.toModel(user);
     });
-    console.log("User models:", usersModel);
     return usersModel;
   }
 

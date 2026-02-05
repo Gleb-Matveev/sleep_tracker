@@ -15,7 +15,6 @@ export class GoalAdapter {
             name: goal.name,
             description: goal.description,
             status: goal.status,
-            //user: goal.user
         };
     }
     
@@ -24,7 +23,6 @@ export class GoalAdapter {
         goal.name = createGoalInput.name;
         goal.description = createGoalInput.description;
         goal.status = createGoalInput.status;
-        //goal.user = createGoalInput.user;
         return goal;
     }
 

@@ -16,6 +16,4 @@ export class UpdateRuleInput {
   @IsString()
   @IsOptional()
   description: string;
-
-  //user: User;
 }
