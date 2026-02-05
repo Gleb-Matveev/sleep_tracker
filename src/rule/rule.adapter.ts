@@ -5,6 +5,7 @@ import { UpdateRuleInput } from "./inputs/update-rule.input";
 import { Rule } from "./entities/rule.entity";
 import { RuleModel } from "./models/rule.model"
 import { Injectable } from "@nestjs/common";
+import { RuleResponseDto } from "./dto/rule-response.dto";
 
 @Injectable()
 export class RuleAdapter {
@@ -31,5 +32,13 @@ export class RuleAdapter {
         rule.description = updateRuleDto.description;
         //rule.user = createRuleInput.user;
         return rule;
+    }
+
+    toResponseDto(rule: Rule): RuleResponseDto {
+        const ruleDto = new RuleResponseDto();
+        ruleDto.id = rule.id;
+        ruleDto.name = rule.name;
+        ruleDto.description = rule.description;
+        return ruleDto;
     }
 }

@@ -33,6 +33,7 @@ import {
 } from '@nestjs/swagger';
 import { RuleResponseDto, PaginatedRuleResponseDto } from './dto/rule-response.dto';
 import { UserId } from 'src/auth/decorators/userid.decorator';
+import { RuleAdapter } from './rule.adapter';
 
 @ApiTags('Rules')
 @Controller('api/rules')
@@ -40,6 +41,7 @@ export class RuleApiController {
   constructor(
     private readonly ruleService: RuleService,
     private readonly paginationService: PaginationService,
+    private readonly ruleAdapter: RuleAdapter,
   ) {}
 
   @Post()
@@ -63,8 +65,7 @@ export class RuleApiController {
     @Body() createRuleDto: CreateRuleDto,
     @UserId() userId: number
   ) {
-    console.log("Create");
-    return await this.ruleService.create(createRuleDto, userId);
+    return this.ruleAdapter.toResponseDto(await this.ruleService.create(createRuleDto, userId));
   }
 
   @Get()
@@ -89,8 +90,9 @@ export class RuleApiController {
     const limit = paginationDto.limit || 10;
 
     const { data, total } = await this.ruleService.findAllPaginated(page, limit, userId);
+    const rulesDto = data.map((rule) => this.ruleAdapter.toResponseDto(rule));
     const response = this.paginationService.createPaginatedResponse(
-      data,
+      rulesDto,
       total,
       page,
       limit,
@@ -127,11 +129,7 @@ export class RuleApiController {
     @Param('id') id: string,
     @UserId() userId: number
   ) {
-    const rule = await this.ruleService.findOne(+id, userId);
-    if (!rule) {
-      throw new NotFoundException(`Rule with id ${id} not found`);
-    }
-    return rule;
+    return this.ruleAdapter.toResponseDto(await this.ruleService.findOne(+id, userId));
   }
 
   @Patch(':id')
@@ -165,11 +163,10 @@ export class RuleApiController {
     @Body() updateRuleDto: UpdateRuleDto,
     @UserId() userId: number
   ) {
-    return await this.ruleService.update(+id, updateRuleDto, userId);
+    return this.ruleAdapter.toResponseDto(await this.ruleService.update(+id, updateRuleDto, userId));
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ 
     summary: 'Delete rule', 
     description: 'Deletes a rule by the specified identifier' 
@@ -180,7 +177,8 @@ export class RuleApiController {
     description: 'Unique rule identifier',
     example: 1
   })
-  @ApiNoContentResponse({ 
+  @ApiOkResponse({ 
+    type: RuleResponseDto,
     description: 'Rule successfully deleted' 
   })
   @ApiResponse({ 
@@ -193,7 +191,7 @@ export class RuleApiController {
   async remove(
     @Param('id') id: string,
     @UserId() userId: number
-  ) {
-    await this.ruleService.remove(+id, userId);
+  ): Promise<RuleResponseDto> {
+    return this.ruleAdapter.toResponseDto(await this.ruleService.remove(+id, userId));
   }
 }

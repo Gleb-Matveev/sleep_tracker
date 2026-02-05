@@ -16,7 +16,7 @@ export class RuleService {
 
   async create(createRuleDto: CreateRuleDto, userId: number): Promise<Rule> {
     const rule = this.ruleRepository.create({ ...createRuleDto, userId });
-    return this.ruleRepository.save(rule);
+    return await this.ruleRepository.save(rule);
   }
 
   async findAll(userId: number): Promise<Rule[]> {
