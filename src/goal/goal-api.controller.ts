@@ -29,6 +29,7 @@ import {
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiBadRequestResponse,
+  ApiCookieAuth,
 } from '@nestjs/swagger';
 import {
   GoalResponseDto,
@@ -38,6 +39,7 @@ import { UserId } from 'src/auth/decorators/userid.decorator';
 import { GoalAdapter } from './goal.adapter';
 
 @ApiTags('Goals')
+@ApiCookieAuth('sAccessToken')
 @Controller('api/goals')
 export class GoalApiController {
   constructor(

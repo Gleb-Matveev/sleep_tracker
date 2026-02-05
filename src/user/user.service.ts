@@ -18,7 +18,15 @@ export class UserService {
   }
 
   async findAll() {
-    return await this.userRepository.find();
+    const findOptions: FindManyOptions<User> = {
+      relations: {
+        routines: true,
+        days: true,
+        goals: true,
+        rules: true,
+      }
+    };
+    return await this.userRepository.find(findOptions);
   }
 
   async findOne(id: number): Promise<User> {

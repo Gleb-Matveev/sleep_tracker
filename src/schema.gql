@@ -58,15 +58,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-"""Paginated day model"""
-type DaysPaginationModel {
-  """List of days"""
-  days: [DayModel!]!
-
-  """Total count of days"""
-  total: Int!
-}
-
 """Goal"""
 type GoalModel {
   """Unique identifier for the goal"""
@@ -100,7 +91,58 @@ type RuleModel {
   description: String!
 }
 
+"""User"""
+type UserModel {
+  """Unique identifier for the user"""
+  id: ID
+
+  """Unique identifier for the user from SUPERTOKEN service"""
+  supertoken_id: String
+
+  """Email of user"""
+  email: String!
+
+  """Avatar image url"""
+  avatar_url: String!
+
+  """Users role"""
+  role: UserRole!
+
+  """Days associated with user"""
+  days: [DayModel!]!
+
+  """Routines associated with user"""
+  routines: [RoutineModel!]!
+
+  """Goals associated with user"""
+  goals: [GoalModel!]!
+
+  """Rules associated with user"""
+  rules: [RuleModel!]!
+}
+
+"""ADMIN or USER"""
+enum UserRole {
+  USER
+  ADMIN
+}
+
+"""Paginated day model"""
+type DaysPaginationModel {
+  """List of days"""
+  days: [DayModel!]!
+
+  """Total count of days"""
+  total: Int!
+}
+
 type Query {
+  """Retrieve all rules"""
+  users: [UserModel!]!
+
+  """Retrieve user with specified id"""
+  user(id: Int!): UserModel!
+
   """Retrieve all days"""
   days: [DayModel!]!
 

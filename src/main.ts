@@ -33,6 +33,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Sleep tracker API')
     .setDescription('The sleep tracker API description')
+    .addCookieAuth('sAccessToken')
     .setVersion('1.0')
     .addTag('Users')
     .addTag('Days')

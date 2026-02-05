@@ -4,6 +4,7 @@ import { UserRole } from './entities/user.entity';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import {
   ApiBadRequestResponse,
+  ApiCookieAuth,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
@@ -16,6 +17,7 @@ import { UserAdapter } from './user.adapter';
 import type { Request, Response } from 'express';
 import { PaginationService } from 'src/common/services/pagination.service';
 
+@ApiCookieAuth('sAccessToken')
 @Roles(UserRole.ADMIN)
 @ApiTags('Users')
 @Controller('api/user')

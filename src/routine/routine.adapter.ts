@@ -9,7 +9,6 @@ import { RoutineResponseDto } from "./dto/routine-response.dto";
 
 @Injectable()
 export class RoutineAdapter {
-    
     toModel(routine: Routine): RoutineModel {
         return {
               id: routine.id,

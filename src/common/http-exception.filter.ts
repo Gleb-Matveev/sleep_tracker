@@ -13,9 +13,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let message = 'Internal server error';
 
     const gqlHost = GqlArgumentsHost.create(host);
+    //console.log("Gql context:", !gqlHost.getContext());
     const isGraphQL = !gqlHost.getContext();
     
     if (isGraphQL) {
+      //console.log("Graph");
       return {
         errors: [{
           message: exception instanceof Error ? exception.message : 'Internal server error',
@@ -25,10 +27,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     if (exception instanceof HttpException) {
+      console.log("Http");
       status = exception.getStatus();
       message = exception.message;
     }
 
+    //console.log("Status: ", status);
+    //console.log("Message: ", message);
+    //console.log("Url: ", request.url);
     response
       .status(status)
       .json({

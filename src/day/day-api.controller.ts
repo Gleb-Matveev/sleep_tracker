@@ -30,6 +30,7 @@ import {
   ApiNoContentResponse,
   ApiBadRequestResponse,
   ApiNotFoundResponse,
+  ApiCookieAuth,
 } from '@nestjs/swagger';
 import { DayResponseDto, PaginatedDayResponseDto } from './dto/day-response.dto';
 import { RoutineResponseDto } from '../routine/dto/routine-response.dto';
@@ -37,6 +38,7 @@ import { UserId } from 'src/auth/decorators/userid.decorator';
 import { DayAdapter } from './day.adapter';
 
 @ApiTags('Days')
+@ApiCookieAuth('sAccessToken')
 @Controller('api/days')
 export class DayApiController {
   constructor(

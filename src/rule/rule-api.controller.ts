@@ -30,11 +30,13 @@ import {
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiBadRequestResponse,
+  ApiCookieAuth,
 } from '@nestjs/swagger';
 import { RuleResponseDto, PaginatedRuleResponseDto } from './dto/rule-response.dto';
 import { UserId } from 'src/auth/decorators/userid.decorator';
 import { RuleAdapter } from './rule.adapter';
 
+@ApiCookieAuth('sAccessToken')
 @ApiTags('Rules')
 @Controller('api/rules')
 export class RuleApiController {

@@ -29,6 +29,7 @@ import {
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiBadRequestResponse,
+  ApiCookieAuth,
 } from '@nestjs/swagger';
 import { RoutineResponseDto, PaginatedRoutineResponseDto } from './dto/routine-response.dto';
 import { DayResponseDto } from '../day/dto/day-response.dto';
@@ -36,6 +37,7 @@ import { UserId } from 'src/auth/decorators/userid.decorator';
 import { RouteInfo } from '@nestjs/common/interfaces';
 import { RoutineAdapter } from './routine.adapter';
 
+@ApiCookieAuth('sAccessToken')
 @ApiTags('Routines')
 @Controller('api/routines')
 export class RoutineApiController {
