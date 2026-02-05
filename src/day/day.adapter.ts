@@ -8,6 +8,7 @@ import { UpdateDayInput } from './inputs/update-day.input';
 import { RoutineAdapter } from 'src/routine/routine.adapter';
 import { Routine } from 'src/routine/entities/routine.entity';
 import { RoutineModel } from 'src/routine/models/routine.model';
+import { DayResponseDto } from './dto/day-response.dto';
 
 @Injectable()
 export class DayAdapter {
@@ -51,6 +52,24 @@ export class DayAdapter {
       routineIds: updateDayInput.routines,
     };
   }
+
+  toDayResponseDto(day: Day): DayResponseDto {
+    const dayDto = new DayResponseDto();
+    dayDto.id = day.id;
+    dayDto.date = day.date;
+    dayDto.description = day.description;
+    dayDto.feeling_score = day.feeling_score;
+    dayDto.getup_score = day.getup_score;
+    dayDto.routines = 
+        day.routines
+          ?.map((dr) => dr.routine)
+          .filter((r): r is Routine => r !== undefined)
+          .map((r) => this.toRoutineModel(r)) ?? [],
+    dayDto.wakeUpTime = day.wakeUpTime;
+    dayDto.wakeDownTime = day.wakeDownTime;
+    return dayDto;
+  }
+
 
   toRoutineModel(routine: Routine): RoutineModel {
     return {

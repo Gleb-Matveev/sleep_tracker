@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -21,8 +21,49 @@ export class UserService {
     return await this.userRepository.find();
   }
 
-  async findOne(id: number) {
-    return await this.userRepository.findOne({ where: { id } });
+  async findOne(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user)
+      throw new NotFoundException('User with specified id wasnt found');
+
+    return user;
+  }
+
+  async findOneWithRelations(id: number): Promise<User> {
+    const findOptions: FindManyOptions<User> = {
+      where: { id },
+      relations: {
+        routines: true,
+        days: true,
+        goals: true,
+        rules: true,
+      },
+    };
+
+    const user = await this.userRepository.findOne(findOptions);
+    if (!user)
+      throw new NotFoundException('User with specified id wasnt found');
+
+    return user;
+  }
+
+  async findAllPaginated(
+    page: number,
+    limit: number,
+  ): Promise<{ data: User[]; total: number }> {
+    const findOptions: FindManyOptions<User> = {
+      relations: {
+        routines: true,
+        days: true,
+        goals: true,
+        rules: true,
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+    };
+
+    const [data, total] = await this.userRepository.findAndCount(findOptions);
+    return { data, total };
   }
 
   async findBysuperTokenId(supertoken_id: string) {

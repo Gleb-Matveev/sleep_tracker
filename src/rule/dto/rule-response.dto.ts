@@ -9,9 +9,6 @@ export class RuleResponseDto {
 
   @ApiProperty({ description: 'Rule description', example: 'Avoid using electronic devices 1 hour before sleep' })
   description: string;
-
-  @ApiProperty({ description: 'Time server took to respond', example: '70.7723330000008' })
-  serverResponseTime?: number;
 }
 
 export class PaginatedRuleResponseDto {

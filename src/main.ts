@@ -34,7 +34,7 @@ async function bootstrap() {
     .setTitle('Sleep tracker API')
     .setDescription('The sleep tracker API description')
     .setVersion('1.0')
-    .addTag('User')
+    .addTag('Users')
     .addTag('Days')
     .addTag('Rules')
     .addTag('Goals')

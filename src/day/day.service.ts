@@ -27,23 +27,26 @@ export class DayService {
     userId: number
   ): Promise<Day> {
     await this.dayCacheService.invalidateDays();
+    let saved;
     const day = this.dayRepository.create({
-      ...createDayDto,
-      getup_score: Number(createDayDto.getup_score),
-      feeling_score: Number(createDayDto.feeling_score),
-      date: new Date(createDayDto.date),
-      routines: createDayDto.routineIds.map((id) =>
-        this.dayRoutineRepository.create({
-          routine: { id },
-        }),
-      ),
-      userId,
-    });
+        ...createDayDto,
+        getup_score: Number(createDayDto.getup_score),
+        feeling_score: Number(createDayDto.feeling_score),
+        date: new Date(createDayDto.date),
+        routines: createDayDto.routineIds.map((id) =>
+          this.dayRoutineRepository.create({
+            routine: { id },
+          }),
+        ),
+        userId,
+      });
 
-    const saved = await this.dayRepository.save(day);
-    if (!saved) {
-      throw new Error(`Coudn't create new day`);
+    try {
+      saved = await this.dayRepository.save(day);
+    } catch (e) {
+      throw new NotFoundException("Specified session's ids werent found");
     }
+
     return saved;
   }
 
@@ -121,26 +124,30 @@ export class DayService {
     userId: number
   ): Promise<Day> {
     await this.dayCacheService.invalidateDays();
-    await this.dayRepository.save({
-      id,
-      ...updateDayDto,
-      getup_score:
-        updateDayDto.getup_score !== undefined
-          ? Number(updateDayDto.getup_score)
-          : undefined,
-      feeling_score:
-        updateDayDto.feeling_score !== undefined
-          ? Number(updateDayDto.feeling_score)
-          : undefined,
-      date: updateDayDto.date ? new Date(updateDayDto.date) : undefined,
-      routines:
-        updateDayDto.routineIds !== undefined
-          ? updateDayDto.routineIds.map((id) =>
-              this.dayRoutineRepository.create({ routine: { id } }),
-            )
-          : undefined,
-      userId
-    });
+    try {
+      await this.dayRepository.save({
+        id,
+        ...updateDayDto,
+        getup_score:
+          updateDayDto.getup_score !== undefined
+            ? Number(updateDayDto.getup_score)
+            : undefined,
+        feeling_score:
+          updateDayDto.feeling_score !== undefined
+            ? Number(updateDayDto.feeling_score)
+            : undefined,
+        date: updateDayDto.date ? new Date(updateDayDto.date) : undefined,
+        routines:
+          updateDayDto.routineIds !== undefined
+            ? updateDayDto.routineIds.map((id) =>
+                this.dayRoutineRepository.create({ routine: { id } }),
+              )
+            : undefined,
+        userId
+      });
+    } catch (e) {
+      throw new NotFoundException("Specified session's ids werent found");
+    }
     const updated = await this.dayRepository.findOne({ where: { id, userId } });
 
     if (!updated) {

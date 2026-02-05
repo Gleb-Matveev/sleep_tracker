@@ -17,13 +17,14 @@ export class RequestTimeInterceptor implements NestInterceptor {
         try {
           if (context.getType() === 'http') {
             const ctx = context.switchToHttp();
+            const req = ctx.getRequest();
             const response = ctx.getResponse<Response>();
             
             if (response && !response.headersSent) {
               response.setHeader('X-Elapsed-Time', `${elapsed}ms`);
             }
             
-            if (data && typeof data === 'object' && !Array.isArray(data)) {
+            if (!this.isApiRequest(req)) {
               return { ...data, serverResponseTime: elapsed };
             }
           } else if (context.getType<string>() === 'graphql') {
@@ -45,5 +46,17 @@ export class RequestTimeInterceptor implements NestInterceptor {
         return data;
       })
     );
+  }
+
+  isApiRequest(req: any): boolean {
+    const accept = String(req.headers?.accept ?? '');
+    const secFetchDest = String(req.headers?.['sec-fetch-dest'] ?? '');
+    const wantsHtml = accept.includes('text/html') || secFetchDest === 'document';
+
+    if (wantsHtml) return false;
+
+    if (accept.includes('application/json')) return true;
+
+    return true;
   }
 } 

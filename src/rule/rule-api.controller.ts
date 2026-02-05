@@ -83,7 +83,7 @@ export class RuleApiController {
   async findAll(
     @Query() paginationDto: PaginationDto,
     @Req() req: Request,
-    @Res() res: Response,
+    @Res({ passthrough: true }) res: Response,
     @UserId() userId: number
   ) {
     const page = paginationDto.page || 1;
@@ -100,7 +100,7 @@ export class RuleApiController {
       res,
     );
 
-    return res.json(response);
+    return response;
   }
 
   @Get(':id')

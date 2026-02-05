@@ -13,16 +13,16 @@ export class UpdateDayDto extends PartialType(
   date?: string;
 
   @ApiPropertyOptional({ 
-    description: 'Get up score (0-10)', 
-    example: 7.5,
+    description: 'Get up score (0-10 integer)', 
+    example: 7,
     minimum: 0,
     maximum: 10
   })
   getup_score?: number;
 
   @ApiPropertyOptional({ 
-    description: 'Feeling score (0-10)', 
-    example: 8.0,
+    description: 'Feeling score (0-10 integer)', 
+    example: 8,
     minimum: 0,
     maximum: 10
   })

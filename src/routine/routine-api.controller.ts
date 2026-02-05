@@ -33,6 +33,8 @@ import {
 import { RoutineResponseDto, PaginatedRoutineResponseDto } from './dto/routine-response.dto';
 import { DayResponseDto } from '../day/dto/day-response.dto';
 import { UserId } from 'src/auth/decorators/userid.decorator';
+import { RouteInfo } from '@nestjs/common/interfaces';
+import { RoutineAdapter } from './routine.adapter';
 
 @ApiTags('Routines')
 @Controller('api/routines')
@@ -40,6 +42,7 @@ export class RoutineApiController {
   constructor(
     private readonly routineService: RoutineService,
     private readonly paginationService: PaginationService,
+    private readonly routineAdapter: RoutineAdapter
   ) {}
 
   @Post()
@@ -63,7 +66,7 @@ export class RoutineApiController {
     @Body() createRoutineDto: CreateRoutineDto,
     @UserId() userId: number
   ) {
-    return await this.routineService.create(createRoutineDto, userId);
+    return this.routineAdapter.toRoutineResponseDto(await this.routineService.create(createRoutineDto, userId));
   }
 
   @Get()
@@ -81,15 +84,18 @@ export class RoutineApiController {
   async findAll(
     @Query() paginationDto: PaginationDto,
     @Req() req: Request,
-    @Res() res: Response,
+    @Res({ passthrough: true }) res: Response,
     @UserId() userId: number
   ) {
     const page = paginationDto.page || 1;
     const limit = paginationDto.limit || 10;
 
     const { data, total } = await this.routineService.findAllPaginated(page, limit, userId);
+
+    const routinesDto = data.map((routine) => this.routineAdapter.toRoutineResponseDto(routine));
+
     const response = this.paginationService.createPaginatedResponse(
-      data,
+      routinesDto,
       total,
       page,
       limit,
@@ -97,7 +103,7 @@ export class RoutineApiController {
       res,
     );
 
-    return res.json(response);
+    return response;
   }
 
   @Get(':id')
@@ -126,11 +132,7 @@ export class RoutineApiController {
     @Param('id') id: string,
     @UserId() userId: number
   ) {
-    const routine = await this.routineService.findOne(+id, userId);
-    if (!routine) {
-      throw new NotFoundException(`Routine with id ${id} not found`);
-    }
-    return routine;
+    return this.routineAdapter.toRoutineResponseDto(await this.routineService.findOne(+id, userId));
   }
 
   @Patch(':id')
@@ -164,11 +166,10 @@ export class RoutineApiController {
     @Body() updateRoutineDto: UpdateRoutineDto,
     @UserId() userId: number
   ) {
-    return await this.routineService.update(+id, updateRoutineDto, userId);
+    return this.routineAdapter.toRoutineResponseDto(await this.routineService.update(+id, updateRoutineDto, userId));
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ 
     summary: 'Delete routine', 
     description: 'Deletes a routine by the specified identifier' 
@@ -179,8 +180,9 @@ export class RoutineApiController {
     description: 'Unique routine identifier',
     example: 1
   })
-  @ApiNoContentResponse({ 
-    description: 'Routine successfully deleted' 
+  @ApiOkResponse({ 
+    type: RoutineResponseDto,
+    description: 'Routine found and returned' 
   })
   @ApiResponse({ 
     status: 404, 
@@ -193,7 +195,7 @@ export class RoutineApiController {
     @Param('id') id: string,
     @UserId() userId: number
   ) {
-    await this.routineService.remove(+id, userId);
+    return this.routineAdapter.toRoutineResponseDto(await this.routineService.remove(+id, userId));
   }
 
   @Get(':id/days')
@@ -223,9 +225,6 @@ export class RoutineApiController {
     @UserId() userId: number
   ) {
     const routine = await this.routineService.findOne(+id, userId);
-    if (!routine) {
-      throw new NotFoundException(`Routine with id ${id} not found`);
-    }
     return routine.days?.map((dr) => dr.day) || [];
   }
 
@@ -263,9 +262,6 @@ export class RoutineApiController {
     @UserId() userId: number
   ) {
     const routine = await this.routineService.findOne(+routineId, userId);
-    if (!routine) {
-      throw new NotFoundException(`Routine with id ${routineId} not found`);
-    }
     const day = routine.days?.find((dr) => dr.day.id === +dayId)?.day;
     if (!day) {
       throw new NotFoundException(

@@ -21,7 +21,7 @@ export class RoutineService {
   ): Promise<Routine> {
     this.dayCacheService.invalidateDays();
     const routine = this.routineRepository.create({...createRoutineDto, userId});
-    return this.routineRepository.save(routine);
+    return await this.routineRepository.save(routine);
   }
 
   async findAll(

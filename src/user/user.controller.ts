@@ -3,7 +3,9 @@ import { UserService } from './user.service';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { UserRole } from './entities/user.entity';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController()
 @Roles(UserRole.ADMIN)
 @Controller('user')
 export class UserController {

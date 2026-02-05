@@ -29,10 +29,12 @@ import {
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiBadRequestResponse,
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
 import { DayResponseDto, PaginatedDayResponseDto } from './dto/day-response.dto';
 import { RoutineResponseDto } from '../routine/dto/routine-response.dto';
 import { UserId } from 'src/auth/decorators/userid.decorator';
+import { DayAdapter } from './day.adapter';
 
 @ApiTags('Days')
 @Controller('api/days')
@@ -40,6 +42,7 @@ export class DayApiController {
   constructor(
     private readonly dayService: DayService,
     private readonly paginationService: PaginationService,
+    private readonly dayAdapter: DayAdapter,
   ) {}
 
   @Post()
@@ -59,11 +62,14 @@ export class DayApiController {
   @ApiBadRequestResponse({
     description: 'Invalid request data. Check the format and required fields' 
   })
+  @ApiNotFoundResponse({
+    description: "Specified session's ids werent found"
+  })
   async create(
     @Body() createDayDto: CreateDayDto,
     @UserId() userId: number
   ) {
-    return await this.dayService.create(createDayDto, userId);
+    return this.dayAdapter.toDayResponseDto(await this.dayService.create(createDayDto, userId));
   }
 
   @Get()
@@ -81,15 +87,18 @@ export class DayApiController {
   async findAll(
     @Query() paginationDto: PaginationDto,
     @Req() req: Request,
-    @Res() res: Response,
+    @Res({ passthrough: true }) res: Response,
     @UserId() userId: number
   ) {
     const page = paginationDto.page || 1;
     const limit = paginationDto.limit || 10;
 
     const { data, total } = await this.dayService.findAllPaginated(page, limit, userId);
+
+    const datDto = data.map((day) => this.dayAdapter.toDayResponseDto(day));
+
     const response = this.paginationService.createPaginatedResponse(
-      data,
+      datDto,
       total,
       page,
       limit,
@@ -97,7 +106,7 @@ export class DayApiController {
       res,
     );
 
-    return res.json(response);
+    return response;
   }
 
   @Get(':id')
@@ -126,11 +135,7 @@ export class DayApiController {
     @Param('id') id: string,
     @UserId() userId: number
   ) {
-    const day = await this.dayService.findOne(+id, userId);
-    if (!day) {
-      throw new NotFoundException(`Day with id ${id} not found`);
-    }
-    return day;
+    return this.dayAdapter.toDayResponseDto(await this.dayService.findOne(+id, userId));
   }
 
   @Patch(':id')
@@ -156,6 +161,9 @@ export class DayApiController {
     status: 404, 
     description: 'Day with the specified ID not found' 
   })
+  @ApiNotFoundResponse({
+    description: "Specified session's ids werent found"
+  })
   @ApiBadRequestResponse({ 
     description: 'Invalid request data or ID format' 
   })
@@ -164,11 +172,10 @@ export class DayApiController {
     @Body() updateDayDto: UpdateDayDto,
     @UserId() userId: number
   ) {
-    return await this.dayService.update(+id, updateDayDto, userId);
+    return this.dayAdapter.toDayResponseDto(await this.dayService.update(+id, updateDayDto, userId));
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ 
     summary: 'Delete day', 
     description: 'Deletes a day by the specified identifier' 
@@ -179,8 +186,9 @@ export class DayApiController {
     description: 'Unique day identifier',
     example: 1
   })
-  @ApiNoContentResponse({ 
-    description: 'Day successfully deleted' 
+  @ApiOkResponse({ 
+    type: DayResponseDto,
+    description: 'Day successfully updated' 
   })
   @ApiResponse({ 
     status: 404, 
@@ -193,7 +201,7 @@ export class DayApiController {
     @Param('id') id: string,
     @UserId() userId: number
   ) {
-    await this.dayService.remove(+id, userId);
+    return this.dayAdapter.toDayResponseDto(await this.dayService.remove(+id, userId));
   }
 
   @Get(':id/routines')
@@ -223,10 +231,7 @@ export class DayApiController {
     @UserId() userId: number
   ) {
     const day = await this.dayService.findOne(+id, userId);
-    if (!day) {
-      throw new NotFoundException(`Day with id ${id} not found`);
-    }
-    return day.routines.map((dr) => dr.routine);
+    return day.routines.map((dr) => this.dayAdapter.toRoutineModel(dr.routine));
   }
 
   @Get(':dayId/routines/:routineId')
@@ -263,9 +268,6 @@ export class DayApiController {
     @UserId() userId: number
   ) {
     const day = await this.dayService.findOne(+dayId, userId);
-    if (!day) {
-      throw new NotFoundException(`Day with id ${dayId} not found`);
-    }
     const routine = day.routines.find(
       (dr) => dr.routine.id === +routineId,
     )?.routine;
@@ -274,6 +276,6 @@ export class DayApiController {
         `Routine with id ${routineId} not found for day ${dayId}`,
       );
     }
-    return routine;
+    return this.dayAdapter.toRoutineModel(routine);
   }
 }

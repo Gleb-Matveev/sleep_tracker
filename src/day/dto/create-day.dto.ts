@@ -12,8 +12,8 @@ export class CreateDayDto {
   date: string;
 
   @ApiProperty({ 
-    description: 'Get up score (0-10)', 
-    example: 7.5,
+    description: 'Get up score (0-10 integer)', 
+    example: 7,
     minimum: 0,
     maximum: 10,
     required: true 
@@ -25,8 +25,8 @@ export class CreateDayDto {
   getup_score: number;
 
   @ApiProperty({ 
-    description: 'Feeling score (0-10)', 
-    example: 8.0,
+    description: 'Feeling score (0-10 integer)', 
+    example: 8,
     minimum: 0,
     maximum: 10,
     required: true 
