@@ -35,6 +35,7 @@ import {
   PaginatedGoalResponseDto,
 } from './dto/goal-response.dto';
 import { UserId } from 'src/auth/decorators/userid.decorator';
+import { GoalAdapter } from './goal.adapter';
 
 @ApiTags('Goals')
 @Controller('api/goals')
@@ -42,6 +43,7 @@ export class GoalApiController {
   constructor(
     private readonly goalService: GoalService,
     private readonly paginationService: PaginationService,
+    private readonly goalAdapter: GoalAdapter,
   ) {}
 
   @Post()
@@ -65,7 +67,7 @@ export class GoalApiController {
     @Body() createGoalDto: CreateGoalDto,
     @UserId() userId: number
   ) {
-    return await this.goalService.create(createGoalDto, userId);
+    return this.goalAdapter.toResponseDto(await this.goalService.create(createGoalDto, userId));
   }
 
   @Get()
@@ -97,8 +99,11 @@ export class GoalApiController {
       limit,
       userId
     );
+
+    const goalsDto = data.map((goal) => this.goalAdapter.toResponseDto(goal));
+
     const response = this.paginationService.createPaginatedResponse(
-      data,
+      goalsDto,
       total,
       page,
       limit,
@@ -135,11 +140,7 @@ export class GoalApiController {
     @Param('id') id: string,
     @UserId() userId: number
   ) {
-    const goal = await this.goalService.findOne(+id, userId);
-    if (!goal) {
-      throw new NotFoundException(`Goal with id ${id} not found`);
-    }
-    return goal;
+    return this.goalAdapter.toResponseDto(await this.goalService.findOne(+id, userId));;
   }
 
   @Patch(':id')
@@ -174,11 +175,10 @@ export class GoalApiController {
     @Body() updateGoalDto: UpdateGoalDto,
     @UserId() userId: number
   ) {
-    return await this.goalService.update(+id, updateGoalDto, userId);
+    return this.goalAdapter.toResponseDto(await this.goalService.update(+id, updateGoalDto, userId));
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
     summary: 'Delete goal',
     description: 'Deletes a goal by the specified identifier',
@@ -189,7 +189,8 @@ export class GoalApiController {
     description: 'Unique goal identifier',
     example: 1,
   })
-  @ApiNoContentResponse({
+  @ApiOkResponse({
+    type: GoalResponseDto,
     description: 'Goal successfully deleted',
   })
   @ApiResponse({
@@ -202,7 +203,7 @@ export class GoalApiController {
   async remove(
     @Param('id') id: string,
     @UserId() userId: number
-  ) {
-    await this.goalService.remove(+id, userId);
+  ): Promise<GoalResponseDto> {
+    return this.goalAdapter.toResponseDto(await this.goalService.remove(+id, userId));
   }
 }

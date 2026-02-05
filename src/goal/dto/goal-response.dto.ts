@@ -26,6 +26,12 @@ export class GoalResponseDto {
     example: Status.NOTDONE,
   })
   status: Status;
+
+  @ApiProperty({
+    description: 'Time server took to respond',
+    example: '70.7723330000008',
+  })
+  serverResponseTime?: number;
 }
 
 export class PaginatedGoalResponseDto {

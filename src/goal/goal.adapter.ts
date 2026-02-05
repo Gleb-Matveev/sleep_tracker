@@ -5,6 +5,7 @@ import { Goal } from './entities/goal.entity';
 import { CreateGoalInput } from './inputs/create-goal.input';
 import { UpdateGoalInput } from './inputs/update-goal.input';
 import { GoalModel } from './models/goal.model';
+import { GoalResponseDto } from './dto/goal-response.dto';
 
 @Injectable()
 export class GoalAdapter {
@@ -33,5 +34,15 @@ export class GoalAdapter {
         goal.description = updateGoalDto.description;
         goal.status = updateGoalDto.status;
         return goal;
+    }
+
+    toResponseDto(goal: Goal): GoalResponseDto {
+        const goalDto = new GoalResponseDto();
+        goalDto.id = goal.id;
+        goalDto.name = goal.name;
+        goalDto.description = goal.description;
+        goalDto.image_url = goal.image_url;
+        goalDto.status = goal.status;
+        return goalDto;
     }
 }

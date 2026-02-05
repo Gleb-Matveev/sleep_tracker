@@ -33,7 +33,7 @@ export class GoalService {
         payload: { id: goal.id, title: goal.name },
       });
     }
-    return this.goalRepository.save(goal);
+    return await this.goalRepository.save(goal);
   }
 
   async findAll(
