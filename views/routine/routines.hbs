@@ -1,44 +1,46 @@
-<section class="card">
-  <div class="card-header">
-    <h1 class="card-title">Sleep routines</h1>
-    <div style="display: flex; align-items: center; gap: 0.6rem;">
-      <span class="badge-pill">Night &amp; morning</span>
-      <a class="btn btn-secondary" href="/routine/new" aria-label="Add routine">+</a>
+<section class="card goals-page">
+  <div class="goals-scroll">
+    <div class="card-header">
+      <h1 class="card-title">Sleep routines</h1>
+      <div style="display: flex; align-items: center; gap: 0.6rem;">
+        <span class="badge-pill">Night &amp; morning</span>
+        <a class="btn btn-secondary" href="/routine/new" aria-label="Add routine">+</a>
+      </div>
     </div>
-  </div>
 
-  <p class="card-subtitle">
-    Repeatable steps before sleep and after waking up that make your day more stable.
-  </p>
+    <p class="card-subtitle">
+      Repeatable steps before sleep and after waking up that make your day more stable.
+    </p>
 
-  <div style="margin-top: 1rem; display: grid; gap: 1rem;">
-    {{#each this.items}}
-      <article class="card card-hover card-delete-trigger" style="padding: 1rem 1.1rem; cursor: pointer;" card-collection-url="routine", entity-id={{this.id}}>
-        <div class="card-header" style="margin-bottom: 0.4rem;">
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <h2 class="card-title" style="font-size: 0.95rem;">{{this.name}}</h2>
-            <span class="chip">
-              {{this.period}}
-            </span>
+    <div class='goals-list'>
+      {{#each this.items}}
+        <article class="card card-hover card-delete-trigger" style="padding: 1rem 1.1rem; cursor: pointer;" card-collection-url="routine", entity-id={{this.id}}>
+          <div class="card-header" style="margin-bottom: 0.4rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <h2 class="card-title" style="font-size: 0.95rem;">{{this.name}}</h2>
+              <span class="chip">
+                {{this.period}}
+              </span>
+            </div>
+            <button
+              type="button"
+              class="btn btn-secondary js-delete-trigger"
+              style="padding-inline: 0.75rem; font-size: 0.8rem;"
+              data-delete-url="/routine/{{this.id}}"
+              data-remove-closest=".card"
+              data-delete-message="Delete this routine?"
+            >
+              Delete
+            </button>
           </div>
-          <button
-            type="button"
-            class="btn btn-secondary js-delete-trigger"
-            style="padding-inline: 0.75rem; font-size: 0.8rem;"
-            data-delete-url="/routine/{{this.id}}"
-            data-remove-closest=".card"
-            data-delete-message="Delete this routine?"
-          >
-            Delete
-          </button>
-        </div>
-        <ul style="margin: 0.4rem 0 0; padding-left: 1.1rem; font-size: 0.85rem; color: var(--text-main);">
-          {{#each this.steps}}
-            <li>{{this}}</li>
-          {{/each}}
-        </ul>
-      </article>
-    {{/each}}
+          <ul style="margin: 0.4rem 0 0; padding-left: 1.1rem; font-size: 0.85rem; color: var(--text-main);">
+            {{#each this.steps}}
+              <li>{{this}}</li>
+            {{/each}}
+          </ul>
+        </article>
+      {{/each}}
+    </div>
   </div>
 </section>
 
